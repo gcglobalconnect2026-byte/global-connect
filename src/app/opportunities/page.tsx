@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 
+import { PageMain } from "@/components/page-shell";
 import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
 import { OpportunityFinder } from "@/components/sections/opportunity-finder";
@@ -20,9 +21,12 @@ export default async function OpportunitiesPage() {
   return (
     <>
       <SiteHeader />
-      <main className="flex-1">
-        <OpportunityFinder opportunities={opportunities} config={homepageSections.opportunityFinder} />
-      </main>
+      <PageMain>
+        <OpportunityFinder
+          opportunities={opportunities}
+          config={homepageSections.opportunityFinder}
+        />
+      </PageMain>
       <SiteFooter />
     </>
   );

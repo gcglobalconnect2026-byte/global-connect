@@ -4,6 +4,7 @@ import { Suspense } from "react";
 import { notFound } from "next/navigation";
 import { ArrowLeft } from "lucide-react";
 
+import { tv } from "@/lib/utils";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -11,6 +12,7 @@ import {
   CardContent,
   CardFooter,
 } from "@/components/ui/card";
+import { PageArticle, PageMain } from "@/components/page-shell";
 import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
 import { RichText } from "@/lib/richtext";
@@ -27,13 +29,38 @@ export async function generateMetadata({
   params: { slug: string };
 }): Promise<Metadata> {
   const { slug } = await params;
-  const opportunity = (await getOpportunities()).find((o) => o.slug === slug);
+  const opportunity = (await getOpportunities()).find(
+    (o) => o.slug === slug,
+  );
   if (!opportunity) return {};
   return {
     title: opportunity.title,
     description: opportunity.description,
   };
 }
+
+const opportunityPage = tv({
+  slots: {
+    backButton: "-ml-2 mb-8",
+    backIcon: "size-4",
+    head: "flex items-center gap-3 text-sm font-medium",
+    flag: "text-3xl",
+    badge: "rounded-full",
+    title:
+      "mt-4 font-display text-3xl font-normal tracking-tight text-balance sm:text-4xl",
+    description: "mt-3 text-lg text-muted-foreground",
+    card: "mt-8",
+    cardBody: "grid gap-4 sm:grid-cols-3",
+    cardFoot: "flex flex-wrap gap-1.5 border-t border-border pt-4",
+    tag: "rounded-full font-normal",
+    prose: "prose prose-neutral max-w-none mt-8",
+    fallback:
+      "mt-8 rounded-2xl border border-dashed border-border p-6 text-center text-sm text-muted-foreground",
+    detail: "flex flex-col gap-0.5",
+    detailLabel: "text-xs uppercase tracking-wide text-muted-foreground",
+    detailValue: "font-medium",
+  },
+});
 
 async function OpportunityContent({ params }: { params: { slug: string } }) {
   const { slug } = await params;
@@ -42,46 +69,40 @@ async function OpportunityContent({ params }: { params: { slug: string } }) {
 
   if (!opportunity) notFound();
 
+  const slots = opportunityPage();
+
   return (
-    <article className="mx-auto max-w-3xl px-4 py-12 sm:px-6 sm:py-16">
+    <PageArticle>
       <Button
         variant="ghost"
         size="sm"
-        className="-ml-2 mb-8"
+        className={slots.backButton()}
         render={<Link href="/opportunities" />}
       >
-        <ArrowLeft className="size-4" />
+        <ArrowLeft className={slots.backIcon()} />
         All opportunities
       </Button>
 
-      <div className="flex items-center gap-3 text-sm font-medium">
-        <span className="text-3xl">{opportunity.countryFlag}</span>
+      <div className={slots.head()}>
+        <span className={slots.flag()}>{opportunity.countryFlag}</span>
         <span>{opportunity.country}</span>
-        <Badge variant="outline" className="rounded-full">
+        <Badge variant="outline" className={slots.badge()}>
           {opportunity.type}
         </Badge>
       </div>
 
-      <h1 className="mt-4 font-display text-3xl font-normal tracking-tight text-balance sm:text-4xl">
-        {opportunity.title}
-      </h1>
-      <p className="mt-3 text-lg text-muted-foreground">
-        {opportunity.description}
-      </p>
+      <h1 className={slots.title()}>{opportunity.title}</h1>
+      <p className={slots.description()}>{opportunity.description}</p>
 
-      <Card className="mt-8">
-        <CardContent className="grid gap-4 sm:grid-cols-3">
+      <Card className={slots.card()}>
+        <CardContent className={slots.cardBody()}>
           <MetaRow label="Age" value={opportunity.ageRange} />
           <MetaRow label="Funding" value={opportunity.funding} />
           <MetaRow label="Deadline" value={opportunity.deadline} />
         </CardContent>
-        <CardFooter className="flex flex-wrap gap-1.5 border-t border-border pt-4">
+        <CardFooter className={slots.cardFoot()}>
           {opportunity.tags.map((tag) => (
-            <Badge
-              key={tag}
-              variant="secondary"
-              className="rounded-full font-normal"
-            >
+            <Badge key={tag} variant="secondary" className={slots.tag()}>
               {tag}
             </Badge>
           ))}
@@ -89,16 +110,16 @@ async function OpportunityContent({ params }: { params: { slug: string } }) {
       </Card>
 
       {opportunity.longDescription ? (
-        <div className="prose prose-neutral max-w-none mt-8">
+        <div className={slots.prose()}>
           <RichText document={opportunity.longDescription} />
         </div>
       ) : (
-        <div className="mt-8 rounded-2xl border border-dashed border-border p-6 text-center text-sm text-muted-foreground">
-          A full description will be added soon. Check the official
-          programme page for details.
+        <div className={slots.fallback()}>
+          A full description will be added soon. Check the official programme
+          page for details.
         </div>
       )}
-    </article>
+    </PageArticle>
   );
 }
 
@@ -110,23 +131,22 @@ export default async function OpportunityPage({
   return (
     <>
       <SiteHeader />
-      <main className="flex-1">
+      <PageMain>
         <Suspense>
           <OpportunityContent params={params} />
         </Suspense>
-      </main>
+      </PageMain>
       <SiteFooter />
     </>
   );
 }
 
 function MetaRow({ label, value }: { label: string; value: string }) {
+  const slots = opportunityPage();
   return (
-    <div className="flex flex-col gap-0.5">
-      <span className="text-xs uppercase tracking-wide text-muted-foreground">
-        {label}
-      </span>
-      <span className="font-medium">{value}</span>
+    <div className={slots.detail()}>
+      <span className={slots.detailLabel()}>{label}</span>
+      <span className={slots.detailValue()}>{value}</span>
     </div>
   );
 }

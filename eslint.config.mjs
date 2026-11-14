@@ -5,6 +5,28 @@ import nextTs from "eslint-config-next/typescript";
 const eslintConfig = defineConfig([
   ...nextVitals,
   ...nextTs,
+  {
+    rules: {
+      // One styling system: tailwind-variants (tv) via @/lib/utils.
+      "no-restricted-imports": [
+        "error",
+        {
+          paths: [
+            {
+              name: "class-variance-authority",
+              message:
+                "Use tv from '@/lib/utils' (tailwind-variants) instead of cva.",
+            },
+            {
+              name: "cn",
+              message:
+                "Import cn from '@/lib/utils' — it re-exports tailwind-variants.",
+            },
+          ],
+        },
+      ],
+    },
+  },
   // Override default ignores of eslint-config-next.
   globalIgnores([
     // Default ignores of eslint-config-next:

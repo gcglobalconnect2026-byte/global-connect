@@ -9,7 +9,7 @@ youth-opportunity site, built CMS-first with **Contentful** and auth with
 | Concern   | Choice                                                    |
 | --------- | --------------------------------------------------------- |
 | Framework | Next.js 16 (App Router, React 19, TypeScript)             |
-| Styling   | Tailwind v4 + [shadcn/ui](https://ui.shadcn.com) (Base UI) |
+| Styling   | Tailwind v4 + [tailwind-variants](https://tailwind-variants.org) + [shadcn/ui](https://ui.shadcn.com) (Base UI) |
 | CMS       | Contentful (Delivery + Preview API)                       |
 | Auth      | Clerk (sign-in/sign-up for community access)              |
 | Caching   | SSG + ISR via Cache Components (`cacheLife` / `cacheTag`) |
@@ -67,6 +67,39 @@ src/
     richtext.tsx          # Contentful rich-text → React
   types/                  # hand-written models (models.ts) + Contentful skeleton types (contentful.ts)
 contentful/               # content-model.json + setup guide
+```
+
+## Styling conventions
+
+Every class lives in a `tv()` recipe from `tailwind-variants`, re-exported by
+`src/lib/utils.ts` (`tv`, `cn`, `cx`, `VariantProps`, `mergeClass`).
+`class-variance-authority` and the `cn` package are gone — ESLint blocks
+reintroducing them.
+
+- **Colocate the recipe.** `const card = tv({ ... })` sits directly above its
+  component. Extract to a shared file only when two or more components use it.
+- **Several styled parts → `slots`.** Each part calls its own slot, so JSX keeps
+  markup only: `className={slots.title({ class: className })}`.
+- **Conditional styling → `variants`.** Ternaries, index lookups and
+  `data-[side=…]` blocks become axes (`variant`, `size`, `tone`, `side`,
+  `align`), resolved in JS instead of CSS selectors.
+- **Caller overrides use `class`.** `button({ variant, size, class: className })`
+  merges the caller's classes last, so they win.
+- **No class strings in JSX.** A `className` prop may only be passed through to
+  a recipe; never build one with `${}`.
+- **Keep `data-*` attributes.** `data-slot`, `data-size`, `data-side` and the
+  `group-*` selectors around them are behaviour, not leftovers.
+
+Shared recipes: `ui/tile.tsx` (colour palettes), `ui/arrow-link.tsx`,
+`ui/blobs.tsx` (decorative backdrops), `page-shell.tsx` (route chrome),
+`legal-page.tsx`.
+
+For Tailwind IntelliSense inside `tv(...)` strings, add to VS Code settings:
+
+```json
+"tailwindCSS.experimental.classRegex": [
+  ["tv\\(([^)]*)\\)", "[\"'`]([^\"'`]*).*?[\"'`]"]
+]
 ```
 
 ## Caching model

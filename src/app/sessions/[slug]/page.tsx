@@ -4,8 +4,11 @@ import { Suspense } from "react";
 import { notFound } from "next/navigation";
 import { ArrowLeft } from "lucide-react";
 
+import { tv } from "@/lib/utils";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { Tile } from "@/components/ui/tile";
+import { PageArticle, PageMain } from "@/components/page-shell";
 import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
 import { getSessions, getSiteSettings } from "@/lib/contentful/queries";
@@ -29,6 +32,21 @@ export async function generateMetadata({
   };
 }
 
+const sessionPage = tv({
+  slots: {
+    backButton: "-ml-2 mb-8",
+    backIcon: "size-4",
+    head: "flex items-center gap-3",
+    badge: "rounded-full",
+    title:
+      "mt-6 font-display text-3xl font-normal tracking-tight text-balance sm:text-4xl",
+    description: "mt-4 text-lg text-muted-foreground",
+    badges: "mt-8 flex flex-wrap gap-2",
+    metaBadge: "rounded-full px-3 py-1",
+    actions: "mt-8",
+  },
+});
+
 async function SessionContent({ params }: { params: { slug: string } }) {
   const { slug } = await params;
   const [sessions, siteSettings] = await Promise.all([
@@ -39,49 +57,53 @@ async function SessionContent({ params }: { params: { slug: string } }) {
 
   if (!session) notFound();
 
+  const slots = sessionPage();
+
   return (
-    <article className="mx-auto max-w-3xl px-4 py-12 sm:px-6 sm:py-16">
+    <PageArticle>
       <Button
         variant="ghost"
         size="sm"
-        className="-ml-2 mb-8"
+        className={slots.backButton()}
         render={<Link href="/sessions" />}
       >
-        <ArrowLeft className="size-4" />
+        <ArrowLeft className={slots.backIcon()} />
         All sessions
       </Button>
 
-      <div className="flex items-center gap-3">
-        <span className="flex size-14 items-center justify-center rounded-2xl bg-lavender/20 text-3xl">
+      <div className={slots.head()}>
+        <Tile
+          palette="session"
+          toneIndex={0}
+          size="xl"
+          shape="soft"
+          content="icon"
+        >
           {session.icon}
-        </span>
+        </Tile>
         {session.online && (
-          <Badge variant="secondary" className="rounded-full">
+          <Badge variant="secondary" className={slots.badge()}>
             Online
           </Badge>
         )}
       </div>
 
-      <h1 className="mt-6 font-display text-3xl font-normal tracking-tight text-balance sm:text-4xl">
-        {session.title}
-      </h1>
-      <p className="mt-4 text-lg text-muted-foreground">
-        {session.description}
-      </p>
+      <h1 className={slots.title()}>{session.title}</h1>
+      <p className={slots.description()}>{session.description}</p>
 
-      <div className="mt-8 flex flex-wrap gap-2">
-        <Badge variant="outline" className="rounded-full px-3 py-1">
+      <div className={slots.badges()}>
+        <Badge variant="outline" className={slots.metaBadge()}>
           {session.duration}
         </Badge>
-        <Badge variant="outline" className="rounded-full px-3 py-1">
+        <Badge variant="outline" className={slots.metaBadge()}>
           {session.difficulty}
         </Badge>
         {session.upcoming && (
-          <Badge className="rounded-full px-3 py-1">Upcoming</Badge>
+          <Badge className={slots.metaBadge()}>Upcoming</Badge>
         )}
       </div>
 
-      <div className="mt-8">
+      <div className={slots.actions()}>
         {session.registerUrl ? (
           <Button
             size="lg"
@@ -111,7 +133,7 @@ async function SessionContent({ params }: { params: { slug: string } }) {
           </Button>
         )}
       </div>
-    </article>
+    </PageArticle>
   );
 }
 
@@ -123,11 +145,11 @@ export default async function SessionPage({
   return (
     <>
       <SiteHeader />
-      <main className="flex-1">
+      <PageMain>
         <Suspense>
           <SessionContent params={params} />
         </Suspense>
-      </main>
+      </PageMain>
       <SiteFooter />
     </>
   );

@@ -1,7 +1,16 @@
-import Link from "next/link";
+import { tv } from "@/lib/utils";
 
 import { SectionBand, SectionHeading } from "@/components/sections/section";
+import { ArrowLink } from "@/components/ui/arrow-link";
 import type { HomepageSectionData, InterestData } from "@/types/models";
+
+const discovery = tv({
+  slots: {
+    chips: "mx-auto mt-10 flex max-w-3xl flex-wrap justify-center gap-2.5",
+    chip: "inline-flex cursor-pointer items-center gap-2 rounded-full border border-border bg-background px-4 py-2 text-sm transition-colors hover:border-foreground/30 hover:bg-muted",
+    cta: "mt-10 text-center",
+  },
+});
 
 export function DiscoverySection({
   interests,
@@ -10,6 +19,7 @@ export function DiscoverySection({
   interests: InterestData[];
   config?: HomepageSectionData;
 }) {
+  const slots = discovery();
   return (
     <SectionBand id="discovery">
       <SectionHeading
@@ -18,26 +28,18 @@ export function DiscoverySection({
         title={config?.title ?? "Discover"}
         description={config?.description}
       />
-      <div className="mx-auto mt-10 flex max-w-3xl flex-wrap justify-center gap-2.5">
+      <div className={slots.chips()}>
         {interests.map((interest) => (
-          <span
-            key={interest.id}
-            className="inline-flex cursor-pointer items-center gap-2 rounded-full border border-border bg-background px-4 py-2 text-sm transition-colors hover:border-foreground/30 hover:bg-muted"
-          >
+          <span key={interest.id} className={slots.chip()}>
             <span>{interest.emoji}</span>
             {interest.label}
           </span>
         ))}
       </div>
-      <div className="mt-10 text-center">
-        <Link
-          href="/opportunities"
-          className="group inline-flex items-center gap-2 text-base font-semibold text-foreground underline decoration-border underline-offset-8 transition-colors hover:text-accent-foreground"
-        >
+      <div className={slots.cta()}>
+        <ArrowLink href="/opportunities" variant="underline">
           Find opportunities for me
-          <span className="inline-block transition-transform duration-300 group-hover:translate-x-1">
-            →</span>
-        </Link>
+        </ArrowLink>
       </div>
     </SectionBand>
   );

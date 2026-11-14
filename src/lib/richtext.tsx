@@ -2,6 +2,19 @@ import { documentToReactComponents } from "@contentful/rich-text-react-renderer"
 import { BLOCKS, INLINES } from "@contentful/rich-text-types";
 import type { Document as RichTextDocument } from "@contentful/rich-text-types";
 
+import { tv } from "@/lib/utils";
+
+const richText = tv({
+  slots: {
+    root: "prose prose-neutral max-w-none prose-headings:tracking-tight prose-a:text-brand prose-img:rounded-2xl prose-img:my-8",
+    image: "my-8 w-full rounded-2xl object-cover",
+    figure: "my-8",
+    media: "aspect-video relative w-full overflow-hidden rounded-2xl",
+    iframe: "absolute inset-0 h-full w-full",
+    caption: "mt-3 text-center text-sm text-muted-foreground",
+  },
+});
+
 type AssetFile = {
   url?: string;
   details?: { image?: { width?: number; height?: number } };
@@ -48,8 +61,9 @@ function assetUrl(
 }
 
 export function RichText({ document }: { document: RichTextDocument }) {
+  const slots = richText();
   return (
-    <div className="prose prose-neutral max-w-none prose-headings:tracking-tight prose-a:text-brand prose-img:rounded-2xl prose-img:my-8">
+    <div className={slots.root()}>
       {documentToReactComponents(document, {
         renderNode: {
           [BLOCKS.EMBEDDED_ASSET]: (node) => {
@@ -63,7 +77,7 @@ export function RichText({ document }: { document: RichTextDocument }) {
                 width={asset.width}
                 height={asset.height}
                 loading="lazy"
-                className="my-8 w-full rounded-2xl object-cover"
+                className={slots.image()}
               />
             );
           },
@@ -109,21 +123,19 @@ export function RichText({ document }: { document: RichTextDocument }) {
                     ? (entry.fields.caption as Record<string, string>)["en-US"]
                     : undefined;
               return (
-                <figure className="my-8">
-                  <div className="aspect-video relative w-full overflow-hidden rounded-2xl">
+                <figure className={slots.figure()}>
+                  <div className={slots.media()}>
                     <iframe
                       src={embedSrc}
                       title={title}
                       allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                       allowFullScreen
                       loading="lazy"
-                      className="absolute inset-0 h-full w-full"
+                      className={slots.iframe()}
                     />
                   </div>
                   {caption && (
-                    <figcaption className="mt-3 text-center text-sm text-muted-foreground">
-                      {caption}
-                    </figcaption>
+                    <figcaption className={slots.caption()}>{caption}</figcaption>
                   )}
                 </figure>
               );

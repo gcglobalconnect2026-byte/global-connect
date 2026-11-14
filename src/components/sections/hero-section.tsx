@@ -1,11 +1,52 @@
 import Image from "next/image";
 
-import { Button } from "@/components/ui/button";
+import { tv, type VariantProps } from "@/lib/utils";
 import { SectionEyebrow } from "@/components/sections/section";
+import { Backdrop } from "@/components/ui/blobs";
+import { Button } from "@/components/ui/button";
+import { Tile } from "@/components/ui/tile";
 import type { HomepageSectionData, OpportunityData } from "@/types/models";
 
-const chipTileColors = ["bg-lavender/20", "bg-pastel-blue/20", "bg-sage/20"];
-const chipTranslations = ["", "sm:translate-x-10", "sm:-translate-x-4"];
+const hero = tv({
+  slots: {
+    root: "relative overflow-hidden px-6 pb-20 pt-16 sm:pt-24",
+    grid: "relative mx-auto grid max-w-7xl items-center gap-16 lg:grid-cols-[1.05fr_1fr]",
+    title:
+      "mt-7 font-display text-[2.6rem] leading-[1.05] tracking-tight text-foreground sm:text-6xl text-balance",
+    highlight: "relative inline-block break-words",
+    highlightMark: "absolute inset-x-0 bottom-1 -z-10 h-3 rounded-full bg-peach/40",
+    description:
+      "mt-6 max-w-xl text-base leading-relaxed text-muted-foreground sm:text-lg",
+    actions: "mt-9 flex flex-col gap-3 sm:flex-row",
+    meta: "mt-8 text-sm text-muted-foreground",
+    media: "relative",
+    mediaDrift: "blob drift pointer-events-none absolute inset-8 bg-lavender/15",
+    frame:
+      "relative overflow-hidden rounded-[2rem] border border-border shadow-[0_30px_70px_-40px_rgba(36,36,64,0.55)]",
+    image: "h-[26rem] w-full object-cover sm:h-[34rem]",
+    imageOverlay:
+      "pointer-events-none absolute inset-0 bg-gradient-to-t from-background/70 via-transparent to-transparent",
+    chips: "relative z-10 -mt-16 space-y-3 px-2 sm:-mt-20 sm:px-6",
+    chip: "float-soft flex items-center gap-4 rounded-2xl border border-border bg-card/90 p-4 shadow-[0_14px_36px_-20px_rgba(36,36,64,0.45)] backdrop-blur-md transition-transform duration-300 hover:-translate-y-1",
+    chipTitle: "truncate text-sm font-medium text-foreground",
+    chipMeta: "truncate text-xs text-muted-foreground",
+    chipBody: "min-w-0",
+  },
+  variants: {
+    offset: {
+      none: { chip: "" },
+      right: { chip: "sm:translate-x-10" },
+      left: { chip: "sm:-translate-x-4" },
+    },
+  },
+  defaultVariants: {
+    offset: "none",
+  },
+});
+
+type Offset = NonNullable<VariantProps<typeof hero>["offset"]>;
+
+const CHIP_OFFSETS: Offset[] = ["none", "right", "left"];
 
 export function HeroSection({
   featured,
@@ -21,28 +62,25 @@ export function HeroSection({
   const titleHighlight = titleWords?.slice(-2).join(" ");
   const titleRest = titleWords?.slice(0, -2).join(" ");
 
-  return (
-    <section
-      id="top"
-      className="relative overflow-hidden px-6 pb-20 pt-16 sm:pt-24"
-    >
-      <div className="pointer-events-none absolute inset-0" aria-hidden="true">
-        <div className="blob absolute -left-32 top-0 h-96 w-96 bg-lavender/20 blur-3xl" />
-        <div className="blob absolute -right-24 top-24 h-[26rem] w-[26rem] bg-pastel-blue/20 blur-3xl" />
-        <div className="blob absolute bottom-[-6rem] left-1/3 h-80 w-80 bg-sage/15 blur-3xl" />
-      </div>
+  const slots = hero();
 
-      <div className="relative mx-auto grid max-w-7xl items-center gap-16 lg:grid-cols-[1.05fr_1fr]">
+  return (
+    <section id="top" className={slots.root()}>
+      <Backdrop variant="hero" />
+
+      <div className={slots.grid()}>
         <div>
-          {config?.eyebrow && <SectionEyebrow dot="sage">{config.eyebrow}</SectionEyebrow>}
+          {config?.eyebrow && (
+            <SectionEyebrow dot="sage">{config.eyebrow}</SectionEyebrow>
+          )}
 
           {titleRest && titleHighlight && (
-            <h1 className="mt-7 font-display text-[2.6rem] leading-[1.05] tracking-tight text-foreground sm:text-6xl text-balance">
+            <h1 className={slots.title()}>
               {titleRest}{" "}
-              <span className="relative inline-block break-words">
+              <span className={slots.highlight()}>
                 {titleHighlight}
                 <span
-                  className="absolute inset-x-0 bottom-1 -z-10 h-3 rounded-full bg-peach/40"
+                  className={slots.highlightMark()}
                   aria-hidden="true"
                 />
               </span>
@@ -50,13 +88,14 @@ export function HeroSection({
           )}
 
           {config?.description && (
-            <p className="mt-6 max-w-xl text-base leading-relaxed text-muted-foreground sm:text-lg">
-              {config.description}
-            </p>
+            <p className={slots.description()}>{config.description}</p>
           )}
 
-          <div className="mt-9 flex flex-col gap-3 sm:flex-row">
-            <Button className="w-full sm:w-auto" render={<a href="/opportunities" />}>
+          <div className={slots.actions()}>
+            <Button
+              className="w-full sm:w-auto"
+              render={<a href="/opportunities" />}
+            >
               Explore opportunities <span aria-hidden="true">&rarr;</span>
             </Button>
             <Button
@@ -74,57 +113,62 @@ export function HeroSection({
             </Button>
           </div>
 
-          <p className="mt-8 text-sm text-muted-foreground">
-            1,000+ members &middot; 500+ opportunities shared &middot; 35 online sessions
+          <p className={slots.meta()}>
+            1,000+ members &middot; 500+ opportunities shared &middot; 35 online
+            sessions
           </p>
         </div>
 
-        <div className="relative">
-          <div
-            className="blob drift pointer-events-none absolute inset-8 bg-lavender/15"
-            aria-hidden="true"
-          />
-          <div className="relative overflow-hidden rounded-[2rem] border border-border shadow-[0_30px_70px_-40px_rgba(36,36,64,0.55)]">
+        <div className={slots.media()}>
+          <div className={slots.mediaDrift()} aria-hidden="true" />
+          <div className={slots.frame()}>
             {config?.imageUrl && (
               <Image
                 src={config.imageUrl}
-                alt={config.imageAlt ?? "Young people from different countries laughing together on a campus"}
+                alt={
+                  config.imageAlt ??
+                  "Young people from different countries laughing together on a campus"
+                }
                 width={1024}
                 height={1280}
                 priority
                 sizes="(min-width: 1024px) 50vw, 100vw"
-                className="h-[26rem] w-full object-cover sm:h-[34rem]"
+                className={slots.image()}
               />
             )}
-            <div
-              className="pointer-events-none absolute inset-0 bg-gradient-to-t from-background/70 via-transparent to-transparent"
-              aria-hidden="true"
-            />
+            <div className={slots.imageOverlay()} aria-hidden="true" />
           </div>
 
-          <div className="relative z-10 -mt-16 space-y-3 px-2 sm:-mt-20 sm:px-6">
-            {chips.map((o, index) => (
-              <div
-                key={o.id}
-                className={`float-soft flex items-center gap-4 rounded-2xl border border-border bg-card/90 p-4 shadow-[0_14px_36px_-20px_rgba(36,36,64,0.45)] backdrop-blur-md transition-transform duration-300 hover:-translate-y-1 ${chipTranslations[index] ?? ""}`}
-                style={{ animationDelay: `${index * 900}ms` }}
-              >
-                <span
-                  className={`flex h-11 w-11 shrink-0 items-center justify-center rounded-xl text-lg ${chipTileColors[index] ?? "bg-lavender/20"}`}
-                  aria-hidden="true"
+          <div className={slots.chips()}>
+            {chips.map((o, index) => {
+              const chip = hero({
+                offset: CHIP_OFFSETS[index % CHIP_OFFSETS.length],
+              });
+              return (
+                <div
+                  key={o.id}
+                  className={chip.chip()}
+                  style={{ animationDelay: `${index * 900}ms` }}
                 >
-                  {o.countryFlag}
-                </span>
-                <div className="min-w-0">
-                  <p className="truncate text-sm font-medium text-foreground">
-                    {o.title}
-                  </p>
-                  <p className="truncate text-xs text-muted-foreground">
-                    {o.country} &middot; {o.funding}
-                  </p>
+                  <Tile
+                    palette="hero"
+                    toneIndex={index}
+                    size="md"
+                    shape="rounded"
+                    content="emoji"
+                    aria-hidden="true"
+                  >
+                    {o.countryFlag}
+                  </Tile>
+                  <div className={slots.chipBody()}>
+                    <p className={slots.chipTitle()}>{o.title}</p>
+                    <p className={slots.chipMeta()}>
+                      {o.country} &middot; {o.funding}
+                    </p>
+                  </div>
                 </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
         </div>
       </div>

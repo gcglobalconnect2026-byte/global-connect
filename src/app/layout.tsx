@@ -1,6 +1,8 @@
 import type { Metadata, Viewport } from "next";
 import { ClerkProvider } from "@clerk/nextjs";
 import { Fraunces, Inter } from "next/font/google";
+
+import { cn, tv } from "@/lib/utils";
 import "./globals.css";
 
 const inter = Inter({
@@ -15,6 +17,13 @@ const fraunces = Fraunces({
   weight: ["400", "500", "600"],
 });
 
+const appShell = tv({
+  slots: {
+    html: "h-full antialiased",
+    body: "min-h-full flex flex-col",
+  },
+});
+
 export const metadata: Metadata = {
   metadataBase: new URL("https://global-connect-woad.vercel.app"),
   title: {
@@ -22,11 +31,11 @@ export const metadata: Metadata = {
     template: "%s · Global Connect",
   },
   description:
-    "Discover international opportunities, online sessions, guides and a global youth community. Exchanges, scholarships, conferences and volunteering for young people.",
+    "Discover international opportunities, online sessions, guides, and a global youth community. Exchanges, scholarships, conferences and volunteering for young people.",
   openGraph: {
     title: "Global Connect — Your next global opportunity",
     description:
-      "Discover international opportunities, online sessions, guides and a global youth community. Exchanges, scholarships, conferences and volunteering for young people.",
+      "Discover international opportunities, online sessions, guides, and a global youth community. Exchanges, scholarships, conferences and volunteering for young people.",
     siteName: "Global Connect",
     type: "website",
     locale: "en_US",
@@ -43,12 +52,13 @@ export const viewport: Viewport = {
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
+  const slots = appShell();
   return (
     <html
       lang="en"
-      className={`${inter.variable} ${fraunces.variable} h-full antialiased`}
+      className={cn(inter.variable, fraunces.variable, slots.html())}
     >
-      <body className="min-h-full flex flex-col">
+      <body className={slots.body()}>
         <ClerkProvider>{children}</ClerkProvider>
       </body>
     </html>

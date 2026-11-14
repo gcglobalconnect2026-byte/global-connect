@@ -1,5 +1,19 @@
+import { tv } from "@/lib/utils";
+
+import { Backdrop } from "@/components/ui/blobs";
 import { Button } from "@/components/ui/button";
 import type { HomepageSectionData } from "@/types/models";
+
+const finalCta = tv({
+  slots: {
+    root: "relative overflow-hidden px-6 py-20 sm:py-28",
+    inner: "relative mx-auto max-w-3xl text-center",
+    title: "font-display text-4xl leading-[1.08] text-foreground sm:text-6xl",
+    description:
+      "mx-auto mt-6 max-w-xl text-base text-muted-foreground sm:text-lg",
+    actions: "mt-10 flex flex-col justify-center gap-3 sm:flex-row",
+  },
+});
 
 export function FinalCtaSection({
   config,
@@ -8,32 +22,17 @@ export function FinalCtaSection({
   config?: HomepageSectionData;
   communityUrl: string;
 }) {
+  const slots = finalCta();
   return (
-    <section
-      id="join"
-      className="relative overflow-hidden px-6 py-20 sm:py-28"
-    >
-      <div
-        className="pointer-events-none absolute inset-0 overflow-hidden"
-        aria-hidden="true"
-      >
-        <div className="blob absolute left-[-8rem] top-0 h-96 w-96 bg-lavender/25 blur-3xl" />
-        <div className="blob absolute right-[-6rem] top-1/4 h-80 w-80 bg-pastel-blue/25 blur-3xl" />
-        <div className="blob absolute bottom-[-4rem] left-1/2 h-80 w-80 -translate-x-1/2 bg-sage/20 blur-3xl" />
-      </div>
+    <section id="join" className={slots.root()}>
+      <Backdrop variant="join" />
 
-      <div className="relative mx-auto max-w-3xl text-center">
-        {config?.title && (
-          <h2 className="font-display text-4xl leading-[1.08] text-foreground sm:text-6xl">
-            {config.title}
-          </h2>
-        )}
+      <div className={slots.inner()}>
+        {config?.title && <h2 className={slots.title()}>{config.title}</h2>}
         {config?.description && (
-          <p className="mx-auto mt-6 max-w-xl text-base text-muted-foreground sm:text-lg">
-            {config.description}
-          </p>
+          <p className={slots.description()}>{config.description}</p>
         )}
-        <div className="mt-10 flex flex-col justify-center gap-3 sm:flex-row">
+        <div className={slots.actions()}>
           <Button
             className="w-full sm:w-auto"
             size="lg"

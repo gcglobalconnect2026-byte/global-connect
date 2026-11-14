@@ -1,5 +1,6 @@
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
+import { PageMain } from "@/components/page-shell";
 import { Reveal } from "@/components/reveal";
 import { HeroSection } from "@/components/sections/hero-section";
 import { StatsBand } from "@/components/sections/stats-band";
@@ -70,7 +71,7 @@ export default async function HomePage() {
   return (
     <>
       <SiteHeader />
-      <main className="flex-1">
+      <PageMain>
         {isEnabled(sections.hero) && (
           <HeroSection featured={heroFeatured} config={sections.hero} communityUrl={siteSettings.communityUrl} />
         )}
@@ -124,7 +125,7 @@ export default async function HomePage() {
             <FinalCtaSection config={sections.finalCta} communityUrl={siteSettings.communityUrl} />
           </Reveal>
         )}
-      </main>
+      </PageMain>
       <SiteFooter />
     </>
   );

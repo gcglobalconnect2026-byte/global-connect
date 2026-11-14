@@ -1,16 +1,39 @@
 import Image from "next/image";
 import Link from "next/link";
 
+import { tv } from "@/lib/utils";
 import { Section, SectionHeading } from "@/components/sections/section";
+import { ArrowLink } from "@/components/ui/arrow-link";
+import { Tile } from "@/components/ui/tile";
 import type { HomepageSectionData, SessionData } from "@/types/models";
 
 const SESSION_COUNT = "35";
-const tileColors = [
-  "bg-lavender/20",
-  "bg-pastel-blue/20",
-  "bg-sage/25",
-  "bg-peach/25",
-];
+
+const sessionsSection = tv({
+  slots: {
+    header:
+      "flex flex-col gap-8 md:flex-row md:items-end md:justify-between",
+    count: "shrink-0 font-display text-5xl text-foreground",
+    countLabel:
+      "block text-sm font-sans uppercase tracking-[0.18em] text-muted-foreground",
+    media:
+      "mt-12 overflow-hidden rounded-[2rem] border border-border shadow-[0_30px_70px_-45px_rgba(36,36,64,0.5)]",
+    image:
+      "h-64 w-full object-cover transition-transform duration-[1200ms] hover:scale-[1.04] sm:h-80",
+    grid: "mt-8 grid gap-6 sm:grid-cols-2",
+    cta: "mt-10 text-center",
+    card: "flex flex-col rounded-3xl border border-border bg-card/80 p-7 transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_18px_40px_-24px_rgba(36,36,64,0.4)]",
+    cardHead: "flex items-start justify-between gap-4",
+    badge: "rounded-full bg-muted px-3 py-1 text-xs text-muted-foreground",
+    title: "mt-5 font-display text-xl text-foreground",
+    description: "mt-3 flex-1 text-sm leading-relaxed text-muted-foreground",
+    cardFoot:
+      "mt-6 flex items-center justify-between gap-4 border-t border-border/70 pt-5",
+    meta: "min-w-0 truncate text-xs uppercase tracking-[0.16em] text-muted-foreground",
+    register:
+      "rounded-full border border-border px-4 py-2 text-sm font-medium text-foreground transition-colors hover:bg-muted",
+  },
+});
 
 export function SessionsSection({
   sessions,
@@ -19,9 +42,10 @@ export function SessionsSection({
   sessions: SessionData[];
   config?: HomepageSectionData;
 }) {
+  const slots = sessionsSection();
   return (
     <Section id="sessions" className="scroll-mt-20">
-      <div className="flex flex-col gap-8 md:flex-row md:items-end md:justify-between">
+      <div className={slots.header()}>
         <SectionHeading
           eyebrow={config?.eyebrow}
           eyebrowDot="sage"
@@ -29,47 +53,38 @@ export function SessionsSection({
           description={config?.description}
           align="left"
         />
-        <p className="shrink-0 font-display text-5xl text-foreground">
+        <p className={slots.count()}>
           {SESSION_COUNT}{" "}
-          <span className="block text-sm font-sans uppercase tracking-[0.18em] text-muted-foreground">
-            online sessions
-          </span>
+          <span className={slots.countLabel()}>online sessions</span>
         </p>
       </div>
 
-      <div className="mt-12 overflow-hidden rounded-[2rem] border border-border shadow-[0_30px_70px_-45px_rgba(36,36,64,0.5)]">
+      <div className={slots.media()}>
         {config?.imageUrl && (
           <Image
             src={config.imageUrl}
-            alt={config.imageAlt ?? "A young woman taking notes during an online Global Connect session"}
+            alt={
+              config.imageAlt ??
+              "A young woman taking notes during an online Global Connect session"
+            }
             width={1024}
             height={768}
             loading="lazy"
-            className="h-64 w-full object-cover transition-transform duration-[1200ms] hover:scale-[1.04] sm:h-80"
+            className={slots.image()}
           />
         )}
       </div>
 
-      <div className="mt-8 grid gap-6 sm:grid-cols-2">
+      <div className={slots.grid()}>
         {sessions.slice(0, 2).map((session, index) => (
-          <SessionCard
-            key={session.id}
-            session={session}
-            tileColor={tileColors[index % tileColors.length]}
-          />
+          <SessionCard key={session.id} session={session} index={index} />
         ))}
       </div>
 
-      <div className="mt-10 text-center">
-        <Link
-          href="/sessions"
-          className="group inline-flex items-center gap-2 text-base font-medium text-foreground transition-colors hover:text-accent-foreground"
-        >
+      <div className={slots.cta()}>
+        <ArrowLink href="/sessions" variant="accent">
           View all sessions
-          <span className="inline-block transition-transform duration-300 group-hover:translate-x-1">
-            →
-          </span>
-        </Link>
+        </ArrowLink>
       </div>
     </Section>
   );
@@ -77,32 +92,31 @@ export function SessionsSection({
 
 function SessionCard({
   session,
-  tileColor,
+  index,
 }: {
   session: SessionData;
-  tileColor: string;
+  index: number;
 }) {
+  const slots = sessionsSection();
   return (
-    <article className="flex flex-col rounded-3xl border border-border bg-card/80 p-7 transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_18px_40px_-24px_rgba(36,36,64,0.4)]">
-      <div className="flex items-start justify-between gap-4">
-        <span
-          className={`flex h-11 w-11 items-center justify-center rounded-xl text-lg ${tileColor}`}
+    <article className={slots.card()}>
+      <div className={slots.cardHead()}>
+        <Tile
+          palette="session"
+          toneIndex={index}
+          size="md"
+          shape="rounded"
+          content="emoji"
           aria-hidden="true"
         >
           {session.icon}
-        </span>
-        <span className="rounded-full bg-muted px-3 py-1 text-xs text-muted-foreground">
-          Online
-        </span>
+        </Tile>
+        <span className={slots.badge()}>Online</span>
       </div>
-      <h3 className="mt-5 font-display text-xl text-foreground">
-        {session.title}
-      </h3>
-      <p className="mt-3 flex-1 text-sm leading-relaxed text-muted-foreground">
-        {session.description}
-      </p>
-      <div className="mt-6 flex items-center justify-between gap-4 border-t border-border/70 pt-5">
-        <p className="min-w-0 truncate text-xs uppercase tracking-[0.16em] text-muted-foreground">
+      <h3 className={slots.title()}>{session.title}</h3>
+      <p className={slots.description()}>{session.description}</p>
+      <div className={slots.cardFoot()}>
+        <p className={slots.meta()}>
           {session.duration} · {session.difficulty}
         </p>
         {session.registerUrl ? (
@@ -111,14 +125,14 @@ function SessionCard({
             target="_blank"
             rel="noopener noreferrer"
             aria-label="Register"
-            className="rounded-full border border-border px-4 py-2 text-sm font-medium text-foreground transition-colors hover:bg-muted"
+            className={slots.register()}
           >
             Register
           </a>
         ) : (
           <Link
             href={`/sessions/${session.slug}`}
-            className="rounded-full border border-border px-4 py-2 text-sm font-medium text-foreground transition-colors hover:bg-muted"
+            className={slots.register()}
           >
             Register
           </Link>

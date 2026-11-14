@@ -3,6 +3,7 @@
 import { usePathname } from "next/navigation";
 import { Show, SignInButton, UserButton } from "@clerk/nextjs";
 
+import { tv } from "@/lib/utils";
 import { Logo } from "@/components/logo";
 import { Button } from "@/components/ui/button";
 import {
@@ -14,9 +15,32 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 
-function AuthButtons({ className }: { className?: string }) {
+const headerNav = tv({
+  slots: {
+    header:
+      "sticky top-0 z-50 border-b border-border/70 bg-background/80 backdrop-blur-md",
+    nav: "mx-auto flex h-16 max-w-7xl items-center justify-between gap-6 px-6",
+    list: "hidden items-center gap-7 lg:flex",
+    link: "text-sm text-muted-foreground transition-colors hover:text-foreground",
+    actions: "hidden items-center gap-3 lg:flex",
+    authRow: "flex items-center",
+    menuButton:
+      "flex h-10 w-10 items-center justify-center rounded-full border border-border text-foreground lg:hidden",
+    menuLabel: "sr-only",
+    menuLines: "flex flex-col gap-1.5",
+    menuLine: "block h-px w-5 bg-foreground",
+    mobileNav: "flex flex-col gap-2 px-4",
+    mobileLink:
+      "rounded-full px-4 py-2.5 text-sm text-muted-foreground transition-colors hover:bg-muted hover:text-foreground",
+    mobileActions: "mt-6 flex flex-col gap-3 px-4 pb-6",
+    mobileAuthRow: "flex items-center gap-3",
+  },
+});
+
+function AuthButtons({ variant = "desktop" }: { variant?: "desktop" | "mobile" }) {
+  const slots = headerNav();
   return (
-    <div className={className}>
+    <div className={variant === "mobile" ? slots.mobileAuthRow() : slots.authRow()}>
       <Show
         when="signed-out"
         fallback={
@@ -56,19 +80,21 @@ export function SiteHeaderNav({ communityUrl }: { communityUrl: string }) {
     external: "external" in l,
   }));
 
+  const slots = headerNav();
+
   return (
-    <header className="sticky top-0 z-50 border-b border-border/70 bg-background/80 backdrop-blur-md">
-      <nav className="mx-auto flex h-16 max-w-7xl items-center justify-between gap-6 px-6">
+    <header className={slots.header()}>
+      <nav className={slots.nav()}>
         <Logo />
 
-        <ul className="hidden items-center gap-7 lg:flex">
+        <ul className={slots.list()}>
           {links.map((link) => (
             <li key={link.label}>
               <a
                 href={link.href}
                 target={link.external ? "_blank" : undefined}
                 rel={link.external ? "noopener noreferrer" : undefined}
-                className="text-sm text-muted-foreground transition-colors hover:text-foreground"
+                className={slots.link()}
               >
                 {link.label}
               </a>
@@ -76,7 +102,7 @@ export function SiteHeaderNav({ communityUrl }: { communityUrl: string }) {
           ))}
         </ul>
 
-        <div className="hidden items-center gap-3 lg:flex">
+        <div className={slots.actions()}>
           <Button
             variant="outline"
             size="xs"
@@ -84,7 +110,7 @@ export function SiteHeaderNav({ communityUrl }: { communityUrl: string }) {
           >
             Explore opportunities
           </Button>
-          <AuthButtons className="flex items-center" />
+          <AuthButtons />
         </div>
 
         <Sheet>
@@ -93,12 +119,12 @@ export function SiteHeaderNav({ communityUrl }: { communityUrl: string }) {
               <button
                 type="button"
                 aria-label="Toggle navigation"
-                className="flex h-10 w-10 items-center justify-center rounded-full border border-border text-foreground lg:hidden"
+                className={slots.menuButton()}
               >
-                <span className="sr-only">Menu</span>
-                <span className="flex flex-col gap-1.5">
-                  <span className="block h-px w-5 bg-foreground" />
-                  <span className="block h-px w-5 bg-foreground" />
+                <span className={slots.menuLabel()}>Menu</span>
+                <span className={slots.menuLines()}>
+                  <span className={slots.menuLine()} />
+                  <span className={slots.menuLine()} />
                 </span>
               </button>
             }
@@ -106,29 +132,27 @@ export function SiteHeaderNav({ communityUrl }: { communityUrl: string }) {
           <SheetContent side="right">
             <SheetHeader className="text-left">
               <SheetTitle>Menu</SheetTitle>
-              <SheetDescription>
-                Explore Global Connect
-              </SheetDescription>
+              <SheetDescription>Explore Global Connect</SheetDescription>
             </SheetHeader>
-            <nav className="flex flex-col gap-2 px-4" aria-label="Mobile">
+            <nav className={slots.mobileNav()} aria-label="Mobile">
               {links.map((link) => (
                 <a
                   key={link.label}
                   href={link.href}
                   target={link.external ? "_blank" : undefined}
                   rel={link.external ? "noopener noreferrer" : undefined}
-                  className="rounded-full px-4 py-2.5 text-sm text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
+                  className={slots.mobileLink()}
                 >
                   {link.label}
                 </a>
               ))}
             </nav>
-            <div className="mt-6 flex flex-col gap-3 px-4 pb-6">
-              <AuthButtons className="flex items-center gap-3" />
+            <div className={slots.mobileActions()}>
+              <AuthButtons variant="mobile" />
               <Button
                 variant="outline"
                 size="sm"
-            render={<a href="/opportunities" />}
+                render={<a href="/opportunities" />}
               >
                 Explore opportunities
               </Button>

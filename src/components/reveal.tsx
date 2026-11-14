@@ -1,7 +1,17 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { cn } from "@/lib/utils";
+
+import { tv } from "@/lib/utils";
+
+const reveal = tv({
+  base: "reveal",
+  variants: {
+    visible: {
+      true: "reveal-in",
+    },
+  },
+});
 
 export function Reveal({
   children,
@@ -24,11 +34,9 @@ export function Reveal({
     }
     const observer = new IntersectionObserver(
       (entries) => {
-        for (const entry of entries) {
-          if (entry.isIntersecting) {
-            setVisible(true);
-            observer.disconnect();
-          }
+        if (entries[0]?.isIntersecting) {
+          setVisible(true);
+          observer.disconnect();
         }
       },
       { threshold: 0.08 },
@@ -40,7 +48,7 @@ export function Reveal({
   return (
     <div
       ref={ref}
-      className={cn("reveal", visible && "reveal-in", className)}
+      className={reveal({ visible, class: className })}
       style={{ transitionDelay: `${delay}ms` }}
     >
       {children}

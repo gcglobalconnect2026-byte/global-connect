@@ -1,6 +1,9 @@
 import Image from "next/image";
 
+import { tv, type VariantProps } from "@/lib/utils";
 import { SectionHeading } from "@/components/sections/section";
+import { ArrowLink } from "@/components/ui/arrow-link";
+import { Tile } from "@/components/ui/tile";
 import type { CityData, HomepageSectionData } from "@/types/models";
 
 const FEATURES = [
@@ -11,18 +14,37 @@ const FEATURES = [
   { icon: "📚", text: "Learn together" },
 ];
 
-const CITY_STYLES: { bg: string; lift?: boolean }[] = [
-  { bg: "bg-lavender/30" },
-  { bg: "bg-pastel-blue/30", lift: true },
-  { bg: "bg-sage/30" },
-  { bg: "bg-peach/35" },
-  { bg: "bg-blush/35", lift: true },
-  { bg: "bg-lavender/20" },
-  { bg: "bg-pastel-blue/20", lift: true },
-  { bg: "bg-sage/20" },
-];
+/** Which city chips sit one step higher. */
+const CITY_LIFT = [false, true, false, false, true, false, true, false];
 
-const DEFAULT_CITY_BG = "bg-muted/30";
+const community = tv({
+  slots: {
+    root: "px-6 py-24 sm:py-32",
+    inner: "mx-auto max-w-7xl",
+    grid: "grid items-start gap-16 lg:grid-cols-2",
+    features: "mt-10 space-y-3",
+    feature: "flex items-center gap-3 text-base text-foreground",
+    cta: "mt-10",
+    media:
+      "relative overflow-hidden rounded-[2rem] border border-border shadow-[0_30px_70px_-45px_rgba(36,36,64,0.5)]",
+    image:
+      "h-72 w-full object-cover transition-transform duration-[1200ms] hover:scale-[1.04] sm:h-96",
+    cities: "mt-5 grid grid-cols-4 gap-3 sm:gap-4",
+    city: "flex flex-col items-center justify-center rounded-2xl border border-border bg-card/70 p-2.5 text-center transition-transform duration-300 hover:-translate-y-1",
+    cityName: "mt-2 text-[0.7rem] text-muted-foreground",
+  },
+  variants: {
+    lift: {
+      true: { city: "translate-y-3" },
+    },
+  },
+});
+
+type Lift = VariantProps<typeof community>["lift"];
+
+function liftAt(index: number): Lift {
+  return CITY_LIFT[index % CITY_LIFT.length] ? true : undefined;
+}
 
 export function CommunitySection({
   config,
@@ -33,10 +55,11 @@ export function CommunitySection({
   cities?: CityData[];
   communityUrl: string;
 }) {
+  const slots = community();
   return (
-    <section id="community" className="px-6 py-24 sm:py-32">
-      <div className="mx-auto max-w-7xl">
-        <div className="grid items-start gap-16 lg:grid-cols-2">
+    <section id="community" className={slots.root()}>
+      <div className={slots.inner()}>
+        <div className={slots.grid()}>
           <div>
             <SectionHeading
               eyebrow={config?.eyebrow}
@@ -45,64 +68,53 @@ export function CommunitySection({
               description={config?.description}
               align="left"
             />
-            <ul className="mt-10 space-y-3">
+            <ul className={slots.features()}>
               {FEATURES.map((f) => (
-                <li
-                  key={f.text}
-                  className="flex items-center gap-3 text-base text-foreground"
-                >
+                <li key={f.text} className={slots.feature()}>
                   <span aria-hidden="true">{f.icon}</span>
                   {f.text}
                 </li>
               ))}
             </ul>
-            <a
-              href={communityUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="group mt-10 inline-flex items-center gap-2 text-base font-medium text-foreground"
-            >
+            <ArrowLink href={communityUrl} external className={slots.cta()}>
               Join the community
-              <span className="transition-transform duration-300 group-hover:translate-x-1">
-                &rarr;
-              </span>
-            </a>
+            </ArrowLink>
           </div>
 
           <div>
-            <div className="relative overflow-hidden rounded-[2rem] border border-border shadow-[0_30px_70px_-45px_rgba(36,36,64,0.5)]">
+            <div className={slots.media()}>
               {config?.imageUrl && (
                 <Image
                   src={config.imageUrl}
-                  alt={config.imageAlt ?? "Young people from different countries talking in a circle"}
+                  alt={
+                    config.imageAlt ??
+                    "Young people from different countries talking in a circle"
+                  }
                   width={1200}
                   height={912}
                   loading="lazy"
-                  className="h-72 w-full object-cover transition-transform duration-[1200ms] hover:scale-[1.04] sm:h-96"
+                  className={slots.image()}
                 />
               )}
             </div>
-            <div className="mt-5 grid grid-cols-4 gap-3 sm:gap-4">
-              {(cities ?? []).map((c, i) => {
-                const pres = CITY_STYLES[i % CITY_STYLES.length] ?? {
-                  bg: DEFAULT_CITY_BG,
-                };
-                return (
-                  <div
-                    key={c.initials}
-                    className={`flex flex-col items-center justify-center rounded-2xl border border-border bg-card/70 p-2.5 text-center transition-transform duration-300 hover:-translate-y-1 ${pres.lift ? "translate-y-3" : ""}`}
+            <div className={slots.cities()}>
+              {(cities ?? []).map((c, i) => (
+                <div
+                  key={c.initials}
+                  className={slots.city({ lift: liftAt(i) })}
+                >
+                  <Tile
+                    palette="community"
+                    toneIndex={i}
+                    size="md"
+                    shape="circle"
+                    content="initials"
                   >
-                    <span
-                      className={`flex h-11 w-11 items-center justify-center rounded-full font-display text-sm text-foreground ${pres.bg}`}
-                    >
-                      {c.initials}
-                    </span>
-                    <span className="mt-2 text-[0.7rem] text-muted-foreground">
-                      {c.city}
-                    </span>
-                  </div>
-                );
-              })}
+                    {c.initials}
+                  </Tile>
+                  <span className={slots.cityName()}>{c.city}</span>
+                </div>
+              ))}
             </div>
           </div>
         </div>

@@ -3,7 +3,10 @@
 import { useDeferredValue, useMemo, useState } from "react";
 import { RotateCcw } from "lucide-react";
 
+import { tv } from "@/lib/utils";
 import { OpportunityCard } from "@/components/opportunity-card";
+import { Section, SectionHeading } from "@/components/sections/section";
+import { ArrowLink } from "@/components/ui/arrow-link";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -13,9 +16,32 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import Link from "next/link";
-import { Section, SectionHeading } from "@/components/sections/section";
 import type { HomepageSectionData, OpportunityData } from "@/types/models";
+
+const opportunityFinder = tv({
+  slots: {
+    searchPanel: "mx-auto mb-10 mt-12 max-w-3xl",
+    searchBar:
+      "flex items-center gap-3 rounded-full border border-border bg-card px-5 py-3 shadow-[0_10px_30px_-22px_rgba(36,36,64,0.5)]",
+    searchIcon: "text-lg leading-none",
+    searchInput:
+      "h-auto w-full border-0 bg-transparent p-0 rounded-none text-base md:text-[16px] text-foreground outline-none placeholder:text-muted-foreground focus-visible:ring-0",
+    filters: "-mx-6 mt-4 overflow-x-auto px-6 pb-1",
+    filterRow: "flex w-max gap-2 sm:w-auto sm:flex-wrap sm:justify-center",
+    filterTrigger:
+      "h-auto w-fit shrink-0 gap-1 rounded-full border border-border bg-card/60 px-4 py-2.5 text-sm text-muted-foreground transition-colors hover:border-foreground/25 hover:text-foreground",
+    filterContent: "min-w-48",
+    clearFilters: "shrink-0 rounded-full px-4 py-2 text-sm",
+    clearIcon: "size-3.5",
+    grid: "grid gap-6 sm:grid-cols-2 lg:grid-cols-3",
+    cta: "mt-10 text-center",
+    empty:
+      "mx-auto max-w-md rounded-3xl border border-border bg-card/80 p-10 text-center",
+    emptyTitle: "font-display text-xl",
+    emptyText: "mt-1 text-sm text-muted-foreground",
+    emptyAction: "mt-4",
+  },
+});
 
 export function OpportunityFinder({
   opportunities,
@@ -89,6 +115,8 @@ export function OpportunityFinder({
     setDeadline("all");
   }
 
+  const slots = opportunityFinder();
+
   return (
     <Section id="opportunities" className="scroll-mt-20">
       <SectionHeading
@@ -98,20 +126,22 @@ export function OpportunityFinder({
         description={config?.description}
       />
 
-      <div className="mx-auto mb-10 mt-12 max-w-3xl">
-        <div className="flex items-center gap-3 rounded-full border border-border bg-card px-5 py-3 shadow-[0_10px_30px_-22px_rgba(36,36,64,0.5)]">
-          <span aria-hidden="true" className="text-lg leading-none">🔎</span>
+      <div className={slots.searchPanel()}>
+        <div className={slots.searchBar()}>
+          <span aria-hidden="true" className={slots.searchIcon()}>
+            🔎
+          </span>
           <Input
             type="search"
             placeholder="Search opportunities…"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             aria-label="Search opportunities"
-            className="h-auto w-full border-0 bg-transparent p-0 rounded-none text-base md:text-[16px] text-foreground outline-none placeholder:text-muted-foreground focus-visible:ring-0"
+            className={slots.searchInput()}
           />
         </div>
-        <div className="-mx-6 mt-4 overflow-x-auto px-6 pb-1">
-          <div className="flex w-max gap-2 sm:w-auto sm:flex-wrap sm:justify-center">
+        <div className={slots.filters()}>
+          <div className={slots.filterRow()}>
             <FilterSelect
               label="Country"
               value={country}
@@ -145,10 +175,10 @@ export function OpportunityFinder({
             {hasActiveFilters && (
               <Button
                 variant="ghost"
-                className="shrink-0 rounded-full px-4 py-2 text-sm"
+                className={slots.clearFilters()}
                 onClick={resetFilters}
               >
-                <RotateCcw className="size-3.5" />
+                <RotateCcw className={slots.clearIcon()} />
                 Clear
               </Button>
             )}
@@ -158,7 +188,7 @@ export function OpportunityFinder({
 
       {filtered.length > 0 ? (
         <>
-          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          <div className={slots.grid()}>
             {(limit ? filtered.slice(0, limit) : filtered).map(
               (opportunity, index) => (
                 <OpportunityCard
@@ -170,26 +200,24 @@ export function OpportunityFinder({
             )}
           </div>
           {limit && filtered.length > limit && (
-            <div className="mt-10 text-center">
-              <Link
-                href="/opportunities"
-                className="group inline-flex items-center gap-2 text-base font-medium text-foreground transition-colors hover:text-accent-foreground"
-              >
+            <div className={slots.cta()}>
+              <ArrowLink href="/opportunities" variant="accent">
                 View all opportunities
-                <span className="inline-block transition-transform duration-300 group-hover:translate-x-1">
-                  →
-                </span>
-              </Link>
+              </ArrowLink>
             </div>
           )}
         </>
       ) : (
-        <div className="mx-auto max-w-md rounded-3xl border border-border bg-card/80 p-10 text-center">
-          <p className="font-display text-xl">No opportunities match</p>
-          <p className="mt-1 text-sm text-muted-foreground">
+        <div className={slots.empty()}>
+          <p className={slots.emptyTitle()}>No opportunities match</p>
+          <p className={slots.emptyText()}>
             Try clearing a filter or two to widen the search.
           </p>
-          <Button className="mt-4" variant="outline" onClick={resetFilters}>
+          <Button
+            className={slots.emptyAction()}
+            variant="outline"
+            onClick={resetFilters}
+          >
             Clear filters
           </Button>
         </div>
@@ -209,6 +237,7 @@ function FilterSelect({
   onChange: (v: string) => void;
   options: string[];
 }) {
+  const slots = opportunityFinder();
   const isActive = value !== "all";
 
   return (
@@ -217,13 +246,10 @@ function FilterSelect({
       value={isActive ? value : undefined}
       onValueChange={(next) => onChange(next ?? "all")}
     >
-      <SelectTrigger
-        aria-label={label}
-        className="h-auto w-fit shrink-0 gap-1 rounded-full border border-border bg-card/60 px-4 py-2.5 text-sm text-muted-foreground transition-colors hover:border-foreground/25 hover:text-foreground"
-      >
+      <SelectTrigger aria-label={label} className={slots.filterTrigger()}>
         <SelectValue placeholder={label} />
       </SelectTrigger>
-      <SelectContent className="min-w-48">
+      <SelectContent className={slots.filterContent()}>
         {options.map((option) => (
           <SelectItem key={option} value={option}>
             {option}
