@@ -48,8 +48,7 @@ const guidePage = tv({
 });
 
 async function GuideContent({ params }: { params: { slug: string } }) {
-  const { slug } = await params;
-  const guides = await getGuides();
+  const [{ slug }, guides] = await Promise.all([params, getGuides()]);
   const guide = guides.find((g) => g.slug === slug);
 
   if (!guide) notFound();

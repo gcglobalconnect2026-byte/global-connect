@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useState, isValidElement } from "react";
 import useEmblaCarousel from "embla-carousel-react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 
@@ -89,8 +89,11 @@ export function Carousel({
 
       <div ref={emblaRef} className={slots.viewport()} aria-label={ariaLabel}>
         <div className={slots.track()}>
-          {slides.map((child, i) => (
-            <div key={i} className={slots.slide()}>
+          {slides.map((child) => (
+            <div
+              key={isValidElement(child) ? child.key : undefined}
+              className={slots.slide()}
+            >
               {child}
             </div>
           ))}
@@ -99,13 +102,13 @@ export function Carousel({
 
       {snaps.length > 1 && (
         <div className={slots.dots()}>
-          {snaps.map((_, i) => (
+          {snaps.map((snap, index) => (
             <button
-              key={i}
+              key={snap}
               type="button"
-              aria-label={`Go to slide group ${i + 1}`}
-              onClick={() => emblaApi?.scrollTo(i)}
-              className={slots.dot({ active: i === selectedIndex })}
+              aria-label={`Go to slide group ${index + 1}`}
+              onClick={() => emblaApi?.scrollTo(index)}
+              className={slots.dot({ active: index === selectedIndex })}
             />
           ))}
         </div>

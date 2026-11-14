@@ -8,7 +8,7 @@
     "start": "next start",
     "lint": "eslint",
     "typecheck": "tsc --noEmit",
-    "react-doctor": "react-doctor . --verbose --diff",
+    "react-doctor": "react-doctor . --verbose",
     "contentful:import": "node scripts/contentful-import.mjs",
     "contentful:seed": "tsx scripts/contentful-seed.ts",
     "contentful:codegen": "dotenv -e .env.local -e .env -- contentful-typescript-codegen --output src/types/generated/contentful.d.ts"
@@ -45,6 +45,7 @@
     "dotenv-cli": "^11.0.0",
     "eslint": "^9",
     "eslint-config-next": "16.3.5",
+    "react-doctor": "^0.9.23",
     "tailwindcss": "^4",
     "tsx": "^4.23.13",
     "typescript": "^5"

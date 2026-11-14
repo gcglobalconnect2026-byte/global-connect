@@ -6,7 +6,7 @@ import { tv, type VariantProps } from "@/lib/utils";
  * Shared route chrome: `<main>`, the banded page header and the page
  * container, so every route frames its content the same way.
  */
-export const pageShell = tv({
+const pageShell = tv({
   slots: {
     main: "flex-1",
     band: "border-b border-border/70 bg-card/40",

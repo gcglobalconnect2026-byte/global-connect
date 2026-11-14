@@ -77,7 +77,7 @@ export default async function HomePage() {
         )}
         {isEnabled(sections.stats) && (
           <Reveal>
-            <StatsBand config={sections.stats} />
+            <StatsBand />
           </Reveal>
         )}
         {isEnabled(sections.opportunityFinder) && (

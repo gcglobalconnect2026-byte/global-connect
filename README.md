@@ -53,6 +53,30 @@ pnpm contentful:seed   # seed entries + assets into Contentful (see contentful/R
 pnpm contentful:codegen# generate TS types from your Contentful content model
 ```
 
+## Quality control
+
+There is no test suite yet, so these four commands are the gate. All must pass
+before an MR:
+
+- [ ] `pnpm typecheck` — `tsc --noEmit`, zero errors
+- [ ] `pnpm lint` — ESLint, zero problems
+- [ ] `pnpm react-doctor` — React diagnostics over the whole codebase, `100/100`
+- [ ] `pnpm build` — production build; every route must prerender
+
+`react-doctor` is a pinned devDependency and its script scans **everything**, not
+just changed files, so a regression shows up locally instead of waiting for CI.
+It scores render stability, hooks, a11y (anchor content, internal links), list
+keys, async data fetching and export hygiene — the fixes behind the current
+100/100 were mostly real bugs: `Promise.all` for independent awaits, module-scope
+rich-text renderers, `next/link` for internal links, stable carousel keys.
+
+While iterating on one file, scope it down:
+
+```bash
+npx react-doctor . --scope changed          # only issues in changed files
+npx react-doctor . --scope changed --base main
+```
+
 ## Project structure
 
 ```

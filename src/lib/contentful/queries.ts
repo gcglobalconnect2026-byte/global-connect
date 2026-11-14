@@ -19,7 +19,6 @@ import type {
   PathStepSkeleton,
   Session,
   SessionSkeleton,
-  SiteSettings,
   SiteSettingsSkeleton,
   Story,
   StorySkeleton,

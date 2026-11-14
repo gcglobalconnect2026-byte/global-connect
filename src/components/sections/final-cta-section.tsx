@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 import { tv } from "@/lib/utils";
 
 import { Backdrop } from "@/components/ui/blobs";
@@ -37,7 +39,7 @@ export function FinalCtaSection({
             className="w-full sm:w-auto"
             size="lg"
             variant="default"
-            render={<a href="/opportunities" />}
+            render={<Link href="/opportunities" />}
           >
             Explore opportunities
           </Button>
@@ -50,6 +52,7 @@ export function FinalCtaSection({
                 href={communityUrl}
                 target="_blank"
                 rel="noopener noreferrer"
+                aria-label="Join Global Connect"
               />
             }
           >

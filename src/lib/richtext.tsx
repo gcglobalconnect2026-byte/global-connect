@@ -1,4 +1,5 @@
 import { documentToReactComponents } from "@contentful/rich-text-react-renderer";
+import type { RenderNode } from "@contentful/rich-text-react-renderer";
 import { BLOCKS, INLINES } from "@contentful/rich-text-types";
 import type { Document as RichTextDocument } from "@contentful/rich-text-types";
 
@@ -60,90 +61,92 @@ function assetUrl(
   };
 }
 
+const richTextSlots = richText();
+
+// Module scope: the render callbacks keep a stable identity across renders.
+const renderNode: RenderNode = {
+  [BLOCKS.EMBEDDED_ASSET]: (node) => {
+    const asset = assetUrl(node.data.target);
+    if (!asset) return null;
+    return (
+      // eslint-disable-next-line @next/next/no-img-element -- CMS-rich-text images come from Contentful (images.ctfassets.net) and local fallback; next/image would need remotePatterns
+      <img
+        src={asset.url}
+        alt={asset.alt}
+        width={asset.width}
+        height={asset.height}
+        loading="lazy"
+        className={richTextSlots.image()}
+      />
+    );
+  },
+  [INLINES.ASSET_HYPERLINK]: (node, children) => {
+    const asset = assetUrl(node.data.target);
+    if (!asset) return <>{children}</>;
+    return (
+      <a href={asset.url} target="_blank" rel="noopener noreferrer">
+        {children}
+      </a>
+    );
+  },
+  [BLOCKS.EMBEDDED_ENTRY]: (node, children) => {
+    const entry = node.data.target as
+      | { sys?: { contentType?: { sys?: { id?: string } } }; fields?: Record<string, unknown> }
+      | undefined;
+    const typeId = entry?.sys?.contentType?.sys?.id;
+    if (typeId === "video" && entry?.fields) {
+      const rawUrl =
+        typeof entry.fields.videoUrl === "string"
+          ? entry.fields.videoUrl
+          : typeof entry.fields.videoUrl === "object" &&
+              entry.fields.videoUrl !== null &&
+              "en-US" in (entry.fields.videoUrl as Record<string, unknown>)
+            ? (entry.fields.videoUrl as Record<string, string>)["en-US"]
+            : "";
+      const embedSrc = youtubeEmbedUrl(rawUrl);
+      if (!embedSrc) return null;
+      const title =
+        typeof entry.fields.title === "string"
+          ? entry.fields.title
+          : typeof entry.fields.title === "object" &&
+              entry.fields.title !== null &&
+              "en-US" in (entry.fields.title as Record<string, unknown>)
+            ? (entry.fields.title as Record<string, string>)["en-US"]
+            : "Video";
+      const caption =
+        typeof entry.fields.caption === "string"
+          ? entry.fields.caption
+          : typeof entry.fields.caption === "object" &&
+              entry.fields.caption !== null &&
+              "en-US" in (entry.fields.caption as Record<string, unknown>)
+            ? (entry.fields.caption as Record<string, string>)["en-US"]
+            : undefined;
+      return (
+        <figure className={richTextSlots.figure()}>
+          <div className={richTextSlots.media()}>
+            <iframe
+              src={embedSrc}
+              title={title}
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+              allowFullScreen
+              loading="lazy"
+              className={richTextSlots.iframe()}
+            />
+          </div>
+          {caption && (
+            <figcaption className={richTextSlots.caption()}>{caption}</figcaption>
+          )}
+        </figure>
+      );
+    }
+    return <>{children}</>;
+  },
+};
+
 export function RichText({ document }: { document: RichTextDocument }) {
-  const slots = richText();
   return (
-    <div className={slots.root()}>
-      {documentToReactComponents(document, {
-        renderNode: {
-          [BLOCKS.EMBEDDED_ASSET]: (node) => {
-            const asset = assetUrl(node.data.target);
-            if (!asset) return null;
-            return (
-              // eslint-disable-next-line @next/next/no-img-element -- CMS-rich-text images come from Contentful (images.ctfassets.net) and local fallback; next/image would need remotePatterns
-              <img
-                src={asset.url}
-                alt={asset.alt}
-                width={asset.width}
-                height={asset.height}
-                loading="lazy"
-                className={slots.image()}
-              />
-            );
-          },
-          [INLINES.ASSET_HYPERLINK]: (node, children) => {
-            const asset = assetUrl(node.data.target);
-            if (!asset) return <>{children}</>;
-            return (
-              <a href={asset.url} target="_blank" rel="noopener noreferrer">
-                {children}
-              </a>
-            );
-          },
-          [BLOCKS.EMBEDDED_ENTRY]: (node, children) => {
-            const entry = node.data.target as
-              | { sys?: { contentType?: { sys?: { id?: string } } }; fields?: Record<string, unknown> }
-              | undefined;
-            const typeId = entry?.sys?.contentType?.sys?.id;
-            if (typeId === "video" && entry?.fields) {
-              const rawUrl =
-                typeof entry.fields.videoUrl === "string"
-                  ? entry.fields.videoUrl
-                  : typeof entry.fields.videoUrl === "object" &&
-                      entry.fields.videoUrl !== null &&
-                      "en-US" in (entry.fields.videoUrl as Record<string, unknown>)
-                    ? (entry.fields.videoUrl as Record<string, string>)["en-US"]
-                    : "";
-              const embedSrc = youtubeEmbedUrl(rawUrl);
-              if (!embedSrc) return null;
-              const title =
-                typeof entry.fields.title === "string"
-                  ? entry.fields.title
-                  : typeof entry.fields.title === "object" &&
-                      entry.fields.title !== null &&
-                      "en-US" in (entry.fields.title as Record<string, unknown>)
-                    ? (entry.fields.title as Record<string, string>)["en-US"]
-                    : "Video";
-              const caption =
-                typeof entry.fields.caption === "string"
-                  ? entry.fields.caption
-                  : typeof entry.fields.caption === "object" &&
-                      entry.fields.caption !== null &&
-                      "en-US" in (entry.fields.caption as Record<string, unknown>)
-                    ? (entry.fields.caption as Record<string, string>)["en-US"]
-                    : undefined;
-              return (
-                <figure className={slots.figure()}>
-                  <div className={slots.media()}>
-                    <iframe
-                      src={embedSrc}
-                      title={title}
-                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                      allowFullScreen
-                      loading="lazy"
-                      className={slots.iframe()}
-                    />
-                  </div>
-                  {caption && (
-                    <figcaption className={slots.caption()}>{caption}</figcaption>
-                  )}
-                </figure>
-              );
-            }
-            return <>{children}</>;
-          },
-        },
-      })}
+    <div className={richTextSlots.root()}>
+      {documentToReactComponents(document, { renderNode })}
     </div>
   );
 }

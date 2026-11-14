@@ -48,8 +48,8 @@ const sessionPage = tv({
 });
 
 async function SessionContent({ params }: { params: { slug: string } }) {
-  const { slug } = await params;
-  const [sessions, siteSettings] = await Promise.all([
+  const [{ slug }, sessions, siteSettings] = await Promise.all([
+    params,
     getSessions(),
     getSiteSettings(),
   ]);
@@ -126,6 +126,7 @@ async function SessionContent({ params }: { params: { slug: string } }) {
                 href={siteSettings.communityUrl}
                 target="_blank"
                 rel="noopener noreferrer"
+                aria-label="Join to register"
               />
             }
           >

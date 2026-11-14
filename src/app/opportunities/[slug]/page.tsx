@@ -63,8 +63,10 @@ const opportunityPage = tv({
 });
 
 async function OpportunityContent({ params }: { params: { slug: string } }) {
-  const { slug } = await params;
-  const opportunities = await getOpportunities();
+  const [{ slug }, opportunities] = await Promise.all([
+    params,
+    getOpportunities(),
+  ]);
   const opportunity = opportunities.find((o) => o.slug === slug);
 
   if (!opportunity) notFound();

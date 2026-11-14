@@ -1,7 +1,5 @@
 import { tv } from "@/lib/utils";
 
-import type { HomepageSectionData } from "@/types/models";
-
 const statsBand = tv({
   slots: {
     root: "border-y border-border/70 bg-card/40 px-6 py-14",
@@ -20,7 +18,7 @@ const STATS: { value: string; label: string }[] = [
   { value: "3", label: "Partnerships" },
 ];
 
-export function StatsBand({ config }: { config?: HomepageSectionData }) {
+export function StatsBand() {
   const slots = statsBand();
   return (
     <section className={slots.root()}>

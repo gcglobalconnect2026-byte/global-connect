@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Show, SignInButton, UserButton } from "@clerk/nextjs";
 
@@ -106,7 +107,7 @@ export function SiteHeaderNav({ communityUrl }: { communityUrl: string }) {
           <Button
             variant="outline"
             size="xs"
-            render={<a href="/opportunities" />}
+            render={<Link href="/opportunities" />}
           >
             Explore opportunities
           </Button>
@@ -152,7 +153,7 @@ export function SiteHeaderNav({ communityUrl }: { communityUrl: string }) {
               <Button
                 variant="outline"
                 size="sm"
-                render={<a href="/opportunities" />}
+                render={<Link href="/opportunities" />}
               >
                 Explore opportunities
               </Button>

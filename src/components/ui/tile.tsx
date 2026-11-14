@@ -7,7 +7,7 @@ import { cn, tv, type VariantProps } from "@/lib/utils";
  * Structure lives in `tile`; color comes from the palette tables below so
  * every colour string is defined once, in one place.
  */
-export const tile = tv({
+const tile = tv({
   base: "flex items-center justify-center",
   variants: {
     size: {
@@ -119,7 +119,7 @@ const PALETTE_TONES: Record<Palette, Record<Tone, string>> = {
   },
 };
 
-export function toneAt(palette: Palette, index = 0): string {
+function toneAt(palette: Palette, index = 0): string {
   const order = PALETTE_ORDER[palette];
   const tone = order[index % order.length] ?? order[0];
   return PALETTE_TONES[palette][tone];

@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from "next/link";
 
 import { tv, type VariantProps } from "@/lib/utils";
 import { SectionEyebrow } from "@/components/sections/section";
@@ -94,7 +95,7 @@ export function HeroSection({
           <div className={slots.actions()}>
             <Button
               className="w-full sm:w-auto"
-              render={<a href="/opportunities" />}
+              render={<Link href="/opportunities" />}
             >
               Explore opportunities <span aria-hidden="true">&rarr;</span>
             </Button>
@@ -106,6 +107,7 @@ export function HeroSection({
                   href={communityUrl}
                   target="_blank"
                   rel="noopener noreferrer"
+                  aria-label="Join Global Connect"
                 />
               }
             >
