@@ -3,12 +3,17 @@ import Link from "next/link";
 import { tv } from "@/lib/utils";
 
 import { SectionBand, SectionHeading } from "@/components/sections/section";
+import { ArrowLink } from "@/components/ui/arrow-link";
 import { Tile } from "@/components/ui/tile";
 import type { GuideData, HomepageSectionData } from "@/types/models";
+
+/** Two rows on desktop (lg: 3 columns). */
+const GUIDE_COUNT = 6;
 
 const guidesSection = tv({
   slots: {
     grid: "mt-14 grid gap-px overflow-hidden rounded-3xl border border-border bg-border sm:grid-cols-2 lg:grid-cols-3",
+    footer: "mt-10 text-center",
     card: "group flex flex-col bg-background p-8 transition-colors hover:bg-card",
     title: "mt-6 font-display text-xl leading-snug text-foreground",
     readTime: "mt-3 text-sm text-muted-foreground",
@@ -35,7 +40,7 @@ export function GuidesSection({
         align="left"
       />
       <div className={slots.grid()}>
-        {guides.map((guide, index) => (
+        {guides.slice(0, GUIDE_COUNT).map((guide, index) => (
           <Link
             key={guide.id}
             href={`/guides/${guide.slug}`}
@@ -62,6 +67,13 @@ export function GuidesSection({
           </Link>
         ))}
       </div>
+      {guides.length > GUIDE_COUNT && (
+        <div className={slots.footer()}>
+          <ArrowLink href="/guides" variant="accent">
+            View all guides
+          </ArrowLink>
+        </div>
+      )}
     </SectionBand>
   );
 }
