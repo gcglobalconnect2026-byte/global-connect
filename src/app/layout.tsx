@@ -3,6 +3,7 @@ import { ClerkProvider } from "@clerk/nextjs";
 import { Fraunces, Inter } from "next/font/google";
 
 import { cn, tv } from "@/lib/utils";
+import { SITE_URL } from "@/lib/site";
 import "./globals.css";
 
 const inter = Inter({
@@ -25,7 +26,7 @@ const appShell = tv({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://global-connect-woad.vercel.app"),
+  metadataBase: new URL(SITE_URL),
   title: {
     default: "Global Connect — Your next global opportunity",
     template: "%s · Global Connect",

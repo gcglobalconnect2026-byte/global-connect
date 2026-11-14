@@ -38,6 +38,9 @@ Copy `.env.example` → `.env.local` and fill in your keys. Full walkthroughs:
 - **Clerk** — create an app in the [Clerk dashboard](https://dashboard.clerk.com),
   then copy the Publishable Key and Secret Key into `.env.local`. The cofig lives
   in `src/proxy.ts`.
+- **Site origin** — `NEXT_PUBLIC_SITE_URL` drives canonical URLs, Open Graph,
+  `sitemap.xml` and `robots.txt` (see `src/lib/site.ts`). On Vercel it falls
+  back to `$VERCEL_PROJECT_PRODUCTION_URL`; locally to `http://localhost:3000`.
 
 ## Useful commands
 
