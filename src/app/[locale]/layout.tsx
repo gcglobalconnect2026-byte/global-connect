@@ -107,7 +107,7 @@ export default async function RootLayout({
   return (
     <html lang={LOCALES[locale].htmlLang} className={cn(inter.variable, fraunces.variable, slots.html())}>
       <body className={slots.body()}>
-        <JsonLd data={organization(locale)} />
+        <JsonLd data={organization()} />
         <JsonLd data={website(locale)} />
         <NextIntlClientProvider locale={locale} messages={messages}>
           <ClerkProvider localization={clerkLocalizations[locale]}>

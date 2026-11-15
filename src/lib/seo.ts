@@ -7,6 +7,7 @@ import {
   LOCALE_CODES,
   type Locale,
 } from "@/lib/locales";
+import { SITE_URL } from "@/lib/site";
 
 /**
  * Shared page metadata.
@@ -33,8 +34,12 @@ export const DEFAULT_OG_IMAGE = {
 } as const;
 
 /**
- * `alternates.languages` for a path that is relative to the locale prefix
- * (`/about` → `{ en: "/en/about", de: "/de/about", "x-default": "/en/about" }`).
+ * `alternates.languages` for a path relative to the locale prefix
+ * (`/about` → `{ en: "…/en/about", de: "…/de/about", "x-default": "…/en/about" }`).
+ *
+ * Values are absolute: `sitemap.xml`'s `<xhtml:link href>` is emitted
+ * verbatim by Next and the sitemaps.org spec requires fully-qualified URLs
+ * there, so relative values would have the whole hreflang set discarded.
  *
  * Only pass `locales` that actually have a translation — advertising a
  * `de` URL that renders English fallback content is a soft duplicate.
@@ -45,9 +50,9 @@ export function alternatesFor(
 ): Record<string, string> {
   const languages: Record<string, string> = {};
   for (const code of locales) {
-    languages[LOCALES[code].hreflang] = `/${code}${path}`;
+    languages[LOCALES[code].hreflang] = `${SITE_URL}/${code}${path}`;
   }
-  languages["x-default"] = `/${DEFAULT_LOCALE}${path}`;
+  languages["x-default"] = `${SITE_URL}/${DEFAULT_LOCALE}${path}`;
   return languages;
 }
 

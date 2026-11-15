@@ -68,7 +68,7 @@ export default async function SessionsPage({
       <JsonLd
         data={breadcrumb(
           [
-            { name: nav("home"), path: "/" },
+            { name: nav("home"), path: "" },
             { name: nav("sessions"), path: "/sessions" },
           ],
           locale,

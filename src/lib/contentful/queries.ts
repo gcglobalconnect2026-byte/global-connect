@@ -332,6 +332,7 @@ function mapGuide(entry: Guide, locale: Locale): GuideData {
     excerpt: pick<string>(fields.excerpt, locale) ?? "",
     body: pick<RichTextDocument>(fields.body, locale),
     publishedAt: pick<string>(fields.publishedAt, locale),
+    createdAt: entry.sys.createdAt,
     updatedAt: entry.sys.updatedAt,
     translatedLocales: translatedLocales(fields, ["title", "excerpt", "body"]),
   };

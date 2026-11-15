@@ -58,6 +58,8 @@ export interface GuideData {
   excerpt: string;
   body?: RichTextDocument;
   publishedAt?: string;
+  /** CMS entry creation time (ISO). Fallback for `datePublished`. */
+  createdAt?: string;
   updatedAt?: string;
   author?: string;
   translatedLocales: Locale[];

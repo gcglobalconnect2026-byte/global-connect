@@ -27,19 +27,23 @@ const inLanguage = (locale: Locale) => LOCALES[locale].htmlLang;
 /**
  * Site-wide: Organization + WebSite.
  *
- * `@id` stays locale-independent — it is the same entity on every page —
- * while `url` and `inLanguage` point at the locale the page is served in.
+ * `Organization` is the same entity on every page, so it points at the site
+ * root — a locale-specific `url` under one `@id` would contradict itself
+ * between `/en` and `/de`.
+ *
+ * `WebSite` is per-locale (each language version is its own site), hence a
+ * distinct `@id` so the two never collide.
  *
  * No `SearchAction` — the opportunity finder filters client-side and has no
  * query-parameter URL, so declaring a search endpoint would be false.
  */
-export function organization(locale: Locale): Record<string, unknown> {
+export function organization(): Record<string, unknown> {
   return {
     "@context": "https://schema.org",
     "@type": "Organization",
     "@id": `${SITE_URL}/#organization`,
     name: SITE_NAME,
-    url: `${SITE_URL}/${locale}`,
+    url: SITE_URL,
     logo: {
       "@type": "ImageObject",
       url: `${SITE_URL}/logo.png`,
@@ -47,7 +51,6 @@ export function organization(locale: Locale): Record<string, unknown> {
       height: 512,
     },
     image: `${SITE_URL}/og-default.jpg`,
-    inLanguage: inLanguage(locale),
     sameAs: ["https://t.me/globalconnectforyou"],
   };
 }
@@ -56,7 +59,7 @@ export function website(locale: Locale): Record<string, unknown> {
   return {
     "@context": "https://schema.org",
     "@type": "WebSite",
-    "@id": `${SITE_URL}/#website`,
+    "@id": `${SITE_URL}/${locale}#website`,
     name: SITE_NAME,
     url: `${SITE_URL}/${locale}`,
     inLanguage: inLanguage(locale),
@@ -64,7 +67,12 @@ export function website(locale: Locale): Record<string, unknown> {
   };
 }
 
-/** Root node for `BreadcrumbList`; items are appended in display order. */
+/**
+ * Root node for `BreadcrumbList`; items are appended in display order.
+ *
+ * `path` is relative to the locale prefix — pass `""` for the locale root
+ * (`/en`), not `"/"`: the latter produces `/en/`, which 308-redirects.
+ */
 export function breadcrumb(
   items: BreadcrumbItem[],
   locale: Locale,
@@ -76,15 +84,18 @@ export function breadcrumb(
       "@type": "ListItem",
       position: index + 1,
       name: item.name,
-      url: absolute(item.path, locale),
+      // `BreadcrumbList` reads `item`; `url` is not a ListItem property.
+      item: absolute(item.path, locale),
     })),
   };
 }
 
 /**
- * `Article` for guide pages. Dates are emitted only when the CMS has them —
- * a made-up `datePublished` is a trust violation, and Google requires
- * `dateModified` to be accurate if published.
+ * `Article` for guide pages.
+ *
+ * `datePublished` falls back to the CMS entry creation time: Google requires
+ * it for Article eligibility, and `sys.createdAt` is a real timestamp rather
+ * than a fabricated date. A `publishedAt` set by an editor takes precedence.
  */
 export function article(
   guide: GuideData,
@@ -111,9 +122,10 @@ export function article(
     inLanguage: inLanguage(locale),
   };
 
-  if (guide.publishedAt) node.datePublished = guide.publishedAt;
-  if (guide.updatedAt) node.dateModified = guide.updatedAt;
-  else if (guide.publishedAt) node.dateModified = guide.publishedAt;
+  const published = guide.publishedAt ?? guide.createdAt;
+  const modified = guide.updatedAt ?? published;
+  if (published) node.datePublished = published;
+  if (modified) node.dateModified = modified;
 
   return node;
 }
@@ -140,6 +152,7 @@ export function itemList(
       "@type": "ListItem",
       position: index + 1,
       name: item.name,
+      // `ItemList` reads `url`, unlike `BreadcrumbList` which reads `item`.
       url: absolute(item.path, locale),
     })),
   };

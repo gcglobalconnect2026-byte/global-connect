@@ -44,7 +44,7 @@ export default async function OpportunitiesPage({
       <JsonLd
         data={breadcrumb(
           [
-            { name: nav("home"), path: "/" },
+            { name: nav("home"), path: "" },
             { name: nav("opportunities"), path: "/opportunities" },
           ],
           locale,

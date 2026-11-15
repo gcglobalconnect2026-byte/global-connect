@@ -148,7 +148,7 @@ export default async function GuidePage({
       <JsonLd
         data={breadcrumb(
           [
-            { name: nav("home"), path: "/" },
+            { name: nav("home"), path: "" },
             { name: nav("guides"), path: "/guides" },
             { name: guide.title, path: `/guides/${guide.slug}` },
           ],
