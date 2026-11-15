@@ -1196,13 +1196,9 @@ export const seedGuides: SeedEntry<GuideData>[] = [
       ),
       video(
         "seed-video-interview-prep",
-        "https://www.youtube.com/watch?v=jNQXAC9IVRw",
+        "https://www.youtube.com/watch?v=JIXejOusj9Q",
         "Interview Preparation Guide",
         "A quick primer on what to expect and how to prepare for your next interview.",
-      ),
-      guideImage(
-        "how-to-prepare-for-an-interview",
-        "A candidate preparing for a job interview",
       ),
       heading2("Before the call"),
       list([
@@ -1232,13 +1228,9 @@ export const seedGuides: SeedEntry<GuideData>[] = [
       ),
       video(
         "seed-video-cv-tips",
-        "https://www.youtube.com/watch?v=lv8TasO-EV4",
+        "https://www.youtube.com/watch?v=ztzxD_S1Ico",
         "CV Writing Tips",
         "Watch this walkthrough on building a clean, effective CV from scratch.",
-      ),
-      guideImage(
-        "how-to-build-your-first-cv",
-        "A clean, well-structured first CV on a screen",
       ),
       heading2("Sections that carry weight"),
       list([
@@ -1426,14 +1418,14 @@ export const seedVideos: VideoData[] = [
   {
     id: "seed-video-cv-tips",
     title: "CV Writing Tips",
-    videoUrl: "https://www.youtube.com/watch?v=lv8TasO-EV4",
+    videoUrl: "https://www.youtube.com/watch?v=ztzxD_S1Ico",
     caption:
       "Watch this walkthrough on building a clean, effective CV from scratch.",
   },
   {
     id: "seed-video-interview-prep",
     title: "Interview Preparation Guide",
-    videoUrl: "https://www.youtube.com/watch?v=jNQXAC9IVRw",
+    videoUrl: "https://www.youtube.com/watch?v=JIXejOusj9Q",
     caption:
       "A quick primer on what to expect and how to prepare for your next interview.",
   },
@@ -1596,7 +1588,7 @@ export const seedInterests: InterestData[] = [
 // ---------------------------------------------------------------------------
 
 export const seedSiteSettings: SiteSettingsData[] = [
-  { communityUrl: "https://t.me/globalconnect", contactEmail: "hello@globalconnect.example" },
+  { communityUrl: "https://t.me/globalconnectforyou", contactEmail: "globalconnectforyou@gmail.com" },
 ];
 
 // ---------------------------------------------------------------------------

@@ -492,7 +492,7 @@ contentful_create_entry({
   contentTypeId: "video",
   fields: {
     title: { "en-US": "CV Writing Tips" },
-    videoUrl: { "en-US": "https://www.youtube.com/watch?v=lv8TasO-EV4" },
+    videoUrl: { "en-US": "https://www.youtube.com/watch?v=ztzxD_S1Ico" },
     caption: { "en-US": "A walkthrough of building a clean CV." }
   }
 })

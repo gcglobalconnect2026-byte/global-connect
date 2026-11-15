@@ -48,7 +48,7 @@ export function organization(locale: Locale): Record<string, unknown> {
     },
     image: `${SITE_URL}/og-default.jpg`,
     inLanguage: inLanguage(locale),
-    sameAs: ["https://t.me/globalconnect"],
+    sameAs: ["https://t.me/globalconnectforyou"],
   };
 }
 

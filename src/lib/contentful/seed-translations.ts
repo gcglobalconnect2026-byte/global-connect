@@ -879,13 +879,9 @@ export const seedTranslations: SeedTranslations = {
       ),
       video(
         "seed-video-interview-prep",
-        "https://www.youtube.com/watch?v=jNQXAC9IVRw",
+        "https://www.youtube.com/watch?v=JIXejOusj9Q",
         "Interview-Vorbereitung",
         "Ein kompakter Überblick, was dich erwartet und wie du dich auf dein nächstes Gespräch vorbereitest.",
-      ),
-      guideImage(
-        "how-to-prepare-for-an-interview",
-        "Eine Kandidatin bereitet sich auf ein Vorstellungsgespräch vor",
       ),
       heading2("Vor dem Gespräch"),
       list([
@@ -912,13 +908,9 @@ export const seedTranslations: SeedTranslations = {
       ),
       video(
         "seed-video-cv-tips",
-        "https://www.youtube.com/watch?v=lv8TasO-EV4",
+        "https://www.youtube.com/watch?v=ztzxD_S1Ico",
         "Tipps für den Lebenslauf",
         "Sieh dir diesen Durchgang an: einen klaren, wirkungsvollen Lebenslauf von Grund auf erstellen.",
-      ),
-      guideImage(
-        "how-to-build-your-first-cv",
-        "Ein klarer, gut strukturierter erster Lebenslauf auf dem Bildschirm",
       ),
       heading2("Abschnitte mit Gewicht"),
       list([
