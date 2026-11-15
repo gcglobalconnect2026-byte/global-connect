@@ -93,6 +93,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       priority: 0.3,
     },
     {
+      path: "/impressum",
+      locales: LOCALE_CODES,
+      changeFrequency: "yearly",
+      priority: 0.3,
+    },
+    {
       path: "/terms",
       locales: LOCALE_CODES,
       changeFrequency: "yearly",

@@ -11,6 +11,8 @@ const legalPage = tv({
     section: "mb-8",
     title: "mb-2 text-lg font-semibold",
     body: "text-muted-foreground",
+    list: "mt-2 list-disc space-y-1.5 pl-5",
+    term: "mb-1 font-medium text-foreground",
   },
 });
 
@@ -18,17 +20,20 @@ const legalPage = tv({
 export function LegalPage({
   title,
   eyebrow,
+  description,
   children,
 }: {
   title: string;
   eyebrow: string;
+  /** Optional subtitle — the privacy/terms pages use it for the revision date. */
+  description?: string;
   children: React.ReactNode;
 }) {
   return (
     <>
       <SiteHeader />
       <PageMain>
-        <PageHeader title={title} eyebrow={eyebrow} />
+        <PageHeader title={title} eyebrow={eyebrow} description={description} />
         <PageContainer size="narrow" spacing="bottom">
           {children}
         </PageContainer>
@@ -51,5 +56,20 @@ export function LegalSection({
       <h2 className={slots.title()}>{title}</h2>
       <div className={slots.body()}>{children}</div>
     </section>
+  );
+}
+
+/**
+ * Bulleted facts inside a section — the processors table and the rights list
+ * both use it. The list is static per locale, so index keys are stable.
+ */
+export function LegalList({ items }: { items: React.ReactNode[] }) {
+  const slots = legalPage();
+  return (
+    <ul className={slots.list()}>
+      {items.map((item, index) => (
+        <li key={index}>{item}</li>
+      ))}
+    </ul>
   );
 }

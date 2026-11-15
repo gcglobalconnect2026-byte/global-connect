@@ -5,14 +5,14 @@ import type { Document as RichTextDocument } from "@contentful/rich-text-types";
 
 import { tv } from "@/lib/utils";
 import { CF_LOCALES } from "@/lib/contentful/locales";
+import { youtubeVideoId } from "@/lib/youtube";
+import { YouTubeEmbed } from "@/components/youtube-embed";
 
 const richText = tv({
   slots: {
     root: "prose prose-neutral dark:prose-invert max-w-none prose-headings:tracking-tight prose-a:text-brand prose-img:rounded-2xl prose-img:my-8",
     image: "my-8 w-full rounded-2xl object-cover",
     figure: "my-8",
-    media: "aspect-video relative w-full overflow-hidden rounded-2xl",
-    iframe: "absolute inset-0 h-full w-full",
     caption: "mt-3 text-center text-sm text-muted-foreground",
   },
 });
@@ -22,14 +22,6 @@ type AssetFile = {
   details?: { image?: { width?: number; height?: number } };
   contentType?: string;
 };
-
-const YOUTUBE_RE =
-  /(?:youtube\.com\/(?:watch\?v=|embed\/|shorts\/|live\/)|youtu\.be\/)([A-Za-z0-9_-]{11})/;
-
-function youtubeEmbedUrl(url: string): string | null {
-  const m = url.match(YOUTUBE_RE);
-  return m ? `https://www.youtube-nocookie.com/embed/${m[1]}` : null;
-}
 
 /**
  * Resolves a locale-aware value from either shape Contentful (or the bundled
@@ -114,22 +106,13 @@ const renderNode: RenderNode = {
     const typeId = entry?.sys?.contentType?.sys?.id;
     if (typeId === "video" && entry?.fields) {
       const rawUrl = localize<string>(entry.fields.videoUrl) ?? "";
-      const embedSrc = youtubeEmbedUrl(rawUrl);
-      if (!embedSrc) return null;
+      const videoId = youtubeVideoId(rawUrl);
+      if (!videoId) return null;
       const title = localize<string>(entry.fields.title) ?? "Video";
       const caption = localize<string>(entry.fields.caption);
       return (
         <figure className={richTextSlots.figure()}>
-          <div className={richTextSlots.media()}>
-            <iframe
-              src={embedSrc}
-              title={title}
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-              allowFullScreen
-              loading="lazy"
-              className={richTextSlots.iframe()}
-            />
-          </div>
+          <YouTubeEmbed videoId={videoId} title={title} />
           {caption && (
             <figcaption className={richTextSlots.caption()}>
               {caption}

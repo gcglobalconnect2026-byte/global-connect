@@ -31,16 +31,16 @@ Rules that keep it working:
 
 - Every page has one URL per language: `/en/…`, `/de/…`. The default locale is
   prefixed too, so `hreflang` needs no special-casing.
-- `/` negotiates from the `NEXT_LOCALE` cookie, then `Accept-Language`.
-  The switcher in the header keeps the current path and swaps only the locale.
+- `/` negotiates from `Accept-Language` only: `localeCookie: false` in
+  `src/i18n/routing.ts` means the site sets no cookie at all, and `src/proxy.ts`
+  expires the `NEXT_LOCALE` cookie older builds left on returning visitors'
+  disks. The switcher in the header keeps the current path and swaps only the
+  locale.
 - Pre-localization URLs (`/about`, `/guides/x`) 308 to `/en/…` — they were
   English and stay English. See `redirects()` in `next.config.ts`.
-- `src/proxy.ts` runs Clerk first (locale stripped before matching), then
-  next-intl. `PROTECTED_PATH_PATTERNS` is empty — the site has no private
-  pages, and an unknown URL must reach the localized 404 instead of bouncing
-  to Clerk's sign-in host. Metadata files are excluded by the matcher, so
-  `robots.txt`, `sitemap.xml`, `llms.txt` and `manifest.json` are never
-  rewritten to `/{locale}/…`.
+- `src/proxy.ts` runs next-intl and nothing else. Metadata files are excluded
+  by the matcher, so `robots.txt`, `sitemap.xml`, `llms.txt` and
+  `manifest.json` are never rewritten to `/{locale}/…`.
 
 ## Translation coverage — what `hreflang` advertises
 
@@ -79,8 +79,7 @@ advertised: linking it would make Google index English text as German.
    `pnpm contentful:locales`.
 4. `src/lib/contentful/seed-translations.ts` — add the language key with the
    translated entries, run `pnpm contentful:seed`.
-5. `src/app/[locale]/layout.tsx` — add the Clerk localization (`deDE`…).
-6. `pnpm typecheck && pnpm lint && pnpm build`, then spot-check `/xx/…`.
+5. `pnpm typecheck && pnpm lint && pnpm build`, then spot-check `/xx/…`.
 
 Nothing else needs a locale list: routing, sitemap, `hreflang` and JSON-LD
 all read `src/lib/locales.ts`.

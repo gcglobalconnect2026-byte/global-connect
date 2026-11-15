@@ -12,6 +12,10 @@ export const routing = defineRouting({
   locales: [...LOCALE_CODES],
   defaultLocale: DEFAULT_LOCALE,
   localePrefix: "always",
+  // Detection runs on `Accept-Language` alone: the cookie is off, so the site
+  // sets no cookies at all. The locale is always in the URL, which is what
+  // search engines and users actually rely on — the cookie only ever mattered
+  // for remembering a choice the URL already carries.
   localeDetection: true,
-  localeCookie: { name: "NEXT_LOCALE", maxAge: 60 * 60 * 24 * 365 },
+  localeCookie: false,
 });

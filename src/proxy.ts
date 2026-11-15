@@ -1,77 +1,48 @@
-import { clerkMiddleware } from "@clerk/nextjs/server";
 import createMiddleware from "next-intl/middleware";
 import type { NextRequest } from "next/server";
 
 import { routing } from "@/i18n/routing";
-import { LOCALE_CODES } from "@/lib/locales";
 
 const handleI18nRouting = createMiddleware(routing);
 
 /**
- * Paths that require a session. Everything else is public.
- *
- * This list is intentionally empty: the site has no authenticated-only pages
- * yet, and the previous deny-by-default allowlist had a side effect — an
- * unknown URL (`/de/typo`) bounced to Clerk's sign-in host instead of the
- * localized 404, which reads as a soft error to crawlers and sends typo
- * visitors to an unrelated page.
- *
- * Add a prefix here the moment a private area exists, and keep `auth()`
- * checks inside the page itself as defence in depth. Locale prefixes are
- * stripped before matching, so a rule applies to `/de/...` and `/en/...`
- * alike.
+ * The only cookie this site ever sets is the one we now delete: earlier
+ * builds wrote `NEXT_LOCALE` for a year so locale detection could prefer it
+ * over `Accept-Language`. The locale is in the URL instead, so the cookie is
+ * dead weight — and "this site sets no cookies" is only true once the copies
+ * still sitting on returning visitors' disks are expired. Deleting a cookie
+ * is not storing one (§ 25 (2) TDDDG), so doing it here needs no consent.
  */
-const PROTECTED_PATH_PATTERNS: RegExp[] = [];
+const LEGACY_LOCALE_COOKIE = "NEXT_LOCALE";
 
-/** Clerk's own endpoints and APIs. They must never be locale-routed. */
-const INTERNAL_PATHS = ["/api", "/trpc", "/__clerk"];
+/**
+ * Locale negotiation: `/{locale}` rewrites, redirects for unprefixed paths,
+ * and `Accept-Language` detection for `/`.
+ *
+ * `localeCookie: false` in `src/i18n/routing.ts` is what keeps this
+ * cookie-free; there is no auth layer here and never was one that did
+ * anything. If a private area ever appears, add the check inside the page
+ * itself (`auth()`) rather than reintroducing a middleware wrapper — a
+ * protected route in middleware bounces unknown URLs to a third-party
+ * sign-in host, which reads as a soft error to crawlers.
+ */
+export default function proxy(request: NextRequest) {
+  const response = handleI18nRouting(request);
 
-/** Removes a leading `/{locale}` so routes can be matched locale-agnostically. */
-function stripLocale(pathname: string): string {
-  for (const code of LOCALE_CODES) {
-    if (pathname === `/${code}`) return "/";
-    if (pathname.startsWith(`/${code}/`)) {
-      return pathname.slice(code.length + 1);
-    }
-  }
-  return pathname;
-}
-
-function isProtectedPath(pathname: string): boolean {
-  return PROTECTED_PATH_PATTERNS.some((pattern) => pattern.test(pathname));
-}
-
-function isInternalPath(pathname: string): boolean {
-  return INTERNAL_PATHS.some(
-    (prefix) => pathname === prefix || pathname.startsWith(`${prefix}/`),
-  );
-}
-
-export default clerkMiddleware(async (auth, request: NextRequest) => {
-  const path = stripLocale(request.nextUrl.pathname);
-
-  if (isProtectedPath(path)) {
-    await auth.protect();
+  if (request.cookies.has(LEGACY_LOCALE_COOKIE)) {
+    response.cookies.set(LEGACY_LOCALE_COOKIE, "", { path: "/", maxAge: 0 });
   }
 
-  if (isInternalPath(path)) {
-    return;
-  }
-
-  // Locale negotiation, `/x` → `/{locale}/x` redirects and the
-  // `NEXT_LOCALE` cookie all live here; it must run for every page.
-  return handleI18nRouting(request);
-});
+  return response;
+}
 
 export const config = {
   matcher: [
     // Pages — skip static files (any path containing a dot), framework
-    // internals and Clerk's own endpoint prefix, so `/robots.txt`,
-    // `/sitemap.xml`, `/llms.txt` and `/manifest.json` can never be
-    // rewritten to `/{locale}/...`.
-    "/((?!api|trpc|_next|_vercel|__clerk|.*\\..*).*)",
-    // Clerk still needs to run on APIs and its own endpoints.
-    "/(api|trpc)(.*)",
-    "/__clerk/(.*)",
+    // internals and API routes, so `/robots.txt`, `/sitemap.xml`, `/llms.txt`
+    // and `/manifest.json` can never be rewritten to `/{locale}/...`.
+    // `/api` and `/trpc` are listed even though they are not routed today:
+    // the negative lookahead is what stops future routes from breaking.
+    "/((?!api|trpc|_next|_vercel|.*\\..*).*)",
   ],
 };

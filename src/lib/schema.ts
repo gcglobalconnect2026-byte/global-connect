@@ -1,4 +1,5 @@
 import { SITE_URL } from "@/lib/site";
+import { CONTROLLER } from "@/lib/legal";
 import { DEFAULT_OG_IMAGE, SITE_NAME } from "@/lib/seo";
 import { LOCALES, type Locale } from "@/lib/locales";
 import type {
@@ -51,6 +52,12 @@ export function organization(): Record<string, unknown> {
       height: 512,
     },
     image: `${SITE_URL}/og-default.jpg`,
+    contactPoint: {
+      "@type": "ContactPoint",
+      contactType: "customer support",
+      email: CONTROLLER.email,
+      availableLanguage: ["en", "de"],
+    },
     sameAs: ["https://t.me/globalconnectforyou"],
   };
 }

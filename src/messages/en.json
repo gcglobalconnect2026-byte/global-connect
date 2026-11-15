@@ -24,11 +24,15 @@
     },
     "privacy": {
       "title": "Privacy",
-      "description": "How Global Connect collects, uses and protects your data — what we store through Contentful and Clerk, how it is used, and how to request access or deletion."
+      "description": "How Global Connect handles data about you: no cookies, one local theme setting, cookieless analytics, videos loaded only after a click, and how to reach the controller."
     },
     "terms": {
       "title": "Terms",
-      "description": "Global Connect terms of service: how we list opportunities, the limits of our listings, account conduct, and how third-party programme terms still apply to you."
+      "description": "Global Connect terms: a free, non-commercial information offer — no accounts, what our listings are, how external links and the Telegram community work, and German law."
+    },
+    "impressum": {
+      "title": "Imprint",
+      "description": "Provider, contact and responsibility for the content of global-connect.pp.ua."
     }
   },
   "Nav": {
@@ -59,7 +63,8 @@
     "community": "Community",
     "copyright": "© 2026 Global Connect",
     "privacy": "Privacy",
-    "terms": "Terms"
+    "terms": "Terms",
+    "impressum": "Imprint"
   },
   "Common": {
     "explore": "Explore opportunities",
@@ -71,7 +76,9 @@
     "language": "Language",
     "theme": "Theme",
     "light": "Light",
-    "dark": "Dark"
+    "dark": "Dark",
+    "playVideo": "Play video: {title}",
+    "videoPrivacyNote": "Loads YouTube only after you click"
   },
   "A11y": {
     "previous": "Previous",
@@ -198,21 +205,81 @@
   "Privacy": {
     "eyebrow": "Legal",
     "title": "Privacy Policy",
-    "collectTitle": "What we collect",
-    "collectBody": "Global Connect uses Contentful to store content and Clerk to manage accounts. We only collect the information you provide when you sign in, and basic usage data needed to keep the site running. The site also uses Vercel Web Analytics and Vercel Speed Insights, which record anonymous page views and page-performance measurements. They set no cookies and cannot identify you across sites: a visitor is recognised only by a hash built from the incoming request, which is discarded after 24 hours, and every result is an aggregate statistic.",
-    "useTitle": "How we use it",
-    "useBody": "Your details are used to personalise community features — like registering for sessions — and to keep the service secure. We never sell your data.",
-    "choicesTitle": "Your choices",
-    "choicesBody": "You can ask to see or delete your data at any time by contacting us at the address on the About page."
+    "lastUpdated": "Last updated: {date, date, long}",
+    "controllerTitle": "Who is responsible",
+    "controllerBody": "This website is operated by the person named below, who is the controller for everything described in this policy. You can reach them at:",
+    "scopeTitle": "What this policy covers",
+    "scopeBody": "This policy explains what happens to data about you when you visit this website and when you write to us, why we do it, and what you can do about it. It does not cover the websites we link to — those apply their own terms as soon as you follow a link.",
+    "dataTitle": "What we process",
+    "dataBody": "The site has no accounts, so there is no profile, no password and no sign-in data anywhere. In practice we process:",
+    "dataLog": "Server logs — IP address, requested path, timestamp and browser, written automatically by our host while it serves the page.",
+    "dataMessage": "Whatever you choose to write to us by email or Telegram, and nothing more.",
+    "purposesTitle": "Why we process it",
+    "purposesBody": "Server logs are processed to keep the site secure and to diagnose faults; the legal basis is our legitimate interest in running a stable, secure website (Art. 6(1)(f) GDPR). Messages you send us are processed in order to answer them — on your request where the message concerns one (Art. 6(1)(b)), otherwise in our legitimate interest in replying (Art. 6(1)(f)). We do not build profiles, we do not use your data for advertising, and we do not sell it.",
+    "storageTitle": "Cookies and local storage",
+    "storageBody": "This website sets no cookies, which is why there is no consent banner: there is nothing to consent to. The only thing stored on your device is your own choice of light or dark theme, written to your browser's local storage under the key “theme” when you use the theme switcher. It never reaches our server, it is not a cookie, and clearing it in your browser settings simply returns the site to light mode. Under § 25(2) of the German Telecommunications Telemedia Data Protection Act (TDDDG) that storage is exempt from consent, because it is strictly necessary for the function you explicitly asked for. Server logs and analytics are not stored on your device at all — they are covered in the next two sections.",
+    "analyticsTitle": "Web analytics",
+    "analyticsBody": "The site uses Vercel Web Analytics and Vercel Speed Insights. Both are cookieless: they set no cookie and write nothing to your device. A visitor is recognised only by a hash built from the incoming request, which is discarded after 24 hours, and everything we see is an aggregate count of page views and performance measurements — it cannot be used to follow you across sites. The legal basis is our legitimate interest in knowing whether the site works (Art. 6(1)(f) GDPR).",
+    "youtubeTitle": "Embedded videos",
+    "youtubeBody": "Guides and opportunity listings can contain a video. Nothing is loaded from YouTube while you read the page: the player is drawn with our own markup, and the video is only requested when you press play. From that moment Google receives your IP address, your browser details and the page address, and processes them under its own privacy policy — the embed uses youtube-nocookie.com. That request happens on your consent, given by starting the video (Art. 6(1)(a) GDPR); leaving the page instead gives none.",
+    "processorsTitle": "Who receives your data",
+    "processorsBody": "We do not sell data and we do not share it with advertisers. The parties that process data for us are:",
+    "transfersTitle": "Transfers outside the EU",
+    "transfersBody": "One of these providers is established in the United States. Transfers there are covered by the European Commission's standard contractual clauses (Art. 46(2)(c) GDPR), which the provider has agreed to; on request we will send you a copy of the applicable clauses.",
+    "retentionTitle": "How long we keep it",
+    "retentionBody": "Server logs live only as long as our host keeps them for security and fault diagnosis, and are then deleted; they are not combined with anything else. Correspondence is kept as long as the conversation needs, and deleted once it is closed, unless the law requires longer. Our content records are editorial and contain no visitor data. Ask us and we will delete your correspondence — there is nothing else of yours here to delete, because the site has no accounts.",
+    "rightsTitle": "Your rights",
+    "rightsBody": "Under the GDPR you can:",
+    "rightAccess": "ask what we hold about you and receive a copy (Art. 15);",
+    "rightRectification": "have inaccurate data corrected (Art. 16);",
+    "rightErasure": "have your data deleted (Art. 17);",
+    "rightRestriction": "have the use of your data restricted while a question is open (Art. 18);",
+    "rightPortability": "receive the data you gave us in a machine-readable form, and pass it on (Art. 20);",
+    "rightObject": "object to processing based on our legitimate interest (Art. 21);",
+    "rightWithdraw": "withdraw any consent at any time, for the future (Art. 7(3));",
+    "rightComplain": "complain to a supervisory authority (Art. 77).",
+    "complaintBody": "Exercising these rights is free of charge and needs no form — a sentence to the address above is enough. You may complain to any supervisory authority, for example the one where you live; the standing conference of the German authorities keeps the current list:",
+    "complaintAuthority": "the standing conference of the German data protection authorities (DSK)",
+    "childrenTitle": "Children",
+    "childrenBody": "The site is aimed at young people looking for international opportunities, but it is not directed at children under 16 and we do not knowingly process their data. If you believe a child has sent us personal data, write to us and we will delete it.",
+    "changesTitle": "Changes to this policy",
+    "changesBody": "We revise this policy whenever the way the site works changes. The date at the top of the page always shows the current version; for a material change we will also note it on the site itself."
   },
   "Terms": {
     "eyebrow": "Legal",
     "title": "Terms of Service",
-    "usingTitle": "Using Global Connect",
-    "usingBody": "Global Connect connects young people with international opportunities. We aim to keep listings accurate, but always confirm details on official programme pages before applying.",
-    "contentTitle": "Content",
-    "contentBody": "Opportunity listings and guides are provided for informational purposes. We are not responsible for the application outcomes of third-party programmes we share.",
-    "conductTitle": "Account conduct",
-    "conductBody": "Be kind. Harassment, spam or misleading content leads to account removal. Community members are expected to treat each other with respect."
+    "lastUpdated": "Last updated: {date, date, long}",
+    "scopeTitle": "Who we are and what these terms are",
+    "scopeBody": "These terms govern your use of this website and of the material published on it. Global Connect is a free, non-commercial information offer for young people interested in international opportunities: no paid service is offered and no contract is concluded through this site.",
+    "useTitle": "Using the site",
+    "useBody": "You may read, share and link to the pages for personal and educational purposes. You may not scrape the site at scale, interfere with its operation, try to get around its security, or republish our listings as a product of your own.",
+    "contentTitle": "Opportunities and guides",
+    "contentBody": "Listings, guides and session descriptions are for information only. We work to keep them accurate, but deadlines, eligibility and funding change without notice and we cannot check every programme continuously. Always confirm the details on the official programme page before you apply. We are not a party to any third-party programme and cannot influence or guarantee how an application turns out.",
+    "externalTitle": "External links and platforms",
+    "externalBody": "The site links to third-party pages, to our Telegram community and to videos hosted by YouTube. From the moment you follow a link or start a video, that service's own terms and privacy policy apply, and we no longer control anything. A link is not an endorsement.",
+    "accountsTitle": "No accounts on this site",
+    "accountsBody": "There is no registration, no login and no profile on this website. Nothing about you is stored that you could ask us to delete, and there is no password to reset. Joining the community happens on Telegram, under Telegram's terms and the group rules.",
+    "communityTitle": "Community conduct",
+    "communityBody": "Be kind. Harassment, spam, hate speech, discrimination or deliberately misleading content are not welcome; the administrators of our Telegram group may remove members who behave that way. These terms do not replace the group rules — both apply.",
+    "ipTitle": "Intellectual property",
+    "ipBody": "The text, design and structure of this website are ours. Third-party trademarks, programme names and photographs stay the property of their owners and are used descriptively. You may quote our guides with attribution and a link; you may not copy the site wholesale, and you may not use the Global Connect name or logo to suggest an affiliation we have not agreed to.",
+    "availabilityTitle": "Availability and changes",
+    "availabilityBody": "The site is provided as it is. We do not guarantee that it will always be available, and we may change, add or remove pages and content at any time — including closing the site altogether.",
+    "liabilityTitle": "Liability",
+    "liabilityBody": "Nothing here limits liability that German law does not allow to be limited. Beyond that we are liable only for intent and gross negligence, and for a breach of essential duties also for ordinary negligence, capped at the foreseeable damage typical for a website of this kind. We are not responsible for the content of external sites we link to.",
+    "lawTitle": "Applicable law",
+    "lawBody": "German law applies, without displacing the mandatory consumer protection rules of the country where you habitually reside. Choosing German law does not take away protections you could not give up anyway.",
+    "contactTitle": "Contact and severability",
+    "contactBody": "Questions about these terms — or a notice that something here is unlawful — can be sent to:"
+  },
+  "Impressum": {
+    "eyebrow": "Legal",
+    "title": "Imprint",
+    "providerTitle": "Provider",
+    "providerBody": "This website is operated by:",
+    "contentTitle": "Responsibility for content (§ 18(2) MStV)",
+    "contentBody": "The person named above is responsible for this website under § 18(2) of the German State Media Treaty (Medienstaatsvertrag). There is no editorial team and no separate editorial responsibility.",
+    "linksTitle": "Links to other websites",
+    "linksBody": "This site links to external pages — programme websites, Telegram, YouTube. We have no influence over their content and do not adopt it; the operators of those pages are responsible for it. If you find a link to something unlawful, tell us and we will remove it."
   }
 }

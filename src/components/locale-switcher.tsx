@@ -26,8 +26,8 @@ const localeSwitcher = tv({
 
 /**
  * Header language switcher. Keeps the current path and swaps only the locale
- * segment (`/de/guides` → `/en/guides`); next-intl sets the `NEXT_LOCALE`
- * cookie so the choice survives a reload.
+ * segment (`/de/guides` → `/en/guides`). There is no cookie: the locale lives
+ * in the URL, which is also what search engines and bookmarks read.
  */
 export function LocaleSwitcher({ className }: { className?: string }) {
   const locale = useLocale() as Locale;

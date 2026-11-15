@@ -83,6 +83,9 @@ export async function SiteFooter() {
             <Link href="/privacy" className={slots.legalLink()}>
               {t("privacy")}
             </Link>
+            <Link href="/impressum" className={slots.legalLink()}>
+              {t("impressum")}
+            </Link>
             <Link href="/terms" className={slots.legalLink()}>
               {t("terms")}
             </Link>

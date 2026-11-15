@@ -24,11 +24,15 @@
     },
     "privacy": {
       "title": "Datenschutz",
-      "description": "Wie Global Connect deine Daten erhebt, nutzt und schützt – was wir über Contentful und Clerk speichern, wofür wir es verwenden und wie du Zugang oder Löschung verlangen kannst."
+      "description": "Wie Global Connect mit Daten über dich umgeht: keine Cookies, eine lokale Design-Einstellung, Statistik ohne Cookies, Videos erst nach einem Klick und wie du die verantwortliche Person erreichst."
     },
     "terms": {
       "title": "AGB",
-      "description": "Global Connect Nutzungsbedingungen: wie wir Möglichkeiten listen, die Grenzen unserer Angebote, verantwortungsvolles Verhalten und warum die Bedingungen der Programme weiter für dich gelten."
+      "description": "Global Connect Nutzungsbedingungen: ein kostenloses, nicht kommerzielles Informationsangebot – keine Konten, was unsere Angebote sind, wie externe Links und die Telegram-Community funktionieren und deutsches Recht."
+    },
+    "impressum": {
+      "title": "Impressum",
+      "description": "Anbieter, Kontakt und Verantwortung für den Inhalt von global-connect.pp.ua."
     }
   },
   "Nav": {
@@ -59,7 +63,8 @@
     "community": "Community",
     "copyright": "© 2026 Global Connect",
     "privacy": "Datenschutz",
-    "terms": "AGB"
+    "terms": "AGB",
+    "impressum": "Impressum"
   },
   "Common": {
     "explore": "Möglichkeiten entdecken",
@@ -71,7 +76,9 @@
     "language": "Sprache",
     "theme": "Design",
     "light": "Hell",
-    "dark": "Dunkel"
+    "dark": "Dunkel",
+    "playVideo": "Video abspielen: {title}",
+    "videoPrivacyNote": "Lädt YouTube erst nach einem Klick"
   },
   "A11y": {
     "previous": "Zurück",
@@ -198,21 +205,81 @@
   "Privacy": {
     "eyebrow": "Rechtliches",
     "title": "Datenschutzerklärung",
-    "collectTitle": "Was wir erheben",
-    "collectBody": "Global Connect nutzt Contentful zur Speicherung von Inhalten und Clerk zur Verwaltung von Konten. Wir erheben nur die Informationen, die du bei der Anmeldung angibst, sowie grundlegende Nutzungsdaten, die für den Betrieb der Website erforderlich sind. Die Website nutzt zudem Vercel Web Analytics und Vercel Speed Insights, die anonyme Seitenaufrufe und Leistungsmessungen aufzeichnen. Sie setzen keine Cookies und können dich nicht über Websites hinweg identifizieren: Ein Besucher wird nur anhand eines aus der eingehenden Anfrage erzeugten Hash erkannt, der nach 24 Stunden verworfen wird, und alle Auswertungen sind aggregierte Statistiken.",
-    "useTitle": "Wie wir es nutzen",
-    "useBody": "Deine Daten werden genutzt, um Community-Funktionen zu personalisieren – zum Beispiel die Anmeldung für Sessions – und um den Dienst sicher zu halten. Wir verkaufen deine Daten niemals.",
-    "choicesTitle": "Deine Rechte",
-    "choicesBody": "Du kannst jederzeit verlangen, deine Daten einzusehen oder löschen zu lassen. Schreibe uns dafür an die Adresse auf der Über-uns-Seite."
+    "lastUpdated": "Zuletzt aktualisiert: {date, date, long}",
+    "controllerTitle": "Wer verantwortlich ist",
+    "controllerBody": "Diese Website wird von der unten genannten Person betrieben; für die hier beschriebene Verarbeitung ist diese Person Verantwortliche im Sinne der DSGVO. Sie ist erreichbar unter:",
+    "scopeTitle": "Was diese Erklärung umfasst",
+    "scopeBody": "Diese Erklärung beschreibt, was mit Daten über dich passiert, wenn du diese Website besuchst und wenn du uns schreibst, warum wir das tun und was du dagegen tun kannst. Sie gilt nicht für Websites, auf die wir verlinken – dort gelten eigene Regelungen, sobald du einen Link öffnest.",
+    "dataTitle": "Was wir verarbeiten",
+    "dataBody": "Auf dieser Website gibt es keine Konten, deshalb existieren nirgends ein Profil, ein Passwort oder Zugangsdaten. Tatsächlich verarbeiten wir:",
+    "dataLog": "Serverprotokolle – IP-Adresse, angefordertes Verzeichnis, Zeitstempel und Browser, die unser Hosting-Anbieter automatisch beim Ausliefern der Seite speichert.",
+    "dataMessage": "Alles, was du uns freiwillig per E-Mail oder Telegram schreibst – und sonst nichts.",
+    "purposesTitle": "Wofür wir das tun",
+    "purposesBody": "Serverprotokolle verarbeiten wir, um die Website sicher zu halten und Fehler zu beheben; Rechtsgrundlage ist unser berechtigtes Interesse an einem stabilen, sicheren Angebot (Art. 6 Abs. 1 lit. f DSGVO). Nachrichten von dir verarbeiten wir, um zu antworten – auf deine Anfrage hin, wenn es darum geht (Art. 6 Abs. 1 lit. b), sonst in unserem berechtigten Interesse an einer Antwort (Art. 6 Abs. 1 lit. f). Wir erstellen keine Profile, nutzen deine Daten nicht für Werbung und verkaufen sie nicht.",
+    "storageTitle": "Cookies und lokaler Speicher",
+    "storageBody": "Diese Website setzt keine Cookies – deshalb gibt es auch keine Einwilligungsleiste: nichts, wofür du einwilligen müsstest. Gespeichert wird auf deinem Gerät nur deine eigene Wahl zwischen hellem und dunklem Design, und zwar unter dem Schlüssel „theme“ im lokalen Speicher deines Browsers, wenn du den Design-Umschalter benutzt. Das kommt nie auf unseren Server, ist kein Cookie, und wenn du es in den Browsereinstellungen löschst, steht die Website wieder auf hell. Nach § 25 Abs. 2 TDDDG ist diese Speicherung von der Einwilligung ausgenommen, weil sie für die Funktion erforderlich ist, die du ausdrücklich angefordert hast. Serverprotokolle und Statistik werden überhaupt nicht auf deinem Gerät gespeichert – dazu die nächsten beiden Abschnitte.",
+    "analyticsTitle": "Statistik ohne Cookies",
+    "analyticsBody": "Die Website nutzt Vercel Web Analytics und Vercel Speed Insights. Beide kommen ohne Cookies aus: Sie setzen kein Cookie und schreiben nichts auf dein Gerät. Ein Besucher wird nur anhand eines Hashes erkannt, der aus der eingehenden Anfrage erzeugt und nach 24 Stunden verworfen wird; alles, was wir sehen, sind aggregierte Zahlen zu Seitenaufrufen und Ladezeiten – damit lässt sich dir nicht über Websites hinweg folgen. Rechtsgrundlage ist unser berechtigtes Interesse daran, dass die Website funktioniert (Art. 6 Abs. 1 lit. f DSGVO).",
+    "youtubeTitle": "Eingebettete Videos",
+    "youtubeBody": "In Ratgebern und Angeboten kann ein Video stehen. Beim Lesen der Seite wird nichts von YouTube geladen: Der Player besteht aus unserem eigenen Markup, und das Video wird erst angefordert, wenn du auf Play drückst. Ab diesem Moment erhält Google deine IP-Adresse, Browserdaten und die Seitenadresse und verarbeitet sie nach eigener Datenschutzerklärung – eingebettet wird über youtube-nocookie.com. Diese Anfrage erfolgt mit deiner Einwilligung, die du durch den Start des Videos gibst (Art. 6 Abs. 1 lit. a DSGVO); wenn du stattdessen die Seite verlässt, erteilst du keine.",
+    "processorsTitle": "Wer deine Daten erhält",
+    "processorsBody": "Wir verkaufen keine Daten und geben sie nicht an Werbepartner weiter. Dienstleister, die für uns Daten verarbeiten, sind:",
+    "transfersTitle": "Übermittlungen außerhalb der EU",
+    "transfersBody": "Einer dieser Dienstleister sitzt in den USA. Übermittlungen dorthin werden durch die Standardvertragsklauseln der Europäischen Kommission abgedeckt (Art. 46 Abs. 2 lit. c DSGVO), auf die sich der Anbieter verpflichtet hat; auf Wunsch senden wir dir eine Kopie der geltenden Klauseln zu.",
+    "retentionTitle": "Wie lange wir aufbewahren",
+    "retentionBody": "Serverprotokolle leben so lange, wie unser Anbieter sie für Sicherheit und Fehleranalyse aufbewahrt, und werden danach gelöscht; sie werden nicht mit anderen Daten zusammengeführt. Korrespondenz bewahren wir so lange auf, wie das Gespräch es braucht, und löschen sie, sobald es abgeschlossen ist, sofern das Gesetz nichts längeres verlangt. Unsere Inhalte sind redaktionell und enthalten keine Besucherdaten. Auf Wunsch löschen wir deine Korrespondenz – mehr gibt es von dir hier nicht zu löschen, weil die Website keine Konten hat.",
+    "rightsTitle": "Deine Rechte",
+    "rightsBody": "Nach der DSGVO kannst du:",
+    "rightAccess": "erfahren, welche Daten wir über dich haben, und eine Kopie verlangen (Art. 15 DSGVO);",
+    "rightRectification": "ungenau berichtigt bekommen (Art. 16 DSGVO);",
+    "rightErasure": "deine Daten löschen lassen (Art. 17 DSGVO);",
+    "rightRestriction": "die Verarbeitung einschränken lassen, solange eine Frage offen ist (Art. 18 DSGVO);",
+    "rightPortability": "die Daten, die du uns gegeben hast, in maschinenlesbarer Form erhalten und weitergeben (Art. 20 DSGVO);",
+    "rightObject": "einer Verarbeitung auf Grundlage unseres berechtigten Interesses widersprechen (Art. 21 DSGVO);",
+    "rightWithdraw": "eine Einwilligung jederzeit für die Zukunft widerrufen (Art. 7 Abs. 3 DSGVO);",
+    "rightComplain": "bei einer Aufsichtsbehörde Beschwerde einlegen (Art. 77 DSGVO).",
+    "complaintBody": "Die Ausübung dieser Rechte ist kostenlos und erfordert kein Formular – eine Nachricht an die Adresse oben genügt. Du kannst dich bei jeder Aufsichtsbehörde beschweren, zum Beispiel bei der, in der du lebst; die aktuelle Liste führt die Konferenz der unabhängigen Datenschutzaufsichtsbehörden des Bundes und der Länder:",
+    "complaintAuthority": "die Konferenz der unabhängigen Datenschutzaufsichtsbehörden des Bundes und der Länder (DSK)",
+    "childrenTitle": "Kinder",
+    "childrenBody": "Die Website richtet sich an junge Menschen, die internationale Möglichkeiten suchen, ist aber nicht an Kinder unter 16 Jahren gerichtet, und wir verarbeiten deren Daten nicht wissentlich. Wenn du glaubst, dass ein Kind uns personenbezogene Daten geschickt hat, schreib uns – wir löschen sie.",
+    "changesTitle": "Änderungen dieser Erklärung",
+    "changesBody": "Wir überarbeiten diese Erklärung, sobald sich die Art ändert, wie die Website funktioniert. Das Datum oben auf der Seite zeigt immer die aktuelle Fassung; bei wesentlichen Änderungen weisen wir zusätzlich auf der Website darauf hin."
   },
   "Terms": {
     "eyebrow": "Rechtliches",
     "title": "Nutzungsbedingungen",
-    "usingTitle": "Global Connect nutzen",
-    "usingBody": "Global Connect verbindet junge Menschen mit internationalen Möglichkeiten. Wir bemühen uns um korrekte Angaben, aber prüfe die Details vor einer Bewerbung immer auf den offiziellen Programmseiten.",
-    "contentTitle": "Inhalte",
-    "contentBody": "Möglichkeiten und Ratgeber dienen ausschließlich der Information. Für die Bewerbungsergebnisse externer Programme, die wir verlinken, übernehmen wir keine Verantwortung.",
-    "conductTitle": "Verhalten auf der Plattform",
-    "conductBody": "Sei freundlich. Belästigung, Spam oder irreführende Inhalte führen zur Sperrung des Kontos. Alle Mitglieder sollen einander mit Respekt begegnen."
+    "lastUpdated": "Zuletzt aktualisiert: {date, date, long}",
+    "scopeTitle": "Wer wir sind und was diese Bedingungen sind",
+    "scopeBody": "Diese Bedingungen regeln die Nutzung dieser Website und der darauf veröffentlichten Inhalte. Global Connect ist ein kostenloses, nicht kommerzielles Informationsangebot für junge Menschen, die internationale Möglichkeiten suchen: Es wird keine bezahlte Dienstleistung angeboten und über diese Website kein Vertrag geschlossen.",
+    "useTitle": "Nutzung der Website",
+    "useBody": "Du darfst die Seiten für private und bildungstechnische Zwecke lesen, weitergeben und verlinken. Nicht erlaubt sind das systematische Auslesen der Website, Störung des Betriebs, die Umgehung von Sicherheitsmaßnahmen sowie das erneute Veröffentlichen unserer Angebote als eigenes Produkt.",
+    "contentTitle": "Möglichkeiten und Ratgeber",
+    "contentBody": "Angebote, Ratgeber und Session-Beschreibungen dienen der Information. Wir bemühen uns um Richtigkeit, aber Fristen, Voraussetzungen und Finanzierung ändern sich ohne Vorwarnung, und wir können jedes Programm nicht laufend prüfen. Prüfe die Angaben vor einer Bewerbung immer auf der offiziellen Programmseite. Wir sind an keinem fremden Programm beteiligt und können weder Einfluss darauf nehmen noch ein Bewerbungsergebnis garantieren.",
+    "externalTitle": "Externe Links und Plattformen",
+    "externalBody": "Die Website verlinkt auf fremde Seiten, auf unsere Telegram-Community und auf Videos bei YouTube. Ab dem Öffnen eines Links oder dem Start eines Videos gelten die Bedingungen und Datenschutzbestimmungen dieses Anbieters; dann haben wir keine Kontrolle mehr darüber. Ein Link ist keine Empfehlung.",
+    "accountsTitle": "Keine Konten auf dieser Website",
+    "accountsBody": "Auf dieser Website gibt es keine Registrierung, keine Anmeldung und kein Profil. Es sind keine Daten über dich gespeichert, die du von uns löschen lassen könntest, und es gibt kein Passwort zurückzusetzen. Der Beitritt zur Community erfolgt über Telegram, unter den Bedingungen von Telegram und den Gruppenregeln.",
+    "communityTitle": "Verhalten in der Community",
+    "communityBody": "Sei freundlich. Belästigung, Spam, Hassrede, Diskriminierung oder gezielt irreführende Inhalte sind unerwünscht; die Administratoren unserer Telegram-Gruppe dürfen Mitglieder, die sich so verhalten, entfernen. Diese Bedingungen ersetzen die Gruppenregeln nicht – beide gelten.",
+    "ipTitle": "Geistiges Eigentum",
+    "ipBody": "Text, Gestaltung und Aufbau dieser Website gehören uns. Fremde Marken, Programmnamen und Fotografien bleiben Eigentum ihrer Inhaber und werden beschreibend verwendet. Unsere Ratgeber darfst du mit Quellenangabe und Link zitieren; eine vollständige Übernahme der Website ist nicht erlaubt, und der Name oder das Logo von Global Connect dürfen nicht so verwendet werden, als gäbe es eine Verbindung, der wir zugestimmt haben.",
+    "availabilityTitle": "Verfügbarkeit und Änderungen",
+    "availabilityBody": "Die Website wird so bereitgestellt, wie sie ist. Wir garantieren keine durchgehende Verfügbarkeit und dürfen Seiten und Inhalte jederzeit ändern, ergänzen oder entfernen – bis hin zur vollständigen Einstellung.",
+    "liabilityTitle": "Haftung",
+    "liabilityBody": "Nichts in diesen Bedingungen schränkt die Haftung ein, die das deutsche Recht nicht einschränken lässt. Darüber hinaus haften wir nur für Vorsatz und grobe Fahrlässigkeit sowie bei Verletzung wesentlicher Pflichten auch für einfache Fahrlässigkeit, begrenzt auf den vorhersehbaren Schaden, der bei einer Website dieser Art typisch ist. Für Inhalte externer Seiten, auf die wir verlinken, übernehmen wir keine Verantwortung.",
+    "lawTitle": "Anwendbares Recht",
+    "lawBody": "Es gilt deutsches Recht, ohne dass die zwingenden Verbraucherschutzvorschriften des Landes verdrängt werden, in dem du gewöhnlich wohnst. Die Wahl des deutschen Rechts nimmt dir nicht den Schutz, auf den du ohnehin nicht verzichten könntest.",
+    "contactTitle": "Kontakt und Salvatorische Klausel",
+    "contactBody": "Fragen zu diesen Bedingungen – oder ein Hinweis, dass hier etwas rechtswidrig ist – richte an:"
+  },
+  "Impressum": {
+    "eyebrow": "Rechtliches",
+    "title": "Impressum",
+    "providerTitle": "Anbieter",
+    "providerBody": "Diese Website wird betrieben von:",
+    "contentTitle": "Verantwortlich für den Inhalt nach § 18 Abs. 2 MStV",
+    "contentBody": "Für diese Website ist die oben genannte Person nach § 18 Abs. 2 des Medienstaatsvertrags verantwortlich. Es gibt keine Redaktion und keine gesonderte redaktionelle Verantwortung.",
+    "linksTitle": "Verweise auf andere Websites",
+    "linksBody": "Diese Website verlinkt auf externe Seiten – Programmeseiten, Telegram, YouTube. Wir haben keinen Einfluss auf deren Inhalte und machen sie uns nicht zu eigen; verantwortlich sind die Betreiber dieser Seiten. Wenn du auf einen rechtswidrigen Link triffst, sag uns Bescheid – wir nehmen ihn raus."
   }
 }

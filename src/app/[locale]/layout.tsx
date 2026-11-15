@@ -1,8 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
-import { ClerkProvider } from "@clerk/nextjs";
-import { deDE, enUS } from "@clerk/localizations";
 import { Fraunces, Inter } from "next/font/google";
 import { NextIntlClientProvider } from "next-intl";
 import { getMessages, getTranslations } from "next-intl/server";
@@ -37,9 +35,6 @@ const appShell = tv({
 });
 
 const isProduction = process.env.VERCEL_ENV === "production";
-
-/** Clerk's own UI (sign-in modal, user button) is localized separately. */
-const clerkLocalizations = { en: enUS, de: deDE } as const;
 
 export function generateStaticParams() {
   return LOCALE_CODES.map((locale) => ({ locale }));
@@ -135,9 +130,7 @@ export default async function RootLayout({
           <JsonLd data={organization()} />
           <JsonLd data={website(locale)} />
           <NextIntlClientProvider locale={locale} messages={messages}>
-            <ClerkProvider localization={clerkLocalizations[locale]}>
-              {children}
-            </ClerkProvider>
+            {children}
           </NextIntlClientProvider>
           {/*
           Vercel Web Analytics + Speed Insights: both render `null` and inject

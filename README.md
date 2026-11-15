@@ -1,8 +1,9 @@
 # Global Connect
 
 A Next.js 16 (App Router, React 19, Tailwind v4) clone of the Global Connect
-youth-opportunity site, built CMS-first with **Contentful** and auth with
-**Clerk**. Rendered fully static with ISR (Cache Components).
+youth-opportunity site, built CMS-first with **Contentful**. Rendered fully
+static with ISR (Cache Components), with **no cookies, no accounts and no
+third-party request before the visitor asks for one**.
 
 ## Stack
 
@@ -11,7 +12,7 @@ youth-opportunity site, built CMS-first with **Contentful** and auth with
 | Framework | Next.js 16 (App Router, React 19, TypeScript)             |
 | Styling   | Tailwind v4 + [tailwind-variants](https://tailwind-variants.org) + [shadcn/ui](https://ui.shadcn.com) (Base UI) |
 | CMS       | Contentful (Delivery + Preview API)                       |
-| Auth      | Clerk (sign-in/sign-up for community access)              |
+| Privacy   | Zero cookies; analytics and video are cookieless / click-to-load |
 | Caching   | SSG + ISR via Cache Components (`cacheLife` / `cacheTag`) |
 | Quality   | ESLint, `tsc --noEmit`, [React Doctor](https://react-doctor.com) |
 
@@ -35,9 +36,6 @@ Copy `.env.example` → `.env.local` and fill in your keys. Full walkthroughs:
 
 - **Contentful** — see [`contentful/README.md`](./contentful/README.md) (model
   import, entries, codegen, caching).
-- **Clerk** — create an app in the [Clerk dashboard](https://dashboard.clerk.com),
-  then copy the Publishable Key and Secret Key into `.env.local`. The cofig lives
-  in `src/proxy.ts`.
 - **Site origin** — `NEXT_PUBLIC_SITE_URL` drives canonical URLs, Open Graph,
   `sitemap.xml` and `robots.txt` (see `src/lib/site.ts`). On Vercel it falls
   back to `$VERCEL_PROJECT_PRODUCTION_URL`; locally to `http://localhost:3000`.
@@ -109,7 +107,8 @@ scripts/                  # contentful-locales.ts, contentful-seed.ts
 ## Localization
 
 English (`en`) and German (`de`), one URL per language (`/en/…`, `/de/…`),
-auto-detected from the `NEXT_LOCALE` cookie and `Accept-Language`. UI copy
+auto-detected from `Accept-Language` only — the site sets no cookie, and the
+locale in the URL is what survives a reload. UI copy
 lives in `src/messages/`, CMS copy in Contentful's `de` locale. See
 [LOCALIZATION.md](LOCALIZATION.md) for the rules, the coverage logic behind
 `hreflang`, and the checklist for adding a language.

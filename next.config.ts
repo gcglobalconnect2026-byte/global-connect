@@ -42,6 +42,7 @@ const nextConfig: NextConfig = {
         permanent: true,
       },
       { source: "/privacy", destination: "/en/privacy", permanent: true },
+      { source: "/impressum", destination: "/en/impressum", permanent: true },
       { source: "/terms", destination: "/en/terms", permanent: true },
     ];
   },

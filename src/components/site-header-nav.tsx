@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 
-import { Show, SignInButton, UserButton } from "@clerk/nextjs";
 import { useLocale, useTranslations } from "next-intl";
 
 import { tv } from "@/lib/utils";
@@ -28,7 +27,7 @@ const headerNav = tv({
     list: "hidden items-center gap-7 lg:flex",
     link: "text-sm text-muted-foreground transition-colors hover:text-foreground",
     actions: "hidden items-center gap-3 lg:flex",
-    authRow: "flex items-center",
+    joinRow: "flex items-center",
     menuButton:
       "flex h-10 w-10 items-center justify-center rounded-full border border-border text-foreground lg:hidden",
     menuLabel: "sr-only",
@@ -38,7 +37,7 @@ const headerNav = tv({
     mobileLink:
       "rounded-full px-4 py-2.5 text-sm text-muted-foreground transition-colors hover:bg-muted hover:text-foreground",
     mobileActions: "mt-6 flex flex-col gap-3 px-4 pb-6",
-    mobileAuthRow: "flex items-center gap-3",
+    mobileJoinRow: "flex items-center gap-3",
   },
 });
 
@@ -49,33 +48,40 @@ type NavItem =
   | { key: NavKey; page: string; section?: string }
   | { key: NavKey; href: string; external: true };
 
-function AuthButtons({
+/**
+ * The single call to action: this site has no accounts, sign-in or
+ * registration anywhere, so the button opens the community channel instead.
+ * It opens in a new tab because the header persists across navigation and
+ * sending a reader to Telegram from inside the site would drop them out of it.
+ */
+function JoinButton({
+  communityUrl,
   variant = "desktop",
 }: {
+  communityUrl: string;
   variant?: "desktop" | "mobile";
 }) {
   const t = useTranslations("Nav");
   const slots = headerNav();
   return (
     <div
-      className={variant === "mobile" ? slots.mobileAuthRow() : slots.authRow()}
+      className={
+        variant === "mobile" ? slots.mobileJoinRow() : slots.joinRow()
+      }
     >
-      <Show
-        when="signed-out"
-        fallback={
-          <UserButton
-            appearance={{
-              elements: { avatarBox: "size-8", userButtonAvatarBox: "size-8" },
-            }}
+      <Button
+        variant="default"
+        size="xs"
+        render={
+          <a
+            href={communityUrl}
+            target="_blank"
+            rel="noopener noreferrer"
           />
         }
       >
-        <SignInButton mode="modal">
-          <Button variant="default" size="xs">
-            {t("join")}
-          </Button>
-        </SignInButton>
-      </Show>
+        {t("join")}
+      </Button>
     </div>
   );
 }
@@ -160,7 +166,7 @@ export function SiteHeaderNav({ communityUrl }: { communityUrl: string }) {
           </Button>
           <ThemeSwitcher />
           <LocaleSwitcher />
-          <AuthButtons />
+          <JoinButton communityUrl={communityUrl} />
         </div>
 
         <Sheet
@@ -218,7 +224,7 @@ export function SiteHeaderNav({ communityUrl }: { communityUrl: string }) {
               )}
             </nav>
             <div className={slots.mobileActions()}>
-              <AuthButtons variant="mobile" />
+              <JoinButton communityUrl={communityUrl} variant="mobile" />
               <Button
                 variant="outline"
                 size="sm"
