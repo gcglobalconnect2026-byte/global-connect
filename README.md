@@ -93,7 +93,7 @@ src/
   components/
     sections/             # homepage section components
     ui/                   # shadcn/ui primitives
-    locale-switcher.tsx   # header language switcher
+    settings-menu.tsx     # header settings dropdown (theme + language)
   messages/               # en.json, de.json — every UI string
   lib/
     contentful/           # client.ts, queries.ts (cached fetchers), seed*.ts (CMS seed data)

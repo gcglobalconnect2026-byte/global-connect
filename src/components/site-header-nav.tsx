@@ -6,8 +6,7 @@ import { useLocale, useTranslations } from "next-intl";
 
 import { tv } from "@/lib/utils";
 import { Link, usePathname } from "@/i18n/navigation";
-import { LocaleSwitcher } from "@/components/locale-switcher";
-import { ThemeSwitcher } from "@/components/theme-switcher";
+import { SettingsMenu } from "@/components/settings-menu";
 import { Logo } from "@/components/logo";
 import { Button } from "@/components/ui/button";
 import {
@@ -41,12 +40,9 @@ const headerNav = tv({
   },
 });
 
-type NavKey =
-  "home" | "opportunities" | "sessions" | "guides" | "community" | "about";
+type NavKey = "home" | "opportunities" | "sessions" | "guides" | "about";
 
-type NavItem =
-  | { key: NavKey; page: string; section?: string }
-  | { key: NavKey; href: string; external: true };
+type NavItem = { key: NavKey; page: string; section?: string };
 
 /**
  * The single call to action: this site has no accounts, sign-in or
@@ -112,15 +108,11 @@ export function SiteHeaderNav({ communityUrl }: { communityUrl: string }) {
     { key: "opportunities", section: "opportunities", page: "/opportunities" },
     { key: "sessions", section: "sessions", page: "/sessions" },
     { key: "guides", section: "guides", page: "/guides" },
-    { key: "community", href: communityUrl, external: true },
     { key: "about", page: "/about" },
   ];
 
   const links = NAV_LINKS.map((item) => {
     const label = t(item.key);
-    if ("external" in item) {
-      return { label, href: item.href, kind: "external" as const };
-    }
     // On the homepage the nav jumps to the section instead of reloading.
     if (item.section && isHome) {
       return { label, href: `#${item.section}`, kind: "anchor" as const };
@@ -141,14 +133,7 @@ export function SiteHeaderNav({ communityUrl }: { communityUrl: string }) {
                   {link.label}
                 </Link>
               ) : (
-                <a
-                  href={link.href}
-                  target={link.kind === "external" ? "_blank" : undefined}
-                  rel={
-                    link.kind === "external" ? "noopener noreferrer" : undefined
-                  }
-                  className={slots.link()}
-                >
+                <a href={link.href} className={slots.link()}>
                   {link.label}
                 </a>
               )}
@@ -157,15 +142,7 @@ export function SiteHeaderNav({ communityUrl }: { communityUrl: string }) {
         </ul>
 
         <div className={slots.actions()}>
-          <Button
-            variant="outline"
-            size="xs"
-            render={<Link href="/opportunities" />}
-          >
-            {t("explore")}
-          </Button>
-          <ThemeSwitcher />
-          <LocaleSwitcher />
+          <SettingsMenu />
           <JoinButton communityUrl={communityUrl} />
         </div>
 
@@ -209,12 +186,6 @@ export function SiteHeaderNav({ communityUrl }: { communityUrl: string }) {
                   <a
                     key={link.label}
                     href={link.href}
-                    target={link.kind === "external" ? "_blank" : undefined}
-                    rel={
-                      link.kind === "external"
-                        ? "noopener noreferrer"
-                        : undefined
-                    }
                     onClick={closeMenu}
                     className={slots.mobileLink()}
                   >
@@ -225,15 +196,7 @@ export function SiteHeaderNav({ communityUrl }: { communityUrl: string }) {
             </nav>
             <div className={slots.mobileActions()}>
               <JoinButton communityUrl={communityUrl} variant="mobile" />
-              <Button
-                variant="outline"
-                size="sm"
-                render={<Link href="/opportunities" />}
-              >
-                {t("explore")}
-              </Button>
-              <ThemeSwitcher />
-              <LocaleSwitcher />
+              <SettingsMenu />
             </div>
           </SheetContent>
         </Sheet>
