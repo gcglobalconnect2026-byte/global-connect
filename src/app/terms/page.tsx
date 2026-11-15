@@ -1,10 +1,14 @@
 import type { Metadata } from "next";
 
+import { pageMetadata } from "@/lib/seo";
 import { LegalPage, LegalSection } from "@/components/legal-page";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMetadata({
   title: "Terms",
-};
+  description:
+    "Global Connect terms of service: how we list opportunities, the limits of our listings, account conduct, and how third-party programme terms still apply to you.",
+  path: "/terms",
+});
 
 export default function TermsPage() {
   return (

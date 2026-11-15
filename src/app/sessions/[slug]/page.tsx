@@ -1,17 +1,20 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { Suspense } from "react";
 import { notFound } from "next/navigation";
 import { ArrowLeft } from "lucide-react";
 
 import { tv } from "@/lib/utils";
+import { pageMetadata } from "@/lib/seo";
+import { breadcrumb } from "@/lib/schema";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Tile } from "@/components/ui/tile";
+import { JsonLd } from "@/components/json-ld";
 import { PageArticle, PageMain } from "@/components/page-shell";
 import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
 import { getSessions, getSiteSettings } from "@/lib/contentful/queries";
+import type { SessionData } from "@/types/models";
 
 export async function generateStaticParams() {
   const sessions = await getSessions();
@@ -21,15 +24,16 @@ export async function generateStaticParams() {
 export async function generateMetadata({
   params,
 }: {
-  params: { slug: string };
+  params: Promise<{ slug: string }>;
 }): Promise<Metadata> {
   const { slug } = await params;
   const session = (await getSessions()).find((s) => s.slug === slug);
   if (!session) return {};
-  return {
+  return pageMetadata({
     title: session.title,
     description: session.description,
-  };
+    path: `/sessions/${slug}`,
+  });
 }
 
 const sessionPage = tv({
@@ -47,16 +51,13 @@ const sessionPage = tv({
   },
 });
 
-async function SessionContent({ params }: { params: { slug: string } }) {
-  const [{ slug }, sessions, siteSettings] = await Promise.all([
-    params,
-    getSessions(),
-    getSiteSettings(),
-  ]);
-  const session = sessions.find((s) => s.slug === slug);
-
-  if (!session) notFound();
-
+function SessionContent({
+  session,
+  communityUrl,
+}: {
+  session: SessionData;
+  communityUrl: string;
+}) {
   const slots = sessionPage();
 
   return (
@@ -123,7 +124,7 @@ async function SessionContent({ params }: { params: { slug: string } }) {
             size="lg"
             render={
               <a
-                href={siteSettings.communityUrl}
+                href={communityUrl}
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label="Join to register"
@@ -141,15 +142,30 @@ async function SessionContent({ params }: { params: { slug: string } }) {
 export default async function SessionPage({
   params,
 }: {
-  params: { slug: string };
+  params: Promise<{ slug: string }>;
 }) {
+  const { slug } = await params;
+  // Resolve the record before rendering so unknown slugs return a real 404
+  // status instead of streaming a 200 with a 404 body.
+  const [sessions, siteSettings] = await Promise.all([
+    getSessions(),
+    getSiteSettings(),
+  ]);
+  const session = sessions.find((s) => s.slug === slug);
+  if (!session) notFound();
+
   return (
     <>
       <SiteHeader />
+      <JsonLd
+        data={breadcrumb([
+          { name: "Home", path: "/" },
+          { name: "Online Sessions", path: "/sessions" },
+          { name: session.title, path: `/sessions/${session.slug}` },
+        ])}
+      />
       <PageMain>
-        <Suspense>
-          <SessionContent params={params} />
-        </Suspense>
+        <SessionContent session={session} communityUrl={siteSettings.communityUrl} />
       </PageMain>
       <SiteFooter />
     </>

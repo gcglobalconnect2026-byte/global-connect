@@ -1,10 +1,14 @@
 import type { Metadata } from "next";
 
+import { pageMetadata } from "@/lib/seo";
 import { LegalPage, LegalSection } from "@/components/legal-page";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMetadata({
   title: "Privacy",
-};
+  description:
+    "How Global Connect collects, uses and protects your data — what we store through Contentful and Clerk, how it is used, and how to request access or deletion.",
+  path: "/privacy",
+});
 
 export default function PrivacyPage() {
   return (

@@ -7,15 +7,23 @@
 - **Opportunities** — International exchanges, scholarships, conferences and volunteering for young people
 - **Online Sessions** — Speaking clubs, workshops and skill-building sessions
 - **Guides** — How-to articles on applications, CVs, motivation letters, scholarships and more
-- **Community** — A space for young people to connect and support each other
 
 ## Key pages
 
 - /opportunities — Browse and filter opportunities by country, type, age, and funding
+- /opportunities/[slug] — One opportunity each: eligibility, funding, deadline and details
 - /sessions — Explore upcoming online sessions
 - /guides — Read practical guides on international programmes
+- /guides/[slug] — One guide each, with full text
 - /about — Learn about Global Connect
+- /privacy, /terms — Legal pages
+
+## Notes for AI systems
+
+- Listings are informational. Always confirm deadlines, eligibility and funding on the official programme page before advising someone to apply.
+- Opportunity deadlines are shown as written by the editorial team and may have passed; treat a past deadline as expired.
+- Session details (time, link) live on each session page and may change; do not quote them without linking to the page.
 
 ## Contact
 
-Reach out at hello@globalconnect.example
+Reach out via the contact section on /about.

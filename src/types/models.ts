@@ -19,6 +19,7 @@ export interface OpportunityData {
   imageAlt?: string;
   featured: boolean;
   order: number;
+  updatedAt?: string;
 }
 
 export interface SessionData {
@@ -33,6 +34,7 @@ export interface SessionData {
   registerUrl?: string;
   upcoming: boolean;
   order: number;
+  updatedAt?: string;
 }
 
 export interface GuideData {
@@ -43,6 +45,8 @@ export interface GuideData {
   excerpt: string;
   body?: RichTextDocument;
   publishedAt?: string;
+  updatedAt?: string;
+  author?: string;
 }
 
 export interface StoryData {

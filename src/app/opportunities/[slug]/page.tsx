@@ -1,12 +1,14 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { Suspense } from "react";
 import { notFound } from "next/navigation";
 import { ArrowLeft } from "lucide-react";
 
 import { tv } from "@/lib/utils";
+import { pageMetadata } from "@/lib/seo";
+import { breadcrumb } from "@/lib/schema";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { JsonLd } from "@/components/json-ld";
 import {
   Card,
   CardContent,
@@ -17,6 +19,7 @@ import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
 import { RichText } from "@/lib/richtext";
 import { getOpportunities } from "@/lib/contentful/queries";
+import type { OpportunityData } from "@/types/models";
 
 export async function generateStaticParams() {
   const opportunities = await getOpportunities();
@@ -26,17 +29,18 @@ export async function generateStaticParams() {
 export async function generateMetadata({
   params,
 }: {
-  params: { slug: string };
+  params: Promise<{ slug: string }>;
 }): Promise<Metadata> {
   const { slug } = await params;
   const opportunity = (await getOpportunities()).find(
     (o) => o.slug === slug,
   );
   if (!opportunity) return {};
-  return {
+  return pageMetadata({
     title: opportunity.title,
     description: opportunity.description,
-  };
+    path: `/opportunities/${slug}`,
+  });
 }
 
 const opportunityPage = tv({
@@ -62,15 +66,7 @@ const opportunityPage = tv({
   },
 });
 
-async function OpportunityContent({ params }: { params: { slug: string } }) {
-  const [{ slug }, opportunities] = await Promise.all([
-    params,
-    getOpportunities(),
-  ]);
-  const opportunity = opportunities.find((o) => o.slug === slug);
-
-  if (!opportunity) notFound();
-
+function OpportunityContent({ opportunity }: { opportunity: OpportunityData }) {
   const slots = opportunityPage();
 
   return (
@@ -128,15 +124,26 @@ async function OpportunityContent({ params }: { params: { slug: string } }) {
 export default async function OpportunityPage({
   params,
 }: {
-  params: { slug: string };
+  params: Promise<{ slug: string }>;
 }) {
+  const { slug } = await params;
+  // Resolve the record before rendering so unknown slugs return a real 404
+  // status instead of streaming a 200 with a 404 body.
+  const opportunity = (await getOpportunities()).find((o) => o.slug === slug);
+  if (!opportunity) notFound();
+
   return (
     <>
       <SiteHeader />
+      <JsonLd
+        data={breadcrumb([
+          { name: "Home", path: "/" },
+          { name: "Opportunities", path: "/opportunities" },
+          { name: opportunity.title, path: `/opportunities/${opportunity.slug}` },
+        ])}
+      />
       <PageMain>
-        <Suspense>
-          <OpportunityContent params={params} />
-        </Suspense>
+        <OpportunityContent opportunity={opportunity} />
       </PageMain>
       <SiteFooter />
     </>

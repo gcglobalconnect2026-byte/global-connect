@@ -14,11 +14,14 @@ import {
 import { StoriesSection } from "@/components/sections/stories-section";
 import { tv } from "@/lib/utils";
 
-export const metadata: Metadata = {
+import { pageMetadata } from "@/lib/seo";
+
+export const metadata: Metadata = pageMetadata({
   title: "About",
   description:
     "Global Connect helps young people discover international opportunities, build confidence and connect worldwide.",
-};
+  path: "/about",
+});
 
 const aboutPage = tv({
   slots: {

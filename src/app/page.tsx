@@ -14,6 +14,11 @@ import { DiscoverySection } from "@/components/sections/discovery-section";
 import { PartnersSection } from "@/components/sections/partners-section";
 import { FinalCtaSection } from "@/components/sections/final-cta-section";
 import {
+  DEFAULT_DESCRIPTION,
+  HOMEPAGE_TITLE,
+  pageMetadata,
+} from "@/lib/seo";
+import {
   getCities,
   getGuides,
   getHomepageSections,
@@ -26,9 +31,11 @@ import {
   getStories,
 } from "@/lib/contentful/queries";
 
-export const metadata = {
-  title: "Global Connect — Your next global opportunity",
-};
+export const metadata = pageMetadata({
+  title: { absolute: HOMEPAGE_TITLE },
+  description: DEFAULT_DESCRIPTION,
+  path: "/",
+});
 
 export default async function HomePage() {
   const [opportunities, sessions, guides, stories, partners, pathSteps, interests, cities, homepageSections, siteSettings] =

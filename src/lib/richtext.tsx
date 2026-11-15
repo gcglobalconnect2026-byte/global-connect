@@ -65,6 +65,9 @@ const richTextSlots = richText();
 
 // Module scope: the render callbacks keep a stable identity across renders.
 const renderNode: RenderNode = {
+  // The page already owns the <h1>, so a CMS heading-1 inside the body would
+  // create a second h1 (this has already happened once). Demote it.
+  [BLOCKS.HEADING_1]: (_node, children) => <h2>{children}</h2>,
   [BLOCKS.EMBEDDED_ASSET]: (node) => {
     const asset = assetUrl(node.data.target);
     if (!asset) return null;

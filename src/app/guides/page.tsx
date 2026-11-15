@@ -3,6 +3,9 @@ import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 
 import { tv } from "@/lib/utils";
+import { pageMetadata } from "@/lib/seo";
+import { breadcrumb, guideItemList } from "@/lib/schema";
+import { JsonLd } from "@/components/json-ld";
 import { PageBand, PageContainer, PageMain } from "@/components/page-shell";
 import { PageHeader } from "@/components/page-header";
 import { SiteFooter } from "@/components/site-footer";
@@ -10,11 +13,12 @@ import { SiteHeader } from "@/components/site-header";
 import { Tile } from "@/components/ui/tile";
 import { getGuides } from "@/lib/contentful/queries";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMetadata({
   title: "Guides",
   description:
     "How-to guides on motivation letters, scholarships, Erasmus+, interviews, CVs and more.",
-};
+  path: "/guides",
+});
 
 const guidesPage = tv({
   slots: {
@@ -34,6 +38,13 @@ export default async function GuidesPage() {
   return (
     <>
       <SiteHeader />
+      <JsonLd
+        data={breadcrumb([
+          { name: "Home", path: "/" },
+          { name: "Guides", path: "/guides" },
+        ])}
+      />
+      <JsonLd data={guideItemList(guides)} />
       <PageMain>
         <PageBand>
           <PageHeader

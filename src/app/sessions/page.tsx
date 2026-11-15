@@ -2,6 +2,9 @@ import type { Metadata } from "next";
 import Link from "next/link";
 
 import { tv } from "@/lib/utils";
+import { pageMetadata } from "@/lib/seo";
+import { breadcrumb, sessionItemList } from "@/lib/schema";
+import { JsonLd } from "@/components/json-ld";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -16,11 +19,12 @@ import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
 import { getSessions } from "@/lib/contentful/queries";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMetadata({
   title: "Online Sessions",
   description:
     "Speaking clubs, workshops and sessions that build your skills and confidence.",
-};
+  path: "/sessions",
+});
 
 const sessionsPage = tv({
   slots: {
@@ -45,6 +49,13 @@ export default async function SessionsPage() {
   return (
     <>
       <SiteHeader />
+      <JsonLd
+        data={breadcrumb([
+          { name: "Home", path: "/" },
+          { name: "Online Sessions", path: "/sessions" },
+        ])}
+      />
+      <JsonLd data={sessionItemList(sessions)} />
       <PageMain>
         <PageBand>
           <PageHeader

@@ -103,6 +103,7 @@ export function SectionHeading({
   title,
   description,
   align = "center",
+  as = "h2",
   className,
 }: {
   eyebrow?: string;
@@ -110,13 +111,19 @@ export function SectionHeading({
   title: React.ReactNode;
   description?: React.ReactNode;
   align?: "center" | "left";
+  /**
+   * Heading level. Keep the default `h2` — `h1` is reserved for the page's
+   * primary heading, which is usually a `PageHeader` band.
+   */
+  as?: "h1" | "h2";
   className?: string;
 }) {
   const slots = section({ align, dot: eyebrowDot });
+  const Heading = as;
   return (
     <div className={slots.heading({ class: className })}>
       {eyebrow && <SectionEyebrow dot={eyebrowDot}>{eyebrow}</SectionEyebrow>}
-      <h2 className={slots.title()}>{title}</h2>
+      <Heading className={slots.title()}>{title}</Heading>
       {description && <p className={slots.description()}>{description}</p>}
     </div>
   );

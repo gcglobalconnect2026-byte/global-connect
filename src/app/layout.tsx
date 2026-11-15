@@ -4,6 +4,14 @@ import { Fraunces, Inter } from "next/font/google";
 
 import { cn, tv } from "@/lib/utils";
 import { SITE_URL } from "@/lib/site";
+import {
+  DEFAULT_DESCRIPTION,
+  DEFAULT_OG_IMAGE,
+  HOMEPAGE_TITLE,
+  SITE_NAME,
+} from "@/lib/seo";
+import { JsonLd } from "@/components/json-ld";
+import { organization, website } from "@/lib/schema";
 import "./globals.css";
 
 const inter = Inter({
@@ -25,24 +33,38 @@ const appShell = tv({
   },
 });
 
+const isProduction = process.env.VERCEL_ENV === "production";
+
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: {
-    default: "Global Connect — Your next global opportunity",
-    template: "%s · Global Connect",
+    default: HOMEPAGE_TITLE,
+    template: `%s · ${SITE_NAME}`,
   },
-  description:
-    "Discover international opportunities, online sessions, guides, and a global youth community. Exchanges, scholarships, conferences and volunteering for young people.",
+  description: DEFAULT_DESCRIPTION,
+  // Preview deployments must never compete with production for the same text.
+  robots: isProduction ? undefined : { index: false, follow: false },
+  alternates: {
+    canonical: "/",
+  },
   openGraph: {
-    title: "Global Connect — Your next global opportunity",
-    description:
-      "Discover international opportunities, online sessions, guides, and a global youth community. Exchanges, scholarships, conferences and volunteering for young people.",
-    siteName: "Global Connect",
+    title: HOMEPAGE_TITLE,
+    description: DEFAULT_DESCRIPTION,
+    url: "/",
+    siteName: SITE_NAME,
     type: "website",
     locale: "en_US",
+    images: [DEFAULT_OG_IMAGE],
   },
+  twitter: {
+    card: "summary_large_image",
+    title: HOMEPAGE_TITLE,
+    description: DEFAULT_DESCRIPTION,
+    images: [DEFAULT_OG_IMAGE.url],
+  },
+  applicationName: SITE_NAME,
   other: {
-    "apple-mobile-web-app-title": "Global Connect",
+    "apple-mobile-web-app-title": SITE_NAME,
   },
 };
 
@@ -60,6 +82,8 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       className={cn(inter.variable, fraunces.variable, slots.html())}
     >
       <body className={slots.body()}>
+        <JsonLd data={organization()} />
+        <JsonLd data={website()} />
         <ClerkProvider>{children}</ClerkProvider>
       </body>
     </html>

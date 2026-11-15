@@ -47,10 +47,13 @@ export function OpportunityFinder({
   opportunities,
   limit,
   config,
+  headingAs = "h2",
 }: {
   opportunities: OpportunityData[];
   limit?: number;
   config?: HomepageSectionData;
+  /** Set to `"h1"` when this component is the page's primary heading. */
+  headingAs?: "h1" | "h2";
 }) {
   const [search, setSearch] = useState("");
   const [country, setCountry] = useState("all");
@@ -124,6 +127,7 @@ export function OpportunityFinder({
         eyebrowDot="lavender"
         title={config?.title ?? "Opportunities"}
         description={config?.description}
+        as={headingAs}
       />
 
       <div className={slots.searchPanel()}>

@@ -1,16 +1,19 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { Suspense } from "react";
 import { notFound } from "next/navigation";
 import { ArrowLeft, Clock } from "lucide-react";
 
 import { tv } from "@/lib/utils";
+import { pageMetadata } from "@/lib/seo";
+import { article, breadcrumb } from "@/lib/schema";
 import { Button } from "@/components/ui/button";
+import { JsonLd } from "@/components/json-ld";
 import { PageArticle, PageMain } from "@/components/page-shell";
 import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
 import { RichText } from "@/lib/richtext";
 import { getGuides } from "@/lib/contentful/queries";
+import type { GuideData } from "@/types/models";
 
 export async function generateStaticParams() {
   const guides = await getGuides();
@@ -20,15 +23,17 @@ export async function generateStaticParams() {
 export async function generateMetadata({
   params,
 }: {
-  params: { slug: string };
+  params: Promise<{ slug: string }>;
 }): Promise<Metadata> {
   const { slug } = await params;
   const guide = (await getGuides()).find((g) => g.slug === slug);
   if (!guide) return {};
-  return {
+  return pageMetadata({
     title: guide.title,
     description: guide.excerpt,
-  };
+    path: `/guides/${slug}`,
+    type: "article",
+  });
 }
 
 const guidePage = tv({
@@ -47,12 +52,7 @@ const guidePage = tv({
   },
 });
 
-async function GuideContent({ params }: { params: { slug: string } }) {
-  const [{ slug }, guides] = await Promise.all([params, getGuides()]);
-  const guide = guides.find((g) => g.slug === slug);
-
-  if (!guide) notFound();
-
+function GuideContent({ guide }: { guide: GuideData }) {
   const slots = guidePage();
 
   return (
@@ -110,15 +110,27 @@ async function GuideContent({ params }: { params: { slug: string } }) {
 export default async function GuidePage({
   params,
 }: {
-  params: { slug: string };
+  params: Promise<{ slug: string }>;
 }) {
+  const { slug } = await params;
+  // Resolve the record before rendering so unknown slugs return a real 404
+  // status instead of streaming a 200 with a 404 body.
+  const guide = (await getGuides()).find((g) => g.slug === slug);
+  if (!guide) notFound();
+
   return (
     <>
       <SiteHeader />
+      <JsonLd
+        data={breadcrumb([
+          { name: "Home", path: "/" },
+          { name: "Guides", path: "/guides" },
+          { name: guide.title, path: `/guides/${guide.slug}` },
+        ])}
+      />
+      <JsonLd data={article(guide)} />
       <PageMain>
-        <Suspense>
-          <GuideContent params={params} />
-        </Suspense>
+        <GuideContent guide={guide} />
       </PageMain>
       <SiteFooter />
     </>

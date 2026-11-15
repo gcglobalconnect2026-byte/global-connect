@@ -75,6 +75,7 @@ function mapOpportunity(entry: Opportunity): OpportunityData {
     featured: fields.featured ?? false,
     order: fields.order ?? Number.MAX_SAFE_INTEGER,
     longDescription: fields.longDescription,
+    updatedAt: entry.sys.updatedAt,
   };
 }
 
@@ -92,6 +93,7 @@ function mapSession(entry: Session): SessionData {
     registerUrl: fields.registerUrl,
     upcoming: fields.upcoming ?? true,
     order: fields.order ?? Number.MAX_SAFE_INTEGER,
+    updatedAt: entry.sys.updatedAt,
   };
 }
 
@@ -105,6 +107,7 @@ function mapGuide(entry: Guide): GuideData {
     excerpt: fields.excerpt ?? "",
     body: fields.body,
     publishedAt: fields.publishedAt,
+    updatedAt: entry.sys.updatedAt,
   };
 }
 

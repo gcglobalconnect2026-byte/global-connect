@@ -57,12 +57,6 @@ const richParagraph = (...children: Node[]): Node => ({
   content: children,
 });
 
-const heading1 = (value: string): Node => ({
-  nodeType: BLOCKS.HEADING_1,
-  data: {},
-  content: [text(value)],
-});
-
 const heading2 = (value: string): Node => ({
   nodeType: BLOCKS.HEADING_2,
   data: {},
@@ -1313,7 +1307,7 @@ export const seedGuides: GuideData[] = [
         "/guides/asset-studying-abroad-1.jpg",
         "A student with a suitcase at an airport departure gate",
       ),
-      heading1("Before you go"),
+      heading2("Before you go"),
       richParagraph(
         text("Your "),
         marked("motivation letter", ["bold"]),
