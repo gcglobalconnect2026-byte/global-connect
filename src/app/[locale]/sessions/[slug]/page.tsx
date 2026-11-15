@@ -1,9 +1,11 @@
 import type { Metadata } from "next";
-import Link from "next/link";
+import { withLocale } from "@/i18n/params";
 import { notFound } from "next/navigation";
 import { ArrowLeft } from "lucide-react";
+import { getTranslations } from "next-intl/server";
 
 import { tv } from "@/lib/utils";
+import { Link } from "@/i18n/navigation";
 import { pageMetadata } from "@/lib/seo";
 import { breadcrumb } from "@/lib/schema";
 import { Badge } from "@/components/ui/badge";
@@ -16,23 +18,32 @@ import { SiteHeader } from "@/components/site-header";
 import { getSessions, getSiteSettings } from "@/lib/contentful/queries";
 import type { SessionData } from "@/types/models";
 
+/**
+ * This segment deliberately blocks: the session record is resolved before the
+ * first flush so an unknown slug returns a real 404 instead of a streamed
+ * 200. Moving the lookup behind `<Suspense>` would make navigations instant
+ * but reintroduce that 200 — see the SEO notes in the commit history.
+ */
+export const instant = false;
+
 export async function generateStaticParams() {
-  const sessions = await getSessions();
+  // Slugs are not localized — see `guides/[slug]`.
+  const sessions = await getSessions("en");
   return sessions.map((session) => ({ slug: session.slug }));
 }
 
 export async function generateMetadata({
   params,
-}: {
-  params: Promise<{ slug: string }>;
-}): Promise<Metadata> {
-  const { slug } = await params;
-  const session = (await getSessions()).find((s) => s.slug === slug);
+}: PageProps<"/[locale]/sessions/[slug]">): Promise<Metadata> {
+  const { locale, slug } = withLocale(await params);
+  const session = (await getSessions(locale)).find((s) => s.slug === slug);
   if (!session) return {};
   return pageMetadata({
     title: session.title,
     description: session.description,
     path: `/sessions/${slug}`,
+    locale,
+    translatedLocales: session.translatedLocales,
   });
 }
 
@@ -51,13 +62,16 @@ const sessionPage = tv({
   },
 });
 
-function SessionContent({
+async function SessionContent({
   session,
   communityUrl,
+  locale,
 }: {
   session: SessionData;
   communityUrl: string;
+  locale: string;
 }) {
+  const t = await getTranslations({ locale, namespace: "Sessions" });
   const slots = sessionPage();
 
   return (
@@ -69,7 +83,7 @@ function SessionContent({
         render={<Link href="/sessions" />}
       >
         <ArrowLeft className={slots.backIcon()} />
-        All sessions
+        {t("all")}
       </Button>
 
       <div className={slots.head()}>
@@ -84,7 +98,7 @@ function SessionContent({
         </Tile>
         {session.online && (
           <Badge variant="secondary" className={slots.badge()}>
-            Online
+            {t("badgeOnline")}
           </Badge>
         )}
       </div>
@@ -100,7 +114,7 @@ function SessionContent({
           {session.difficulty}
         </Badge>
         {session.upcoming && (
-          <Badge className={slots.metaBadge()}>Upcoming</Badge>
+          <Badge className={slots.metaBadge()}>{t("upcoming")}</Badge>
         )}
       </div>
 
@@ -113,11 +127,11 @@ function SessionContent({
                 href={session.registerUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                aria-label="Register for this session"
+                aria-label={t("registerAria")}
               />
             }
           >
-            Register for this session
+            {t("register")}
           </Button>
         ) : (
           <Button
@@ -127,11 +141,11 @@ function SessionContent({
                 href={communityUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                aria-label="Join to register"
+                aria-label={t("joinToRegisterAria")}
               />
             }
           >
-            Join to register
+            {t("joinToRegister")}
           </Button>
         )}
       </div>
@@ -141,14 +155,13 @@ function SessionContent({
 
 export default async function SessionPage({
   params,
-}: {
-  params: Promise<{ slug: string }>;
-}) {
-  const { slug } = await params;
+}: PageProps<"/[locale]/sessions/[slug]">) {
+  const { locale, slug } = withLocale(await params);
+  const nav = await getTranslations({ locale, namespace: "Nav" });
   // Resolve the record before rendering so unknown slugs return a real 404
   // status instead of streaming a 200 with a 404 body.
   const [sessions, siteSettings] = await Promise.all([
-    getSessions(),
+    getSessions(locale),
     getSiteSettings(),
   ]);
   const session = sessions.find((s) => s.slug === slug);
@@ -158,14 +171,21 @@ export default async function SessionPage({
     <>
       <SiteHeader />
       <JsonLd
-        data={breadcrumb([
-          { name: "Home", path: "/" },
-          { name: "Online Sessions", path: "/sessions" },
-          { name: session.title, path: `/sessions/${session.slug}` },
-        ])}
+        data={breadcrumb(
+          [
+            { name: nav("home"), path: "/" },
+            { name: nav("sessions"), path: "/sessions" },
+            { name: session.title, path: `/sessions/${session.slug}` },
+          ],
+          locale,
+        )}
       />
       <PageMain>
-        <SessionContent session={session} communityUrl={siteSettings.communityUrl} />
+        <SessionContent
+          session={session}
+          communityUrl={siteSettings.communityUrl}
+          locale={locale}
+        />
       </PageMain>
       <SiteFooter />
     </>

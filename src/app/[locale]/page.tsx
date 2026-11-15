@@ -1,3 +1,7 @@
+import type { Metadata } from "next";
+import { withLocale } from "@/i18n/params";
+import { getTranslations } from "next-intl/server";
+
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
 import { PageMain } from "@/components/page-shell";
@@ -13,11 +17,7 @@ import { CommunitySection } from "@/components/sections/community-section";
 import { DiscoverySection } from "@/components/sections/discovery-section";
 import { PartnersSection } from "@/components/sections/partners-section";
 import { FinalCtaSection } from "@/components/sections/final-cta-section";
-import {
-  DEFAULT_DESCRIPTION,
-  HOMEPAGE_TITLE,
-  pageMetadata,
-} from "@/lib/seo";
+import { pageMetadata } from "@/lib/seo";
 import {
   getCities,
   getGuides,
@@ -31,24 +31,37 @@ import {
   getStories,
 } from "@/lib/contentful/queries";
 
-export const metadata = pageMetadata({
-  title: { absolute: HOMEPAGE_TITLE },
-  description: DEFAULT_DESCRIPTION,
-  path: "/",
-});
+export async function generateMetadata({
+  params,
+}: PageProps<"/[locale]">): Promise<Metadata> {
+  const { locale } = withLocale(await params);
+  const t = await getTranslations({ locale, namespace: "Metadata" });
+  return pageMetadata({
+    title: { absolute: t("defaultTitle") },
+    description: t("defaultDescription"),
+    // The locale root: `""` keeps the canonical at `/{locale}` without a
+    // trailing slash.
+    path: "",
+    locale,
+  });
+}
 
-export default async function HomePage() {
+export default async function HomePage({
+  params,
+}: PageProps<"/[locale]">) {
+  const { locale } = withLocale(await params);
+
   const [opportunities, sessions, guides, stories, partners, pathSteps, interests, cities, homepageSections, siteSettings] =
     await Promise.all([
-      getOpportunities(),
-      getSessions(),
-      getGuides(),
-      getStories(),
+      getOpportunities(locale),
+      getSessions(locale),
+      getGuides(locale),
+      getStories(locale),
       getPartners(),
-      getPathSteps(),
-      getInterests(),
-      getCities(),
-      getHomepageSections(),
+      getPathSteps(locale),
+      getInterests(locale),
+      getCities(locale),
+      getHomepageSections(locale),
       getSiteSettings(),
     ]);
 

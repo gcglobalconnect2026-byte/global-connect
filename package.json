@@ -10,11 +10,13 @@
     "typecheck": "tsc --noEmit",
     "react-doctor": "react-doctor . --verbose",
     "contentful:import": "node scripts/contentful-import.mjs",
+    "contentful:locales": "tsx scripts/contentful-locales.ts",
     "contentful:seed": "tsx scripts/contentful-seed.ts",
     "contentful:codegen": "dotenv -e .env.local -e .env -- contentful-typescript-codegen --output src/types/generated/contentful.d.ts"
   },
   "dependencies": {
     "@base-ui/react": "^1.8.0",
+    "@clerk/localizations": "^4.16.0",
     "@clerk/nextjs": "^7.9.2",
     "@contentful/rich-text-react-renderer": "^16.2.2",
     "@contentful/rich-text-types": "^17.2.7",
@@ -22,6 +24,7 @@
     "embla-carousel-react": "^8.6.0",
     "lucide-react": "^1.45.0",
     "next": "16.3.5",
+    "next-intl": "^4.15.1",
     "react": "19.2.8",
     "react-dom": "19.2.8",
     "server-only": "^0.0.1",

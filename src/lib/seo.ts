@@ -1,4 +1,12 @@
 import type { Metadata } from "next";
+import { getTranslations } from "next-intl/server";
+
+import {
+  DEFAULT_LOCALE,
+  LOCALES,
+  LOCALE_CODES,
+  type Locale,
+} from "@/lib/locales";
 
 /**
  * Shared page metadata.
@@ -9,8 +17,11 @@ import type { Metadata } from "next";
  * never silently dropped when a page adds its own image or type.
  *
  * `canonical`, `og:url` and image URLs are relative on purpose — they are
- * resolved against `metadataBase` in `src/app/layout.tsx`. Keep them relative
+ * resolved against `metadataBase` in the root layout. Keep them relative
  * (never `new URL(...)`) so they stay serializable under `use cache`.
+ *
+ * Site-wide strings (titles, descriptions, image alt) come from the message
+ * catalogs via `getTranslations`, so they are never hardcoded here.
  */
 
 export const SITE_NAME = "Global Connect";
@@ -19,50 +30,83 @@ export const DEFAULT_OG_IMAGE = {
   url: "/og-default.jpg",
   width: 1200,
   height: 630,
-  alt: "Young people from different countries working together",
 } as const;
 
-export const DEFAULT_DESCRIPTION =
-  "Discover international opportunities, online sessions, guides, and a global youth community. Exchanges, scholarships, conferences and volunteering for young people.";
-
-export const HOMEPAGE_TITLE = `${SITE_NAME} — Your next global opportunity`;
+/**
+ * `alternates.languages` for a path that is relative to the locale prefix
+ * (`/about` → `{ en: "/en/about", de: "/de/about", "x-default": "/en/about" }`).
+ *
+ * Only pass `locales` that actually have a translation — advertising a
+ * `de` URL that renders English fallback content is a soft duplicate.
+ */
+export function alternatesFor(
+  path: string,
+  locales: readonly Locale[] = LOCALE_CODES,
+): Record<string, string> {
+  const languages: Record<string, string> = {};
+  for (const code of locales) {
+    languages[LOCALES[code].hreflang] = `/${code}${path}`;
+  }
+  languages["x-default"] = `/${DEFAULT_LOCALE}${path}`;
+  return languages;
+}
 
 type PageMeta = {
   /**
    * Title without the site suffix. The layout template appends
    * " · Global Connect" to titles from child segments only — pass
-   * `{ absolute: HOMEPAGE_TITLE }` when the suffix is not wanted.
+   * `{ absolute: <full title> }` when the suffix is not wanted.
    */
   title: string | { absolute: string };
   description: string;
-  /** Absolute path of this page, e.g. "/about" or "/guides/how-erasmus-works". */
+  /**
+   * Path relative to the locale prefix, e.g. "/about" or
+   * "/guides/how-erasmus-works". Pass `""` for the locale root so the
+   * canonical comes out as `/{locale}` without a trailing slash.
+   */
   path: string;
+  /** Locale this page is rendered in — drives canonical, hreflang and og:locale. */
+  locale: Locale;
+  /**
+   * Locales that have a real translation of this page. Defaults to all
+   * locales; CMS pages pass the entry's translation coverage.
+   */
+  translatedLocales?: readonly Locale[];
   type?: "website" | "article";
   image?: typeof DEFAULT_OG_IMAGE;
 };
 
-export function pageMetadata({
+export async function pageMetadata({
   title,
   description,
   path,
+  locale,
+  translatedLocales = LOCALE_CODES,
   type = "website",
   image = DEFAULT_OG_IMAGE,
-}: PageMeta): Metadata {
+}: PageMeta): Promise<Metadata> {
   // `openGraph.title` must be a plain string; unwrap `{ absolute }` forms.
   const ogTitle = typeof title === "string" ? title : (title?.absolute ?? "");
+
+  const t = await getTranslations({ locale, namespace: "Metadata" });
+  const alternateLocales = translatedLocales.filter((code) => code !== locale);
 
   return {
     title,
     description,
-    alternates: { canonical: path },
+    alternates: {
+      canonical: `/${locale}${path}`,
+      languages: alternatesFor(path, translatedLocales),
+    },
     openGraph: {
       title: ogTitle,
       description,
-      url: path,
+      url: `/${locale}${path}`,
       siteName: SITE_NAME,
-      locale: "en_US",
+      locale: LOCALES[locale].ogLocale,
+      alternateLocale: alternateLocales.map((code) => LOCALES[code].ogLocale),
       type,
-      images: [image],
+      images: [{ ...image, alt: t("ogImageAlt") }],
     },
     twitter: {
       card: "summary_large_image",

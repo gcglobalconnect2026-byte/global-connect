@@ -4,6 +4,7 @@ import { BLOCKS, INLINES } from "@contentful/rich-text-types";
 import type { Document as RichTextDocument } from "@contentful/rich-text-types";
 
 import { tv } from "@/lib/utils";
+import { CF_LOCALES } from "@/lib/contentful/locales";
 
 const richText = tv({
   slots: {
@@ -30,6 +31,23 @@ function youtubeEmbedUrl(url: string): string | null {
   return m ? `https://www.youtube-nocookie.com/embed/${m[1]}` : null;
 }
 
+/**
+ * Resolves a locale-aware value from either shape Contentful (or the bundled
+ * seed) may return: unwrapped for a single-locale request, or keyed by locale
+ * for `locale=*` / seed payloads. Picks the first shipped locale that is
+ * present, which doubles as the default-locale fallback for entries that are
+ * not translated yet.
+ */
+function localize<T>(value: unknown): T | undefined {
+  if (value === undefined || value === null) return undefined;
+  if (typeof value === "object" && !Array.isArray(value)) {
+    const keyed = value as Record<string, T>;
+    const hit = CF_LOCALES.find((code) => code in keyed);
+    if (hit) return keyed[hit];
+  }
+  return value as T;
+}
+
 function assetUrl(
   target: unknown,
 ): { url: string; alt: string; width?: number; height?: number } | null {
@@ -40,18 +58,12 @@ function assetUrl(
       file?: AssetFile | Record<string, AssetFile>;
     };
   } | null;
-  // Contentful delivery returns localized fields unwrapped; the bundled seed
-  // wraps them under the "en-US" locale. Support both shapes.
-  const loc = <T,>(v: T | Record<string, T> | undefined): T | undefined =>
-    v && typeof v === "object" && !Array.isArray(v) && "en-US" in v
-      ? (v as Record<string, T>)["en-US"]
-      : (v as T | undefined);
-  const file = loc<AssetFile>(asset?.fields?.file);
+  const file = localize<AssetFile>(asset?.fields?.file);
   if (!file?.url) return null;
   const url = file.url.startsWith("//") ? `https:${file.url}` : file.url;
   const alt =
-    loc(asset?.fields?.description) ??
-    loc(asset?.fields?.title) ??
+    localize<string>(asset?.fields?.description) ??
+    localize<string>(asset?.fields?.title) ??
     "";
   return {
     url,
@@ -98,32 +110,11 @@ const renderNode: RenderNode = {
       | undefined;
     const typeId = entry?.sys?.contentType?.sys?.id;
     if (typeId === "video" && entry?.fields) {
-      const rawUrl =
-        typeof entry.fields.videoUrl === "string"
-          ? entry.fields.videoUrl
-          : typeof entry.fields.videoUrl === "object" &&
-              entry.fields.videoUrl !== null &&
-              "en-US" in (entry.fields.videoUrl as Record<string, unknown>)
-            ? (entry.fields.videoUrl as Record<string, string>)["en-US"]
-            : "";
+      const rawUrl = localize<string>(entry.fields.videoUrl) ?? "";
       const embedSrc = youtubeEmbedUrl(rawUrl);
       if (!embedSrc) return null;
-      const title =
-        typeof entry.fields.title === "string"
-          ? entry.fields.title
-          : typeof entry.fields.title === "object" &&
-              entry.fields.title !== null &&
-              "en-US" in (entry.fields.title as Record<string, unknown>)
-            ? (entry.fields.title as Record<string, string>)["en-US"]
-            : "Video";
-      const caption =
-        typeof entry.fields.caption === "string"
-          ? entry.fields.caption
-          : typeof entry.fields.caption === "object" &&
-              entry.fields.caption !== null &&
-              "en-US" in (entry.fields.caption as Record<string, unknown>)
-            ? (entry.fields.caption as Record<string, string>)["en-US"]
-            : undefined;
+      const title = localize<string>(entry.fields.title) ?? "Video";
+      const caption = localize<string>(entry.fields.caption);
       return (
         <figure className={richTextSlots.figure()}>
           <div className={richTextSlots.media()}>

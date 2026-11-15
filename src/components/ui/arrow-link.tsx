@@ -1,7 +1,7 @@
-import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 
 import { tv, type VariantProps } from "@/lib/utils";
+import { Link } from "@/i18n/navigation";
 
 const arrowLink = tv({
   slots: {

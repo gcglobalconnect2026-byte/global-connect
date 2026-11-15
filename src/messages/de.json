@@ -1,0 +1,215 @@
+{
+  "Metadata": {
+    "defaultTitle": "Global Connect – Deine nächste globale Chance",
+    "defaultDescription": "Entdecke internationale Möglichkeiten, Online-Sessions, Ratgeber und eine globale Community. Austausche, Stipendien, Konferenzen und Freiwilligenarbeit für junge Menschen.",
+    "ogImageAlt": "Junge Menschen aus verschiedenen Ländern arbeiten zusammen",
+    "itemListOpportunities": "Internationale Möglichkeiten für junge Menschen",
+    "itemListSessions": "Online-Sessions",
+    "itemListGuides": "Ratgeber für Bewerbungen auf internationale Programme",
+    "about": {
+      "title": "Über uns",
+      "description": "Global Connect hilft jungen Menschen, internationale Möglichkeiten zu entdecken, Selbstvertrauen aufzubauen und weltweit zu vernetzen."
+    },
+    "opportunities": {
+      "title": "Möglichkeiten",
+      "description": "Durchstöbere Austausche, Stipendien, Konferenzen und Freiwilligenangebote für junge Menschen weltweit."
+    },
+    "sessions": {
+      "title": "Online-Sessions",
+      "description": "Sprechclubs, Workshops und Sessions, die deine Fähigkeiten und dein Selbstvertrauen stärken."
+    },
+    "guides": {
+      "title": "Ratgeber",
+      "description": "Praktische Anleitungen zu Motivationsschreiben, Stipendien, Erasmus+, Bewerbungsgesprächen, Lebensläufen und mehr."
+    },
+    "privacy": {
+      "title": "Datenschutz",
+      "description": "Wie Global Connect deine Daten erhebt, nutzt und schützt – was wir über Contentful und Clerk speichern, wofür wir es verwenden und wie du Zugang oder Löschung verlangen kannst."
+    },
+    "terms": {
+      "title": "AGB",
+      "description": "Global Connect Nutzungsbedingungen: wie wir Möglichkeiten listen, die Grenzen unserer Angebote, verantwortungsvolles Verhalten und warum die Bedingungen der Programme weiter für dich gelten."
+    }
+  },
+  "Nav": {
+    "home": "Start",
+    "opportunities": "Möglichkeiten",
+    "sessions": "Online-Sessions",
+    "guides": "Ratgeber",
+    "community": "Community",
+    "about": "Über uns",
+    "join": "Mitmachen",
+    "explore": "Möglichkeiten entdecken",
+    "menu": "Menü",
+    "menuDescription": "Global Connect entdecken",
+    "toggle": "Navigation umschalten",
+    "mobileNav": "Mobile Navigation"
+  },
+  "Footer": {
+    "tagline": "Wir helfen jungen Menschen, neue Möglichkeiten zu entdecken.",
+    "explore": "Entdecken",
+    "about": "Über uns",
+    "ourStory": "Unsere Geschichte",
+    "impact": "Wirkung",
+    "partners": "Partner",
+    "contact": "Kontakt",
+    "opportunities": "Möglichkeiten",
+    "sessions": "Sessions",
+    "guides": "Ratgeber",
+    "community": "Community",
+    "copyright": "© 2026 Global Connect",
+    "privacy": "Datenschutz",
+    "terms": "AGB"
+  },
+  "Common": {
+    "explore": "Möglichkeiten entdecken",
+    "join": "Global Connect beitreten",
+    "joinAria": "Global Connect beitreten",
+    "logoHome": "Global Connect – Startseite",
+    "logoAlt": "Global-Connect-Logo",
+    "close": "Schließen",
+    "language": "Sprache"
+  },
+  "A11y": {
+    "previous": "Zurück",
+    "next": "Weiter",
+    "slideGroup": "Zur Folienfolge {index}"
+  },
+  "NotFound": {
+    "title": "Seite nicht gefunden",
+    "description": "Die gesuchte Seite existiert nicht oder wurde verschoben.",
+    "home": "Zur Startseite"
+  },
+  "Home": {
+    "hero": {
+      "ctaExplore": "Möglichkeiten entdecken",
+      "ctaJoin": "Global Connect beitreten",
+      "joinAria": "Global Connect beitreten",
+      "meta": "1.000+ Mitglieder · 500+ geteilte Möglichkeiten · 35 Online-Sessions",
+      "imageAlt": "Junge Menschen aus verschiedenen Ländern lachen gemeinsam auf einem Campus"
+    },
+    "stats": {
+      "members": "Mitglieder",
+      "opportunities": "Geteilte Möglichkeiten",
+      "sessions": "Online-Sessions",
+      "mentored": "Betreute junge Menschen",
+      "partnerships": "Partnerschaften"
+    },
+    "finder": {
+      "defaultTitle": "Möglichkeiten",
+      "searchPlaceholder": "Möglichkeiten suchen …",
+      "searchAria": "Möglichkeiten durchsuchen",
+      "filterCountry": "Land",
+      "filterType": "Art",
+      "filterAge": "Alter",
+      "filterFunding": "Finanzierung",
+      "filterDeadline": "Frist",
+      "clear": "Zurücksetzen",
+      "viewAll": "Alle Möglichkeiten ansehen",
+      "emptyTitle": "Keine passenden Möglichkeiten",
+      "emptyText": "Lösche ein oder zwei Filter, um mehr Treffer zu sehen.",
+      "emptyAction": "Filter zurücksetzen"
+    },
+    "path": {
+      "defaultTitle": "So funktioniert's"
+    },
+    "sessions": {
+      "defaultTitle": "Sessions",
+      "countLabel": "Online-Sessions",
+      "viewAll": "Alle Sessions ansehen",
+      "badgeOnline": "Online",
+      "register": "Anmelden",
+      "registerAria": "Für diese Session anmelden",
+      "imageAlt": "Eine junge Frau macht sich Notizen während einer Online-Session von Global Connect"
+    },
+    "guides": {
+      "defaultTitle": "Ratgeber",
+      "readTime": "{count} Min. Lesezeit",
+      "read": "Ratgeber lesen",
+      "viewAll": "Alle Ratgeber ansehen"
+    },
+    "stories": {
+      "defaultTitle": "Geschichten",
+      "cta": "Deine Global-Connect-Geschichte teilen",
+      "carouselAria": "Studierendengeschichten"
+    },
+    "community": {
+      "defaultTitle": "Community",
+      "features": {
+        "meet": "Junge Menschen weltweit treffen",
+        "discuss": "An Diskussionen teilnehmen",
+        "speak": "Sprechclubs",
+        "mentor": "Mentoring",
+        "learn": "Gemeinsam lernen"
+      },
+      "cta": "Der Community beitreten",
+      "imageAlt": "Junge Menschen aus verschiedenen Ländern sitzen im Kreis und unterhalten sich"
+    },
+    "discovery": {
+      "defaultTitle": "Entdecken",
+      "cta": "Passende Möglichkeiten finden"
+    },
+    "finalCta": {
+      "explore": "Möglichkeiten entdecken",
+      "join": "Global Connect beitreten",
+      "joinAria": "Global Connect beitreten"
+    }
+  },
+  "Opportunities": {
+    "detailAge": "Alter",
+    "detailFunding": "Finanzierung",
+    "detailDeadline": "Frist",
+    "view": "Möglichkeit ansehen",
+    "all": "Alle Möglichkeiten",
+    "fallback": "Eine vollständige Beschreibung folgt bald. Prüfe die Details auf der offiziellen Programmseite."
+  },
+  "Sessions": {
+    "eyebrow": "Online-Sessions",
+    "title": "Lernen. Sprechen. Vernetzen.",
+    "description": "Stärke die Fähigkeiten und das Selbstvertrauen für deinen nächsten globalen Schritt.",
+    "badgeOnline": "Online",
+    "details": "Details",
+    "all": "Alle Sessions",
+    "upcoming": "Demnächst",
+    "register": "Für diese Session anmelden",
+    "registerAria": "Für diese Session anmelden",
+    "joinToRegister": "Zum Anmelden beitreten",
+    "joinToRegisterAria": "Zum Anmelden beitreten"
+  },
+  "Guides": {
+    "eyebrow": "Ratgeber",
+    "title": "Finde nicht nur Möglichkeiten. Lerne, wie du sie bekommst.",
+    "description": "Praktische, kompakte Ratgeber für junge Menschen, die sich auf internationale Programme bewerben.",
+    "readTime": "{count} Min. Lesezeit",
+    "read": "Ratgeber lesen",
+    "all": "Alle Ratgeber",
+    "placeholder": "Der vollständige Text dieses Ratgebers folgt bald. Schau dir derweil <opportunities>Möglichkeiten</opportunities> oder <sessions>Online-Sessions</sessions> an."
+  },
+  "About": {
+    "eyebrow": "Über uns",
+    "title": "Wir helfen jungen Menschen, das Mögliche zu entdecken.",
+    "description": "Global Connect ist eine globale Community für junge Menschen, die internationale Möglichkeiten, Online-Sessions und praktische Ratgeber teilt.",
+    "contactTitle": "Möchtest du mit uns zusammenarbeiten?",
+    "contactText": "Teile Möglichkeiten mit unserer Community, veranstalte eine Session oder werde Partner. Melde dich unter <email>{address}</email>."
+  },
+  "Privacy": {
+    "eyebrow": "Rechtliches",
+    "title": "Datenschutzerklärung",
+    "collectTitle": "Was wir erheben",
+    "collectBody": "Global Connect nutzt Contentful zur Speicherung von Inhalten und Clerk zur Verwaltung von Konten. Wir erheben nur die Informationen, die du bei der Anmeldung angibst, sowie grundlegende Nutzungsdaten, die für den Betrieb der Website erforderlich sind.",
+    "useTitle": "Wie wir es nutzen",
+    "useBody": "Deine Daten werden genutzt, um Community-Funktionen zu personalisieren – zum Beispiel die Anmeldung für Sessions – und um den Dienst sicher zu halten. Wir verkaufen deine Daten niemals.",
+    "choicesTitle": "Deine Rechte",
+    "choicesBody": "Du kannst jederzeit verlangen, deine Daten einzusehen oder löschen zu lassen. Schreibe uns dafür an die Adresse auf der Über-uns-Seite."
+  },
+  "Terms": {
+    "eyebrow": "Rechtliches",
+    "title": "Nutzungsbedingungen",
+    "usingTitle": "Global Connect nutzen",
+    "usingBody": "Global Connect verbindet junge Menschen mit internationalen Möglichkeiten. Wir bemühen uns um korrekte Angaben, aber prüfe die Details vor einer Bewerbung immer auf den offiziellen Programmseiten.",
+    "contentTitle": "Inhalte",
+    "contentBody": "Möglichkeiten und Ratgeber dienen ausschließlich der Information. Für die Bewerbungsergebnisse externer Programme, die wir verlinken, übernehmen wir keine Verantwortung.",
+    "conductTitle": "Verhalten auf der Plattform",
+    "conductBody": "Sei freundlich. Belästigung, Spam oder irreführende Inhalte führen zur Sperrung des Kontos. Alle Mitglieder sollen einander mit Respekt begegnen."
+  }
+}

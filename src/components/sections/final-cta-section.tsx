@@ -1,7 +1,8 @@
-import Link from "next/link";
+import { getT } from "@/i18n/t";
 
 import { tv } from "@/lib/utils";
 
+import { Link } from "@/i18n/navigation";
 import { Backdrop } from "@/components/ui/blobs";
 import { Button } from "@/components/ui/button";
 import type { HomepageSectionData } from "@/types/models";
@@ -17,13 +18,14 @@ const finalCta = tv({
   },
 });
 
-export function FinalCtaSection({
+export async function FinalCtaSection({
   config,
   communityUrl,
 }: {
   config?: HomepageSectionData;
   communityUrl: string;
 }) {
+  const t = await getT("Home.finalCta");
   const slots = finalCta();
   return (
     <section id="join" className={slots.root()}>
@@ -41,7 +43,7 @@ export function FinalCtaSection({
             variant="default"
             render={<Link href="/opportunities" />}
           >
-            Explore opportunities
+            {t("explore")}
           </Button>
           <Button
             className="w-full sm:w-auto"
@@ -52,11 +54,11 @@ export function FinalCtaSection({
                 href={communityUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                aria-label="Join Global Connect"
+                aria-label={t("joinAria")}
               />
             }
           >
-            Join Global Connect
+            {t("join")}
           </Button>
         </div>
       </div>

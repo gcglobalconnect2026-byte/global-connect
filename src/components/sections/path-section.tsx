@@ -1,3 +1,5 @@
+import { getT } from "@/i18n/t";
+
 import { tv, type VariantProps } from "@/lib/utils";
 
 import { SectionBand, SectionHeading } from "@/components/sections/section";
@@ -28,20 +30,21 @@ type Tone = NonNullable<VariantProps<typeof pathSection>["tone"]>;
 
 const STEP_TONES: Tone[] = ["lavender", "pastelBlue", "sage", "peach", "blush"];
 
-export function PathSection({
+export async function PathSection({
   steps,
   config,
 }: {
   steps: PathStepData[];
   config?: HomepageSectionData;
 }) {
+  const t = await getT("Home.path");
   const slots = pathSection();
   return (
     <SectionBand>
       <SectionHeading
         eyebrow={config?.eyebrow}
         eyebrowDot="pastel-blue"
-        title={config?.title ?? "How it works"}
+        title={config?.title ?? t("defaultTitle")}
         align="left"
       />
       <ol className={slots.list()}>

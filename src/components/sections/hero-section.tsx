@@ -1,7 +1,8 @@
 import Image from "next/image";
-import Link from "next/link";
+import { getT } from "@/i18n/t";
 
 import { tv, type VariantProps } from "@/lib/utils";
+import { Link } from "@/i18n/navigation";
 import { SectionEyebrow } from "@/components/sections/section";
 import { Backdrop } from "@/components/ui/blobs";
 import { Button } from "@/components/ui/button";
@@ -49,7 +50,7 @@ type Offset = NonNullable<VariantProps<typeof hero>["offset"]>;
 
 const CHIP_OFFSETS: Offset[] = ["none", "right", "left"];
 
-export function HeroSection({
+export async function HeroSection({
   featured,
   config,
   communityUrl,
@@ -58,6 +59,7 @@ export function HeroSection({
   config?: HomepageSectionData;
   communityUrl: string;
 }) {
+  const t = await getT("Home.hero");
   const chips = featured.slice(0, 3);
   const titleWords = config?.title?.trim().split(/\s+/);
   const titleHighlight = titleWords?.slice(-2).join(" ");
@@ -97,7 +99,7 @@ export function HeroSection({
               className="w-full sm:w-auto"
               render={<Link href="/opportunities" />}
             >
-              Explore opportunities <span aria-hidden="true">&rarr;</span>
+              {t("ctaExplore")} <span aria-hidden="true">&rarr;</span>
             </Button>
             <Button
               className="w-full sm:w-auto"
@@ -107,18 +109,15 @@ export function HeroSection({
                   href={communityUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  aria-label="Join Global Connect"
+                  aria-label={t("joinAria")}
                 />
               }
             >
-              Join Global Connect
+              {t("ctaJoin")}
             </Button>
           </div>
 
-          <p className={slots.meta()}>
-            1,000+ members &middot; 500+ opportunities shared &middot; 35 online
-            sessions
-          </p>
+          <p className={slots.meta()}>{t("meta")}</p>
         </div>
 
         <div className={slots.media()}>
@@ -128,8 +127,7 @@ export function HeroSection({
               <Image
                 src={config.imageUrl}
                 alt={
-                  config.imageAlt ??
-                  "Young people from different countries laughing together on a campus"
+                  config.imageAlt ?? t("imageAlt")
                 }
                 width={1024}
                 height={1280}

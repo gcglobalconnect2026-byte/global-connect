@@ -1,7 +1,8 @@
 import Image from "next/image";
-import Link from "next/link";
+import { getT } from "@/i18n/t";
 
 import { tv } from "@/lib/utils";
+import { Link } from "@/i18n/navigation";
 import { Section, SectionHeading } from "@/components/sections/section";
 import { ArrowLink } from "@/components/ui/arrow-link";
 import { Tile } from "@/components/ui/tile";
@@ -35,13 +36,14 @@ const sessionsSection = tv({
   },
 });
 
-export function SessionsSection({
+export async function SessionsSection({
   sessions,
   config,
 }: {
   sessions: SessionData[];
   config?: HomepageSectionData;
 }) {
+  const t = await getT("Home.sessions");
   const slots = sessionsSection();
   return (
     <Section id="sessions" className="scroll-mt-20">
@@ -49,13 +51,13 @@ export function SessionsSection({
         <SectionHeading
           eyebrow={config?.eyebrow}
           eyebrowDot="sage"
-          title={config?.title ?? "Sessions"}
+          title={config?.title ?? t("defaultTitle")}
           description={config?.description}
           align="left"
         />
         <p className={slots.count()}>
           {SESSION_COUNT}{" "}
-          <span className={slots.countLabel()}>online sessions</span>
+          <span className={slots.countLabel()}>{t("countLabel")}</span>
         </p>
       </div>
 
@@ -63,10 +65,7 @@ export function SessionsSection({
         {config?.imageUrl && (
           <Image
             src={config.imageUrl}
-            alt={
-              config.imageAlt ??
-              "A young woman taking notes during an online Global Connect session"
-            }
+            alt={config.imageAlt ?? t("imageAlt")}
             width={1024}
             height={768}
             loading="lazy"
@@ -83,20 +82,21 @@ export function SessionsSection({
 
       <div className={slots.cta()}>
         <ArrowLink href="/sessions" variant="accent">
-          View all sessions
+          {t("viewAll")}
         </ArrowLink>
       </div>
     </Section>
   );
 }
 
-function SessionCard({
+async function SessionCard({
   session,
   index,
 }: {
   session: SessionData;
   index: number;
 }) {
+  const t = await getT("Home.sessions");
   const slots = sessionsSection();
   return (
     <article className={slots.card()}>
@@ -111,7 +111,7 @@ function SessionCard({
         >
           {session.icon}
         </Tile>
-        <span className={slots.badge()}>Online</span>
+        <span className={slots.badge()}>{t("badgeOnline")}</span>
       </div>
       <h3 className={slots.title()}>{session.title}</h3>
       <p className={slots.description()}>{session.description}</p>
@@ -124,17 +124,17 @@ function SessionCard({
             href={session.registerUrl}
             target="_blank"
             rel="noopener noreferrer"
-            aria-label="Register"
+            aria-label={t("registerAria")}
             className={slots.register()}
           >
-            Register
+            {t("register")}
           </a>
         ) : (
           <Link
             href={`/sessions/${session.slug}`}
             className={slots.register()}
           >
-            Register
+            {t("register")}
           </Link>
         )}
       </div>

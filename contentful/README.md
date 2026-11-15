@@ -140,6 +140,11 @@ This reads the seed arrays in `src/lib/contentful/seed.ts`, uploads images
 to Contentful as assets, and creates or updates every entry. It is
 **idempotent** — safe to re-run after adding new content to the seed file.
 
+It also writes every localized field for **all** languages at once: English
+comes from `seed.ts`, the rest from `src/lib/contentful/seed-translations.ts`
+(see [../LOCALIZATION.md](../LOCALIZATION.md)). Run `pnpm contentful:locales`
+first on a space that has not been localized yet.
+
 What gets seeded:
 
 - 18 **Opportunity** entries (with full rich-text long descriptions + images)
@@ -159,6 +164,11 @@ What gets seeded:
 All seed data lives in `src/lib/contentful/seed.ts`. Each content type has its
 own exported array (`seedOpportunities`, `seedSessions`, `seedCities`, etc.)
 matching the TypeScript interfaces in `src/types/models.ts`.
+
+Translations live separately in `src/lib/contentful/seed-translations.ts`,
+keyed by locale and then by the same entry `id`. Add a key there when the
+entry should exist in another language; fields you leave out fall back to
+English.
 
 **Adding an entry** — append an object to the relevant array. The `id` field
 must be unique (convention: `seed-{type}-{slug}`). Then re-run:
@@ -183,7 +193,10 @@ asset with ID `asset-{slug}`. Two things must exist for it to render:
 **Field validations** — Contentful enforces `in` lists and regex patterns
 defined in the content model. If your new data uses values not in the current
 lists (e.g. a new country or funding type), update the validation in
-`content-model.json` first and re-import.
+`content-model.json` first and re-import. Note that a validation applies to
+**every** locale, so rules that encode an English shape (`^Ages …`, an `in`
+list of English words) are removed for localized fields — see
+`scripts/lib/localized-fields.ts` and [../LOCALIZATION.md](../LOCALIZATION.md).
 
 ### Option B — Enter content manually in the dashboard
 

@@ -1,9 +1,11 @@
 import type { Metadata } from "next";
-import Link from "next/link";
+import { withLocale } from "@/i18n/params";
 import { notFound } from "next/navigation";
 import { ArrowLeft } from "lucide-react";
+import { getTranslations } from "next-intl/server";
 
 import { tv } from "@/lib/utils";
+import { Link } from "@/i18n/navigation";
 import { pageMetadata } from "@/lib/seo";
 import { breadcrumb } from "@/lib/schema";
 import { Badge } from "@/components/ui/badge";
@@ -21,18 +23,25 @@ import { RichText } from "@/lib/richtext";
 import { getOpportunities } from "@/lib/contentful/queries";
 import type { OpportunityData } from "@/types/models";
 
+/**
+ * This segment deliberately blocks: the opportunity record is resolved before
+ * the first flush so an unknown slug returns a real 404 instead of a streamed
+ * 200. Moving the lookup behind `<Suspense>` would make navigations instant
+ * but reintroduce that 200 — see the SEO notes in the commit history.
+ */
+export const instant = false;
+
 export async function generateStaticParams() {
-  const opportunities = await getOpportunities();
+  // Slugs are not localized — see `guides/[slug]`.
+  const opportunities = await getOpportunities("en");
   return opportunities.map((opportunity) => ({ slug: opportunity.slug }));
 }
 
 export async function generateMetadata({
   params,
-}: {
-  params: Promise<{ slug: string }>;
-}): Promise<Metadata> {
-  const { slug } = await params;
-  const opportunity = (await getOpportunities()).find(
+}: PageProps<"/[locale]/opportunities/[slug]">): Promise<Metadata> {
+  const { locale, slug } = withLocale(await params);
+  const opportunity = (await getOpportunities(locale)).find(
     (o) => o.slug === slug,
   );
   if (!opportunity) return {};
@@ -40,6 +49,8 @@ export async function generateMetadata({
     title: opportunity.title,
     description: opportunity.description,
     path: `/opportunities/${slug}`,
+    locale,
+    translatedLocales: opportunity.translatedLocales,
   });
 }
 
@@ -66,7 +77,14 @@ const opportunityPage = tv({
   },
 });
 
-function OpportunityContent({ opportunity }: { opportunity: OpportunityData }) {
+async function OpportunityContent({
+  opportunity,
+  locale,
+}: {
+  opportunity: OpportunityData;
+  locale: string;
+}) {
+  const t = await getTranslations({ locale, namespace: "Opportunities" });
   const slots = opportunityPage();
 
   return (
@@ -78,7 +96,7 @@ function OpportunityContent({ opportunity }: { opportunity: OpportunityData }) {
         render={<Link href="/opportunities" />}
       >
         <ArrowLeft className={slots.backIcon()} />
-        All opportunities
+        {t("all")}
       </Button>
 
       <div className={slots.head()}>
@@ -94,9 +112,9 @@ function OpportunityContent({ opportunity }: { opportunity: OpportunityData }) {
 
       <Card className={slots.card()}>
         <CardContent className={slots.cardBody()}>
-          <MetaRow label="Age" value={opportunity.ageRange} />
-          <MetaRow label="Funding" value={opportunity.funding} />
-          <MetaRow label="Deadline" value={opportunity.deadline} />
+          <MetaRow label={t("detailAge")} value={opportunity.ageRange} />
+          <MetaRow label={t("detailFunding")} value={opportunity.funding} />
+          <MetaRow label={t("detailDeadline")} value={opportunity.deadline} />
         </CardContent>
         <CardFooter className={slots.cardFoot()}>
           {opportunity.tags.map((tag) => (
@@ -112,10 +130,7 @@ function OpportunityContent({ opportunity }: { opportunity: OpportunityData }) {
           <RichText document={opportunity.longDescription} />
         </div>
       ) : (
-        <div className={slots.fallback()}>
-          A full description will be added soon. Check the official programme
-          page for details.
-        </div>
+        <div className={slots.fallback()}>{t("fallback")}</div>
       )}
     </PageArticle>
   );
@@ -123,27 +138,29 @@ function OpportunityContent({ opportunity }: { opportunity: OpportunityData }) {
 
 export default async function OpportunityPage({
   params,
-}: {
-  params: Promise<{ slug: string }>;
-}) {
-  const { slug } = await params;
+}: PageProps<"/[locale]/opportunities/[slug]">) {
+  const { locale, slug } = withLocale(await params);
+  const nav = await getTranslations({ locale, namespace: "Nav" });
   // Resolve the record before rendering so unknown slugs return a real 404
   // status instead of streaming a 200 with a 404 body.
-  const opportunity = (await getOpportunities()).find((o) => o.slug === slug);
+  const opportunity = (await getOpportunities(locale)).find((o) => o.slug === slug);
   if (!opportunity) notFound();
 
   return (
     <>
       <SiteHeader />
       <JsonLd
-        data={breadcrumb([
-          { name: "Home", path: "/" },
-          { name: "Opportunities", path: "/opportunities" },
-          { name: opportunity.title, path: `/opportunities/${opportunity.slug}` },
-        ])}
+        data={breadcrumb(
+          [
+            { name: nav("home"), path: "/" },
+            { name: nav("opportunities"), path: "/opportunities" },
+            { name: opportunity.title, path: `/opportunities/${opportunity.slug}` },
+          ],
+          locale,
+        )}
       />
       <PageMain>
-        <OpportunityContent opportunity={opportunity} />
+        <OpportunityContent opportunity={opportunity} locale={locale} />
       </PageMain>
       <SiteFooter />
     </>

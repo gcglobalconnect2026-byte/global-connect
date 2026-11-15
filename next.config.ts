@@ -1,4 +1,5 @@
 import type { NextConfig } from "next";
+import createNextIntlPlugin from "next-intl/plugin";
 
 const nextConfig: NextConfig = {
   cacheComponents: true,
@@ -18,6 +19,35 @@ const nextConfig: NextConfig = {
       },
     ],
   },
+  async redirects() {
+    return [
+      // Pre-localization URLs are English and stay English: send them to
+      // `/en/...` permanently (308) so ranking signals survive the move.
+      // `/` is deliberately absent — next-intl negotiates the locale there
+      // from the cookie / Accept-Language header.
+      { source: "/about", destination: "/en/about", permanent: true },
+      {
+        source: "/guides/:slug*",
+        destination: "/en/guides/:slug*",
+        permanent: true,
+      },
+      {
+        source: "/opportunities/:slug*",
+        destination: "/en/opportunities/:slug*",
+        permanent: true,
+      },
+      {
+        source: "/sessions/:slug*",
+        destination: "/en/sessions/:slug*",
+        permanent: true,
+      },
+      { source: "/privacy", destination: "/en/privacy", permanent: true },
+      { source: "/terms", destination: "/en/terms", permanent: true },
+    ];
+  },
 };
 
-export default nextConfig;
+// Resolves `./src/i18n/request.ts` automatically.
+const withNextIntl = createNextIntlPlugin();
+
+export default withNextIntl(nextConfig);

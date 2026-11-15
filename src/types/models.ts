@@ -2,6 +2,17 @@
  *  Contentful queries return these — pages never import Contentful SDK types. */
 import type { Document as RichTextDocument } from "@contentful/rich-text-types";
 
+import type { Locale } from "@/lib/locales";
+
+/**
+ * `translatedLocales` (opportunities, sessions, guides) lists the locales
+ * this record has a real translation in. It drives `hreflang` and the
+ * sitemap: a locale that is missing falls back to English, so advertising it
+ * would be a soft duplicate. Only the fields that decide whether a page
+ * reads as translated are checked (title + lead text) — see
+ * `src/lib/contentful/queries.ts`.
+ */
+
 export interface OpportunityData {
   id: string;
   title: string;
@@ -20,6 +31,7 @@ export interface OpportunityData {
   featured: boolean;
   order: number;
   updatedAt?: string;
+  translatedLocales: Locale[];
 }
 
 export interface SessionData {
@@ -35,6 +47,7 @@ export interface SessionData {
   upcoming: boolean;
   order: number;
   updatedAt?: string;
+  translatedLocales: Locale[];
 }
 
 export interface GuideData {
@@ -47,6 +60,7 @@ export interface GuideData {
   publishedAt?: string;
   updatedAt?: string;
   author?: string;
+  translatedLocales: Locale[];
 }
 
 export interface StoryData {

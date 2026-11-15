@@ -18,6 +18,10 @@ import {
   seedVideos,
 } from "../src/lib/contentful/seed";
 import { FALLBACK_COMMUNITY_URL, FALLBACK_CONTACT_EMAIL } from "../src/lib/community";
+import { seedTranslations } from "../src/lib/contentful/seed-translations";
+import { toContentfulLocale } from "../src/lib/contentful/locales";
+import type { Locale } from "../src/lib/locales";
+import { LOCALIZED_FIELDS, RICH_TEXT_FIELDS } from "./lib/localized-fields";
 
 config({ path: ".env.local" });
 config({ path: ".env" });
@@ -193,11 +197,50 @@ async function uploadLocalAsset(
 // Entry upsert
 // ---------------------------------------------------------------------------
 
+/**
+ * Merges every language from `seed-translations.ts` into the locale-wrapped
+ * payload — but only for fields the content model localizes (see
+ * `scripts/lib/localized-fields.ts`) and only where a translation exists;
+ * missing ones stay empty so the Delivery API falls back to English.
+ *
+ * The locale key is mapped through `toContentfulLocale`, so adding a site
+ * language needs no change here.
+ */
+function withTranslations(
+  type: string,
+  id: string,
+  fields: Record<string, Record<string, unknown>>,
+): Record<string, Record<string, unknown>> {
+  const localized = LOCALIZED_FIELDS[type];
+  if (!localized) return fields;
+
+  let merged: Record<string, Record<string, unknown>> | undefined;
+  for (const [siteLocale, entries] of Object.entries(seedTranslations)) {
+    const translations = entries?.[id];
+    if (!translations) continue;
+    const cfLocale = toContentfulLocale(siteLocale as Locale);
+
+    for (const [key, value] of Object.entries(fields)) {
+      const translation = translations[key];
+      if (!localized.includes(key) || translation === undefined) continue;
+      merged ??= { ...fields };
+      merged[key] = {
+        ...value,
+        [cfLocale]: RICH_TEXT_FIELDS.has(key)
+          ? toContentfulBody(translation as Document)
+          : translation,
+      };
+    }
+  }
+  return merged ?? fields;
+}
+
 async function upsert(
   type: string,
   id: string,
-  fields: Record<string, Record<"en-US", unknown>>,
+  rawFields: Record<string, Record<string, unknown>>,
 ): Promise<boolean> {
+  const fields = withTranslations(type, id, rawFields);
   const base = { spaceId: SPACE, environmentId: ENV };
   try {
     const existing = await client.entry.get({ ...base, entryId: id });

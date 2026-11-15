@@ -1,10 +1,11 @@
 import type { Metadata } from "next";
-import Link from "next/link";
+import { withLocale } from "@/i18n/params";
+import { getTranslations } from "next-intl/server";
 
 import { tv } from "@/lib/utils";
+import { Link } from "@/i18n/navigation";
 import { pageMetadata } from "@/lib/seo";
 import { breadcrumb, sessionItemList } from "@/lib/schema";
-import { JsonLd } from "@/components/json-ld";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -13,18 +14,25 @@ import {
   CardFooter,
   CardHeader,
 } from "@/components/ui/card";
+import { JsonLd } from "@/components/json-ld";
 import { PageBand, PageContainer, PageMain } from "@/components/page-shell";
 import { PageHeader } from "@/components/page-header";
 import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
 import { getSessions } from "@/lib/contentful/queries";
 
-export const metadata: Metadata = pageMetadata({
-  title: "Online Sessions",
-  description:
-    "Speaking clubs, workshops and sessions that build your skills and confidence.",
-  path: "/sessions",
-});
+export async function generateMetadata({
+  params,
+}: PageProps<"/[locale]/sessions">): Promise<Metadata> {
+  const { locale } = withLocale(await params);
+  const t = await getTranslations({ locale, namespace: "Metadata" });
+  return pageMetadata({
+    title: t("sessions.title"),
+    description: t("sessions.description"),
+    path: "/sessions",
+    locale,
+  });
+}
 
 const sessionsPage = tv({
   slots: {
@@ -42,26 +50,37 @@ const sessionsPage = tv({
   },
 });
 
-export default async function SessionsPage() {
-  const sessions = await getSessions();
+export default async function SessionsPage({
+  params,
+}: PageProps<"/[locale]/sessions">) {
+  const { locale } = withLocale(await params);
+  const [t, nav, meta, sessions] = await Promise.all([
+    getTranslations({ locale, namespace: "Sessions" }),
+    getTranslations({ locale, namespace: "Nav" }),
+    getTranslations({ locale, namespace: "Metadata" }),
+    getSessions(locale),
+  ]);
   const slots = sessionsPage();
 
   return (
     <>
       <SiteHeader />
       <JsonLd
-        data={breadcrumb([
-          { name: "Home", path: "/" },
-          { name: "Online Sessions", path: "/sessions" },
-        ])}
+        data={breadcrumb(
+          [
+            { name: nav("home"), path: "/" },
+            { name: nav("sessions"), path: "/sessions" },
+          ],
+          locale,
+        )}
       />
-      <JsonLd data={sessionItemList(sessions)} />
+      <JsonLd data={sessionItemList(sessions, meta("itemListSessions"), locale)} />
       <PageMain>
         <PageBand>
           <PageHeader
-            eyebrow="Online sessions"
-            title="Learn. Speak. Connect."
-            description="Build the skills and confidence you need to take your next global step."
+            eyebrow={t("eyebrow")}
+            title={t("title")}
+            description={t("description")}
           />
         </PageBand>
         <PageContainer size="wide">
@@ -72,7 +91,7 @@ export default async function SessionsPage() {
                   <span className={slots.icon()}>{session.icon}</span>
                   {session.online && (
                     <Badge variant="secondary" className={slots.badge()}>
-                      Online
+                      {t("badgeOnline")}
                     </Badge>
                   )}
                 </CardHeader>
@@ -90,7 +109,7 @@ export default async function SessionsPage() {
                     size="sm"
                     render={<Link href={`/sessions/${session.slug}`} />}
                   >
-                    Details
+                    {t("details")}
                   </Button>
                 </CardFooter>
               </Card>

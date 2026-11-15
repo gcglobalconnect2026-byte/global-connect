@@ -1,0 +1,215 @@
+{
+  "Metadata": {
+    "defaultTitle": "Global Connect — Your next global opportunity",
+    "defaultDescription": "Discover international opportunities, online sessions, guides, and a global youth community. Exchanges, scholarships, conferences and volunteering for young people.",
+    "ogImageAlt": "Young people from different countries working together",
+    "itemListOpportunities": "International opportunities for young people",
+    "itemListSessions": "Online sessions",
+    "itemListGuides": "Guides for applying to international programmes",
+    "about": {
+      "title": "About",
+      "description": "Global Connect helps young people discover international opportunities, build confidence and connect worldwide."
+    },
+    "opportunities": {
+      "title": "Opportunities",
+      "description": "Browse exchanges, scholarships, conferences and volunteering opportunities for young people worldwide."
+    },
+    "sessions": {
+      "title": "Online sessions",
+      "description": "Speaking clubs, workshops and sessions that build your skills and confidence."
+    },
+    "guides": {
+      "title": "Guides",
+      "description": "How-to guides on motivation letters, scholarships, Erasmus+, interviews, CVs and more."
+    },
+    "privacy": {
+      "title": "Privacy",
+      "description": "How Global Connect collects, uses and protects your data — what we store through Contentful and Clerk, how it is used, and how to request access or deletion."
+    },
+    "terms": {
+      "title": "Terms",
+      "description": "Global Connect terms of service: how we list opportunities, the limits of our listings, account conduct, and how third-party programme terms still apply to you."
+    }
+  },
+  "Nav": {
+    "home": "Home",
+    "opportunities": "Opportunities",
+    "sessions": "Online sessions",
+    "guides": "Guides",
+    "community": "Community",
+    "about": "About",
+    "join": "Join us",
+    "explore": "Explore opportunities",
+    "menu": "Menu",
+    "menuDescription": "Explore Global Connect",
+    "toggle": "Toggle navigation",
+    "mobileNav": "Mobile"
+  },
+  "Footer": {
+    "tagline": "Helping young people discover what's possible.",
+    "explore": "Explore",
+    "about": "About",
+    "ourStory": "Our story",
+    "impact": "Impact",
+    "partners": "Partners",
+    "contact": "Contact",
+    "opportunities": "Opportunities",
+    "sessions": "Sessions",
+    "guides": "Guides",
+    "community": "Community",
+    "copyright": "© 2026 Global Connect",
+    "privacy": "Privacy",
+    "terms": "Terms"
+  },
+  "Common": {
+    "explore": "Explore opportunities",
+    "join": "Join Global Connect",
+    "joinAria": "Join Global Connect",
+    "logoHome": "Global Connect — home",
+    "logoAlt": "Global Connect logo",
+    "close": "Close",
+    "language": "Language"
+  },
+  "A11y": {
+    "previous": "Previous",
+    "next": "Next",
+    "slideGroup": "Go to slide group {index}"
+  },
+  "NotFound": {
+    "title": "Page not found",
+    "description": "The page you are looking for does not exist or has moved.",
+    "home": "Back to the homepage"
+  },
+  "Home": {
+    "hero": {
+      "ctaExplore": "Explore opportunities",
+      "ctaJoin": "Join Global Connect",
+      "joinAria": "Join Global Connect",
+      "meta": "1,000+ members · 500+ opportunities shared · 35 online sessions",
+      "imageAlt": "Young people from different countries laughing together on a campus"
+    },
+    "stats": {
+      "members": "Members",
+      "opportunities": "Opportunities shared",
+      "sessions": "Online sessions",
+      "mentored": "Young people mentored",
+      "partnerships": "Partnerships"
+    },
+    "finder": {
+      "defaultTitle": "Opportunities",
+      "searchPlaceholder": "Search opportunities…",
+      "searchAria": "Search opportunities",
+      "filterCountry": "Country",
+      "filterType": "Type",
+      "filterAge": "Age",
+      "filterFunding": "Funding",
+      "filterDeadline": "Deadline",
+      "clear": "Clear",
+      "viewAll": "View all opportunities",
+      "emptyTitle": "No opportunities match",
+      "emptyText": "Try clearing a filter or two to widen the search.",
+      "emptyAction": "Clear filters"
+    },
+    "path": {
+      "defaultTitle": "How it works"
+    },
+    "sessions": {
+      "defaultTitle": "Sessions",
+      "countLabel": "online sessions",
+      "viewAll": "View all sessions",
+      "badgeOnline": "Online",
+      "register": "Register",
+      "registerAria": "Register",
+      "imageAlt": "A young woman taking notes during an online Global Connect session"
+    },
+    "guides": {
+      "defaultTitle": "Guides",
+      "readTime": "{count} min read",
+      "read": "Read guide",
+      "viewAll": "View all guides"
+    },
+    "stories": {
+      "defaultTitle": "Stories",
+      "cta": "Share your Global Connect story",
+      "carouselAria": "Student stories"
+    },
+    "community": {
+      "defaultTitle": "Community",
+      "features": {
+        "meet": "Meet young people worldwide",
+        "discuss": "Join discussions",
+        "speak": "Speaking clubs",
+        "mentor": "Mentorship",
+        "learn": "Learn together"
+      },
+      "cta": "Join the community",
+      "imageAlt": "Young people from different countries talking in a circle"
+    },
+    "discovery": {
+      "defaultTitle": "Discover",
+      "cta": "Find opportunities for me"
+    },
+    "finalCta": {
+      "explore": "Explore opportunities",
+      "join": "Join Global Connect",
+      "joinAria": "Join Global Connect"
+    }
+  },
+  "Opportunities": {
+    "detailAge": "Age",
+    "detailFunding": "Funding",
+    "detailDeadline": "Deadline",
+    "view": "View opportunity",
+    "all": "All opportunities",
+    "fallback": "A full description will be added soon. Check the official programme page for details."
+  },
+  "Sessions": {
+    "eyebrow": "Online sessions",
+    "title": "Learn. Speak. Connect.",
+    "description": "Build the skills and confidence you need to take your next global step.",
+    "badgeOnline": "Online",
+    "details": "Details",
+    "all": "All sessions",
+    "upcoming": "Upcoming",
+    "register": "Register for this session",
+    "registerAria": "Register for this session",
+    "joinToRegister": "Join to register",
+    "joinToRegisterAria": "Join to register"
+  },
+  "Guides": {
+    "eyebrow": "Guides",
+    "title": "Don't just find opportunities. Learn how to get them.",
+    "description": "Practical, no-fluff guides written for young people applying to international programmes.",
+    "readTime": "{count} min read",
+    "read": "Read guide",
+    "all": "All guides",
+    "placeholder": "This guide's full text is coming soon. In the meantime, explore <opportunities>opportunities</opportunities> or <sessions>online sessions</sessions>."
+  },
+  "About": {
+    "eyebrow": "About",
+    "title": "Helping young people discover what's possible.",
+    "description": "Global Connect is a global youth community sharing international opportunities, online sessions and practical guides.",
+    "contactTitle": "Want to work with us?",
+    "contactText": "Share opportunities with our community, run a session, or become a partner. Reach out at <email>{address}</email>."
+  },
+  "Privacy": {
+    "eyebrow": "Legal",
+    "title": "Privacy Policy",
+    "collectTitle": "What we collect",
+    "collectBody": "Global Connect uses Contentful to store content and Clerk to manage accounts. We only collect the information you provide when you sign in, and basic usage data needed to keep the site running.",
+    "useTitle": "How we use it",
+    "useBody": "Your details are used to personalise community features — like registering for sessions — and to keep the service secure. We never sell your data.",
+    "choicesTitle": "Your choices",
+    "choicesBody": "You can ask to see or delete your data at any time by contacting us at the address on the About page."
+  },
+  "Terms": {
+    "eyebrow": "Legal",
+    "title": "Terms of Service",
+    "usingTitle": "Using Global Connect",
+    "usingBody": "Global Connect connects young people with international opportunities. We aim to keep listings accurate, but always confirm details on official programme pages before applying.",
+    "contentTitle": "Content",
+    "contentBody": "Opportunity listings and guides are provided for informational purposes. We are not responsible for the application outcomes of third-party programmes we share.",
+    "conductTitle": "Account conduct",
+    "conductBody": "Be kind. Harassment, spam or misleading content leads to account removal. Community members are expected to treat each other with respect."
+  }
+}

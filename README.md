@@ -52,6 +52,7 @@ pnpm lint              # eslint
 pnpm typecheck         # tsc --noEmit
 pnpm react-doctor      # scan the codebase for React issues (0-100 score)
 pnpm contentful:import # import the content model into your space (see contentful/README.md)
+pnpm contentful:locales# add/verify the localized content model (see LOCALIZATION.md)
 pnpm contentful:seed   # seed entries + assets into Contentful (see contentful/README.md)
 pnpm contentful:codegen# generate TS types from your Contentful content model
 ```
@@ -84,17 +85,30 @@ npx react-doctor . --scope changed --base main
 
 ```
 src/
-  app/                    # routes (page.tsx per route)
+  app/                    # routes (page.tsx per route), all under [locale]/
     (sections on the home page) + /opportunities, /sessions, /guides, /about
+  i18n/                   # routing.ts, navigation.ts (locale-aware Link), request.ts, t.ts
   components/
     sections/             # homepage section components
     ui/                   # shadcn/ui primitives
+    locale-switcher.tsx   # header language switcher
+  messages/               # en.json, de.json — every UI string
   lib/
-    contentful/           # client.ts, queries.ts (cached fetchers), seed.ts (fallback + CMS seed data)
+    contentful/           # client.ts, queries.ts (cached fetchers), seed*.ts (CMS seed data)
+    locales.ts            # the locale registry: routes, hreflang, og:locale all read it
     richtext.tsx          # Contentful rich-text → React
   types/                  # hand-written models (models.ts) + Contentful skeleton types (contentful.ts)
 contentful/               # content-model.json + setup guide
+scripts/                  # contentful-locales.ts, contentful-seed.ts
 ```
+
+## Localization
+
+English (`en`) and German (`de`), one URL per language (`/en/…`, `/de/…`),
+auto-detected from the `NEXT_LOCALE` cookie and `Accept-Language`. UI copy
+lives in `src/messages/`, CMS copy in Contentful's `de` locale. See
+[LOCALIZATION.md](LOCALIZATION.md) for the rules, the coverage logic behind
+`hreflang`, and the checklist for adding a language.
 
 ## Styling conventions
 

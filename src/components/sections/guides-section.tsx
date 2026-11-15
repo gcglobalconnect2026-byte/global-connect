@@ -1,7 +1,8 @@
-import Link from "next/link";
+import { getT } from "@/i18n/t";
 
 import { tv } from "@/lib/utils";
 
+import { Link } from "@/i18n/navigation";
 import { SectionBand, SectionHeading } from "@/components/sections/section";
 import { ArrowLink } from "@/components/ui/arrow-link";
 import { Tile } from "@/components/ui/tile";
@@ -23,20 +24,21 @@ const guidesSection = tv({
   },
 });
 
-export function GuidesSection({
+export async function GuidesSection({
   guides,
   config,
 }: {
   guides: GuideData[];
   config?: HomepageSectionData;
 }) {
+  const t = await getT("Home.guides");
   const slots = guidesSection();
   return (
     <SectionBand id="guides" className="scroll-mt-20">
       <SectionHeading
         eyebrow={config?.eyebrow}
         eyebrowDot="peach"
-        title={config?.title ?? "Guides"}
+        title={config?.title ?? t("defaultTitle")}
         align="left"
       />
       <div className={slots.grid()}>
@@ -57,9 +59,11 @@ export function GuidesSection({
               {String(index + 1).padStart(2, "0")}
             </Tile>
             <h3 className={slots.title()}>{guide.title}</h3>
-            <p className={slots.readTime()}>{guide.readTime} min read</p>
+            <p className={slots.readTime()}>
+              {t("readTime", { count: guide.readTime })}
+            </p>
             <span className={slots.cta()}>
-              Read guide
+              {t("read")}
               <span className={slots.ctaArrow()} aria-hidden="true">
                 →
               </span>
@@ -70,7 +74,7 @@ export function GuidesSection({
       {guides.length > GUIDE_COUNT && (
         <div className={slots.footer()}>
           <ArrowLink href="/guides" variant="accent">
-            View all guides
+            {t("viewAll")}
           </ArrowLink>
         </div>
       )}

@@ -3,6 +3,7 @@
 import * as React from "react"
 import { Dialog as DialogPrimitive } from "@base-ui/react/dialog"
 import { XIcon } from "lucide-react"
+import { useTranslations } from "next-intl"
 
 import { mergeClass, tv } from "@/lib/utils"
 
@@ -64,6 +65,7 @@ function DialogContent({
   showCloseButton?: boolean
 }) {
   const slots = dialog();
+  const t = useTranslations("Common");
   return (
     <DialogPortal>
       <DialogOverlay />
@@ -85,7 +87,7 @@ function DialogContent({
             }
           >
             <XIcon />
-            <span className={slots.closeLabel()}>Close</span>
+            <span className={slots.closeLabel()}>{t("close")}</span>
           </DialogPrimitive.Close>
         )}
       </DialogPrimitive.Popup>
@@ -113,6 +115,7 @@ function DialogFooter({
   showCloseButton?: boolean
 }) {
   const slots = dialog();
+  const t = useTranslations("Common");
   return (
     <div
       data-slot="dialog-footer"
@@ -122,7 +125,7 @@ function DialogFooter({
       {children}
       {showCloseButton && (
         <DialogPrimitive.Close render={<Button variant="outline" />}>
-          Close
+          {t("close")}
         </DialogPrimitive.Close>
       )}
     </div>

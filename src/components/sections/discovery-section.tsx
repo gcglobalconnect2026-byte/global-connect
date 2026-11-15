@@ -1,3 +1,5 @@
+import { getT } from "@/i18n/t";
+
 import { tv } from "@/lib/utils";
 
 import { SectionBand, SectionHeading } from "@/components/sections/section";
@@ -12,20 +14,21 @@ const discovery = tv({
   },
 });
 
-export function DiscoverySection({
+export async function DiscoverySection({
   interests,
   config,
 }: {
   interests: InterestData[];
   config?: HomepageSectionData;
 }) {
+  const t = await getT("Home.discovery");
   const slots = discovery();
   return (
     <SectionBand id="discovery">
       <SectionHeading
         eyebrow={config?.eyebrow}
         eyebrowDot="peach"
-        title={config?.title ?? "Discover"}
+        title={config?.title ?? t("defaultTitle")}
         description={config?.description}
       />
       <div className={slots.chips()}>
@@ -38,7 +41,7 @@ export function DiscoverySection({
       </div>
       <div className={slots.cta()}>
         <ArrowLink href="/opportunities" variant="underline">
-          Find opportunities for me
+          {t("cta")}
         </ArrowLink>
       </div>
     </SectionBand>

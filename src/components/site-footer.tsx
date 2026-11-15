@@ -1,7 +1,8 @@
 import Image from "next/image";
-import Link from "next/link";
+import { getT } from "@/i18n/t";
 
 import { tv } from "@/lib/utils";
+import { Link } from "@/i18n/navigation";
 import { getSiteSettings } from "@/lib/contentful/queries";
 
 const footer = tv({
@@ -23,21 +24,32 @@ const footer = tv({
   },
 });
 
-const aboutLinks = [
-  { label: "Our story", href: "/about" },
-  { label: "Impact", href: "/about#impact" },
-  { label: "Partners", href: "/about#partners" },
-  { label: "Contact", href: "/about#contact" },
-];
+type FooterLink = {
+  label: string;
+  href: string;
+  external?: boolean;
+};
 
 export async function SiteFooter() {
-  const { communityUrl } = await getSiteSettings();
+  const [siteSettings, t, tc] = await Promise.all([
+    getSiteSettings(),
+    getT("Footer"),
+    getT("Common"),
+  ]);
+  const { communityUrl } = siteSettings;
 
-  const exploreLinks = [
-    { label: "Opportunities", href: "/opportunities" },
-    { label: "Sessions", href: "/sessions" },
-    { label: "Guides", href: "/guides" },
-    { label: "Community", href: communityUrl, external: true },
+  const aboutLinks: FooterLink[] = [
+    { label: t("ourStory"), href: "/about" },
+    { label: t("impact"), href: "/about#impact" },
+    { label: t("partners"), href: "/about#partners" },
+    { label: t("contact"), href: "/about#contact" },
+  ];
+
+  const exploreLinks: FooterLink[] = [
+    { label: t("opportunities"), href: "/opportunities" },
+    { label: t("sessions"), href: "/sessions" },
+    { label: t("guides"), href: "/guides" },
+    { label: t("community"), href: communityUrl, external: true },
   ];
 
   const slots = footer();
@@ -50,7 +62,7 @@ export async function SiteFooter() {
             <div className={slots.brandRow()}>
               <Image
                 src="/logo.png"
-                alt="Global Connect logo"
+                alt={tc("logoAlt")}
                 width={40}
                 height={40}
                 loading="lazy"
@@ -58,23 +70,21 @@ export async function SiteFooter() {
               />
               <p className={slots.brandWordmark()}>GLOBAL CONNECT</p>
             </div>
-            <p className={slots.tagline()}>
-              Helping young people discover what&apos;s possible.
-            </p>
+            <p className={slots.tagline()}>{t("tagline")}</p>
           </div>
 
-          <FooterColumn title="Explore" links={exploreLinks} />
-          <FooterColumn title="About" links={aboutLinks} />
+          <FooterColumn title={t("explore")} links={exploreLinks} />
+          <FooterColumn title={t("about")} links={aboutLinks} />
         </div>
 
         <div className={slots.bottom()}>
-          <p>&copy; 2026 Global Connect</p>
+          <p>{t("copyright")}</p>
           <div className={slots.legalLinks()}>
             <Link href="/privacy" className={slots.legalLink()}>
-              Privacy
+              {t("privacy")}
             </Link>
             <Link href="/terms" className={slots.legalLink()}>
-              Terms
+              {t("terms")}
             </Link>
           </div>
         </div>
@@ -83,13 +93,7 @@ export async function SiteFooter() {
   );
 }
 
-function FooterColumn({
-  title,
-  links,
-}: {
-  title: string;
-  links: { label: string; href: string; external?: boolean }[];
-}) {
+function FooterColumn({ title, links }: { title: string; links: FooterLink[] }) {
   const slots = footer();
   return (
     <div>
@@ -97,14 +101,20 @@ function FooterColumn({
       <ul className={slots.list()}>
         {links.map((link) => (
           <li key={link.label}>
-            <a
-              href={link.href}
-              target={link.external ? "_blank" : undefined}
-              rel={link.external ? "noopener noreferrer" : undefined}
-              className={slots.link()}
-            >
-              {link.label}
-            </a>
+            {link.external ? (
+              <a
+                href={link.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                className={slots.link()}
+              >
+                {link.label}
+              </a>
+            ) : (
+              <Link href={link.href} className={slots.link()}>
+                {link.label}
+              </Link>
+            )}
           </li>
         ))}
       </ul>

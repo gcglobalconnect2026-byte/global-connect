@@ -19,11 +19,18 @@ import type { Document } from "@contentful/rich-text-types";
  *  Only consumed by scripts/contentful-seed.ts — the app queries Contentful
  *  directly and does not fall back to this data. */
 
+/**
+ * Seed entries carry content only: `translatedLocales` is a runtime value
+ * derived from what is actually in the CMS (see `queries.ts`), so the seed
+ * omits it rather than inventing a coverage claim.
+ */
+type SeedEntry<T> = Omit<T, "translatedLocales">;
+
 // ---------------------------------------------------------------------------
 // Rich-text builders (used to author blog-style guide / opportunity bodies)
 // ---------------------------------------------------------------------------
 
-type Node = {
+export type Node = {
   nodeType: string;
   data: Record<string, unknown>;
   content?: Node[];
@@ -31,41 +38,41 @@ type Node = {
   marks?: unknown[];
 };
 
-const text = (value: string): Node => ({
+export const text = (value: string): Node => ({
   nodeType: "text",
   value,
   marks: [],
   data: {},
 });
 
-const marked = (value: string, marks: string[]): Node => ({
+export const marked = (value: string, marks: string[]): Node => ({
   nodeType: "text",
   value,
   marks: marks.map((m) => ({ type: m })),
   data: {},
 });
 
-const paragraph = (value: string): Node => ({
+export const paragraph = (value: string): Node => ({
   nodeType: BLOCKS.PARAGRAPH,
   data: {},
   content: [text(value)],
 });
 
-const richParagraph = (...children: Node[]): Node => ({
+export const richParagraph = (...children: Node[]): Node => ({
   nodeType: BLOCKS.PARAGRAPH,
   data: {},
   content: children,
 });
 
-const heading2 = (value: string): Node => ({
+export const heading2 = (value: string): Node => ({
   nodeType: BLOCKS.HEADING_2,
   data: {},
   content: [text(value)],
 });
 
-const hr = (): Node => ({ nodeType: BLOCKS.HR, data: {}, content: [] });
+export const hr = (): Node => ({ nodeType: BLOCKS.HR, data: {}, content: [] });
 
-const list = (items: string[]): Node => ({
+export const list = (items: string[]): Node => ({
   nodeType: BLOCKS.UL_LIST,
   data: {},
   content: items.map((i) => ({
@@ -75,7 +82,7 @@ const list = (items: string[]): Node => ({
   })),
 });
 
-const orderedList = (items: string[]): Node => ({
+export const orderedList = (items: string[]): Node => ({
   nodeType: BLOCKS.OL_LIST,
   data: {},
   content: items.map((i) => ({
@@ -85,13 +92,13 @@ const orderedList = (items: string[]): Node => ({
   })),
 });
 
-const link = (uri: string, label: string): Node => ({
+export const link = (uri: string, label: string): Node => ({
   nodeType: INLINES.HYPERLINK,
   data: { uri },
   content: [text(label)],
 });
 
-const quote = (value: string): Node => ({
+export const quote = (value: string): Node => ({
   nodeType: BLOCKS.QUOTE,
   data: {},
   content: [paragraph(value)],
@@ -101,7 +108,7 @@ const quote = (value: string): Node => ({
 /** Embedded image. In the bundled fallback the asset is inlined with a local
  *  URL so it renders without Contentful; the seeder rewrites `data.target` to
  *  an Asset Link when uploading into the CMS. */
-const image = (
+export const image = (
   assetId: string,
   url: string,
   alt: string,
@@ -128,15 +135,15 @@ const image = (
   content: [],
 });
 
-const doc = (...blocks: Node[]): Document =>
+export const doc = (...blocks: Node[]): Document =>
   ({ nodeType: BLOCKS.DOCUMENT, data: {}, content: blocks }) as Document;
 
-const guideImage = (slug: string, alt: string): Node =>
+export const guideImage = (slug: string, alt: string): Node =>
   image(`asset-${slug}`, `/guides/asset-${slug}.jpg`, alt);
 
 /** Embedded video entry. The seeder rewrites `data.target` to an Entry Link
  *  when creating into the CMS. */
-const video = (entryId: string, url: string, title: string, caption?: string): Node => ({
+export const video = (entryId: string, url: string, title: string, caption?: string): Node => ({
   nodeType: BLOCKS.EMBEDDED_ENTRY,
   data: {
     target: {
@@ -155,7 +162,7 @@ const video = (entryId: string, url: string, title: string, caption?: string): N
 // Opportunities
 // ---------------------------------------------------------------------------
 
-export const seedOpportunities: OpportunityData[] = [
+export const seedOpportunities: SeedEntry<OpportunityData>[] = [
   {
     id: "seed-opportunity-erasmus",
     title: "Erasmus+ Youth Exchange",
@@ -881,7 +888,7 @@ export const seedOpportunities: OpportunityData[] = [
 // Sessions
 // ---------------------------------------------------------------------------
 
-export const seedSessions: SessionData[] = [
+export const seedSessions: SeedEntry<SessionData>[] = [
   {
     id: "seed-session-speaking-club",
     title: "Global English Speaking Club",
@@ -1069,7 +1076,7 @@ export const seedSessions: SessionData[] = [
 // Guides
 // ---------------------------------------------------------------------------
 
-export const seedGuides: GuideData[] = [
+export const seedGuides: SeedEntry<GuideData>[] = [
   {
     id: "seed-guide-motivation-letter",
     title: "How to write a motivation letter",

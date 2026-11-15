@@ -1,5 +1,7 @@
 import type { OpportunityData } from "@/types/models";
 
+import { useTranslations } from "next-intl";
+
 import { tv } from "@/lib/utils";
 import { ArrowLink } from "@/components/ui/arrow-link";
 import { Tile } from "@/components/ui/tile";
@@ -27,6 +29,7 @@ export function OpportunityCard({
   opportunity: OpportunityData;
   index?: number;
 }) {
+  const t = useTranslations("Opportunities");
   const slots = opportunityCard();
   return (
     <article className={slots.root()}>
@@ -48,9 +51,9 @@ export function OpportunityCard({
       <p className={slots.description()}>{opportunity.description}</p>
 
       <dl className={slots.details()}>
-        <Detail label="Age" value={opportunity.ageRange} />
-        <Detail label="Funding" value={opportunity.funding} />
-        <Detail label="Deadline" value={opportunity.deadline} />
+        <Detail label={t("detailAge")} value={opportunity.ageRange} />
+        <Detail label={t("detailFunding")} value={opportunity.funding} />
+        <Detail label={t("detailDeadline")} value={opportunity.deadline} />
       </dl>
 
       <div className={slots.tags()}>
@@ -65,7 +68,7 @@ export function OpportunityCard({
         size="sm"
         className="mt-6"
       >
-        View opportunity
+        {t("view")}
       </ArrowLink>
     </article>
   );

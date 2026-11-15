@@ -8,3 +8,11 @@ onlyBuiltDependencies:
   - esbuild
 
 trustPolicy: no-downgrade
+
+# @clerk/localizations pulls a newer @clerk/shared than @clerk/nextjs does.
+# Two copies make `ClerkProvider localization=` fail type-checking (the
+# LocalizationResource types diverge), so pin every @clerk package to the
+# shared version @clerk/nextjs itself resolves to. Both declared ranges
+# (`^4.31.1` and `^4.31.0`) accept it.
+overrides:
+  '@clerk/shared': 4.31.1

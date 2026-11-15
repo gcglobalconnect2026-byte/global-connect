@@ -1,8 +1,10 @@
 import type { Metadata } from "next";
-import Link from "next/link";
+import { withLocale } from "@/i18n/params";
 import { ArrowRight } from "lucide-react";
+import { getTranslations } from "next-intl/server";
 
 import { tv } from "@/lib/utils";
+import { Link } from "@/i18n/navigation";
 import { pageMetadata } from "@/lib/seo";
 import { breadcrumb, guideItemList } from "@/lib/schema";
 import { JsonLd } from "@/components/json-ld";
@@ -13,12 +15,18 @@ import { SiteHeader } from "@/components/site-header";
 import { Tile } from "@/components/ui/tile";
 import { getGuides } from "@/lib/contentful/queries";
 
-export const metadata: Metadata = pageMetadata({
-  title: "Guides",
-  description:
-    "How-to guides on motivation letters, scholarships, Erasmus+, interviews, CVs and more.",
-  path: "/guides",
-});
+export async function generateMetadata({
+  params,
+}: PageProps<"/[locale]/guides">): Promise<Metadata> {
+  const { locale } = withLocale(await params);
+  const t = await getTranslations({ locale, namespace: "Metadata" });
+  return pageMetadata({
+    title: t("guides.title"),
+    description: t("guides.description"),
+    path: "/guides",
+    locale,
+  });
+}
 
 const guidesPage = tv({
   slots: {
@@ -31,26 +39,37 @@ const guidesPage = tv({
   },
 });
 
-export default async function GuidesPage() {
-  const guides = await getGuides();
+export default async function GuidesPage({
+  params,
+}: PageProps<"/[locale]/guides">) {
+  const { locale } = withLocale(await params);
+  const [t, nav, meta, guides] = await Promise.all([
+    getTranslations({ locale, namespace: "Guides" }),
+    getTranslations({ locale, namespace: "Nav" }),
+    getTranslations({ locale, namespace: "Metadata" }),
+    getGuides(locale),
+  ]);
   const slots = guidesPage();
 
   return (
     <>
       <SiteHeader />
       <JsonLd
-        data={breadcrumb([
-          { name: "Home", path: "/" },
-          { name: "Guides", path: "/guides" },
-        ])}
+        data={breadcrumb(
+          [
+            { name: nav("home"), path: "/" },
+            { name: nav("guides"), path: "/guides" },
+          ],
+          locale,
+        )}
       />
-      <JsonLd data={guideItemList(guides)} />
+      <JsonLd data={guideItemList(guides, meta("itemListGuides"), locale)} />
       <PageMain>
         <PageBand>
           <PageHeader
-            eyebrow="Guides"
-            title="Don't just find opportunities. Learn how to get them."
-            description="Practical, no-fluff guides written for young people applying to international programmes."
+            eyebrow={t("eyebrow")}
+            title={t("title")}
+            description={t("description")}
           />
         </PageBand>
         <PageContainer size="medium">
@@ -73,10 +92,10 @@ export default async function GuidesPage() {
                 </Tile>
                 <h2 className={slots.title()}>{guide.title}</h2>
                 <p className={slots.readTime()}>
-                  {guide.readTime} min read
+                  {t("readTime", { count: guide.readTime })}
                 </p>
                 <span className={slots.cta()}>
-                  Read guide
+                  {t("read")}
                   <ArrowRight className={slots.ctaIcon()} />
                 </span>
               </Link>

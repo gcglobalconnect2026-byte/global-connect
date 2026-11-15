@@ -4,6 +4,14 @@ import type {
   EntrySkeletonType,
 } from "contentful";
 
+import type { CfLocale } from "@/lib/contentful/locales";
+
+/**
+ * Entries as returned by `client.withAllLocales` (`locale=*`): every field
+ * value is keyed by locale, so readers resolve the requested locale with a
+ * fallback — see `pick()` in `src/lib/contentful/queries.ts`.
+ */
+
 export type OpportunitySkeleton = EntrySkeletonType<
   {
     title: EntryFieldTypes.Symbol<string>;
@@ -89,13 +97,13 @@ export type InterestSkeleton = EntrySkeletonType<
   "interest"
 >;
 
-export type Opportunity = Entry<OpportunitySkeleton, undefined, "en-US">;
-export type Session = Entry<SessionSkeleton, undefined, "en-US">;
-export type Guide = Entry<GuideSkeleton, undefined, "en-US">;
-export type Story = Entry<StorySkeleton, undefined, "en-US">;
-export type Partner = Entry<PartnerSkeleton, undefined, "en-US">;
-export type PathStep = Entry<PathStepSkeleton, undefined, "en-US">;
-export type Interest = Entry<InterestSkeleton, undefined, "en-US">;
+export type Opportunity = Entry<OpportunitySkeleton, "WITH_ALL_LOCALES", CfLocale>;
+export type Session = Entry<SessionSkeleton, "WITH_ALL_LOCALES", CfLocale>;
+export type Guide = Entry<GuideSkeleton, "WITH_ALL_LOCALES", CfLocale>;
+export type Story = Entry<StorySkeleton, "WITH_ALL_LOCALES", CfLocale>;
+export type Partner = Entry<PartnerSkeleton, "WITH_ALL_LOCALES", CfLocale>;
+export type PathStep = Entry<PathStepSkeleton, "WITH_ALL_LOCALES", CfLocale>;
+export type Interest = Entry<InterestSkeleton, "WITH_ALL_LOCALES", CfLocale>;
 
 export type CitySkeleton = EntrySkeletonType<
   {
@@ -106,7 +114,7 @@ export type CitySkeleton = EntrySkeletonType<
   "city"
 >;
 
-export type City = Entry<CitySkeleton, undefined, "en-US">;
+export type City = Entry<CitySkeleton, "WITH_ALL_LOCALES", CfLocale>;
 
 export type HomepageSectionSkeleton = EntrySkeletonType<
   {
@@ -121,7 +129,7 @@ export type HomepageSectionSkeleton = EntrySkeletonType<
   "homepageSection"
 >;
 
-export type HomepageSection = Entry<HomepageSectionSkeleton, undefined, "en-US">;
+export type HomepageSection = Entry<HomepageSectionSkeleton, "WITH_ALL_LOCALES", CfLocale>;
 
 export type VideoSkeleton = EntrySkeletonType<
   {
@@ -132,7 +140,7 @@ export type VideoSkeleton = EntrySkeletonType<
   "video"
 >;
 
-export type Video = Entry<VideoSkeleton, undefined, "en-US">;
+export type Video = Entry<VideoSkeleton, "WITH_ALL_LOCALES", CfLocale>;
 
 export type SiteSettingsSkeleton = EntrySkeletonType<
   {
@@ -142,4 +150,4 @@ export type SiteSettingsSkeleton = EntrySkeletonType<
   "siteSettings"
 >;
 
-export type SiteSettings = Entry<SiteSettingsSkeleton, undefined, "en-US">;
+export type SiteSettings = Entry<SiteSettingsSkeleton, "WITH_ALL_LOCALES", CfLocale>;

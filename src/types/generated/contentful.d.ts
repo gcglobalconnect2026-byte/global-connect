@@ -3,6 +3,36 @@
 import { Asset, Entry } from "contentful";
 import { Document } from "@contentful/rich-text-types";
 
+export interface ICityFields {
+  /** Initials */
+  initials: string;
+
+  /** City */
+  city: string;
+
+  /** Order */
+  order?: number | undefined;
+}
+
+/** A city shown in the community avatar grid on the homepage. */
+
+export interface ICity extends Entry<ICityFields> {
+  sys: {
+    id: string;
+    type: string;
+    createdAt: string;
+    updatedAt: string;
+    locale: string;
+    contentType: {
+      sys: {
+        id: "city";
+        linkType: "ContentType";
+        type: "Link";
+      };
+    };
+  };
+}
+
 export interface IGuideFields {
   /** Title */
   title: string;
@@ -35,6 +65,59 @@ export interface IGuide extends Entry<IGuideFields> {
     contentType: {
       sys: {
         id: "guide";
+        linkType: "ContentType";
+        type: "Link";
+      };
+    };
+  };
+}
+
+export interface IHomepageSectionFields {
+  /** Section */
+  section:
+    | "hero"
+    | "stats"
+    | "opportunityFinder"
+    | "path"
+    | "sessions"
+    | "guides"
+    | "stories"
+    | "community"
+    | "discovery"
+    | "partners"
+    | "finalCta";
+
+  /** Eyebrow */
+  eyebrow?: string | undefined;
+
+  /** Title */
+  title?: string | undefined;
+
+  /** Description */
+  description?: string | undefined;
+
+  /** Image */
+  image?: Asset | undefined;
+
+  /** Image alt text */
+  imageAlt?: string | undefined;
+
+  /** Enabled */
+  enabled?: boolean | undefined;
+}
+
+/** Configures the heading, description and image of a homepage section. */
+
+export interface IHomepageSection extends Entry<IHomepageSectionFields> {
+  sys: {
+    id: string;
+    type: string;
+    createdAt: string;
+    updatedAt: string;
+    locale: string;
+    contentType: {
+      sys: {
+        id: "homepageSection";
         linkType: "ContentType";
         type: "Link";
       };
@@ -77,7 +160,23 @@ export interface IOpportunityFields {
   slug: string;
 
   /** Country */
-  country?: "Portugal" | "Europe" | "USA" | "Worldwide" | undefined;
+  country?:
+    | "Portugal"
+    | "Europe"
+    | "USA"
+    | "Worldwide"
+    | "Switzerland"
+    | "United Kingdom"
+    | "Germany"
+    | "Spain"
+    | "Poland"
+    | "Philippines"
+    | "Hungary"
+    | "France"
+    | "Italy"
+    | "Global"
+    | "Remote"
+    | undefined;
 
   /** Country flag */
   countryFlag?: string | undefined;
@@ -90,6 +189,10 @@ export interface IOpportunityFields {
     | "Programme"
     | "Volunteering"
     | "Online"
+    | "Volunteer"
+    | "Internship"
+    | "Fellowship"
+    | "Grant"
     | undefined;
 
   /** Short description */
@@ -251,6 +354,33 @@ export interface ISession extends Entry<ISessionFields> {
   };
 }
 
+export interface ISiteSettingsFields {
+  /** Community URL (Telegram) */
+  communityUrl: string;
+
+  /** Contact Email */
+  contactEmail: string;
+}
+
+/** Site-wide links and global configuration. One entry per space. */
+
+export interface ISiteSettings extends Entry<ISiteSettingsFields> {
+  sys: {
+    id: string;
+    type: string;
+    createdAt: string;
+    updatedAt: string;
+    locale: string;
+    contentType: {
+      sys: {
+        id: "siteSettings";
+        linkType: "ContentType";
+        type: "Link";
+      };
+    };
+  };
+}
+
 export interface IStoryFields {
   /** Quote */
   quote: string;
@@ -287,17 +417,61 @@ export interface IStory extends Entry<IStoryFields> {
   };
 }
 
+export interface IVideoFields {
+  /** Title */
+  title: string;
+
+  /** Video URL */
+  videoUrl: string;
+
+  /** Caption */
+  caption?: string | undefined;
+}
+
+/** An external video (YouTube) embedded inside a guide's rich-text body. */
+
+export interface IVideo extends Entry<IVideoFields> {
+  sys: {
+    id: string;
+    type: string;
+    createdAt: string;
+    updatedAt: string;
+    locale: string;
+    contentType: {
+      sys: {
+        id: "video";
+        linkType: "ContentType";
+        type: "Link";
+      };
+    };
+  };
+}
+
 export type CONTENT_TYPE =
+  | "city"
   | "guide"
+  | "homepageSection"
   | "interest"
   | "opportunity"
   | "partner"
   | "pathStep"
   | "session"
-  | "story";
+  | "siteSettings"
+  | "story"
+  | "video";
 
 export type IEntry =
-  IGuide | IInterest | IOpportunity | IPartner | IPathStep | ISession | IStory;
+  | ICity
+  | IGuide
+  | IHomepageSection
+  | IInterest
+  | IOpportunity
+  | IPartner
+  | IPathStep
+  | ISession
+  | ISiteSettings
+  | IStory
+  | IVideo;
 
 export type LOCALE_CODE = "en-US";
 

@@ -8,12 +8,31 @@
       "contentManagementApi": true,
       "fallbackCode": null,
       "optional": false,
-      "sys": { "type": "Locale", "id": "en-US" }
+      "sys": {
+        "type": "Locale",
+        "id": "en-US"
+      }
+    },
+    {
+      "name": "German (Germany)",
+      "code": "de",
+      "default": false,
+      "contentDeliveryApi": true,
+      "contentManagementApi": true,
+      "fallbackCode": "en-US",
+      "optional": true,
+      "sys": {
+        "type": "Locale",
+        "id": "de"
+      }
     }
   ],
   "contentTypes": [
     {
-      "sys": { "id": "opportunity", "type": "ContentType" },
+      "sys": {
+        "id": "opportunity",
+        "type": "ContentType"
+      },
       "name": "Opportunity",
       "description": "A study-abroad, exchange, scholarship, conference, or volunteering opportunity for young people.",
       "displayField": "title",
@@ -22,7 +41,7 @@
           "id": "title",
           "name": "Title",
           "type": "Symbol",
-          "localized": false,
+          "localized": true,
           "required": true,
           "validations": [],
           "disabled": false,
@@ -34,7 +53,11 @@
           "type": "Symbol",
           "localized": false,
           "required": true,
-          "validations": [{ "unique": true }],
+          "validations": [
+            {
+              "unique": true
+            }
+          ],
           "disabled": false,
           "omitted": false
         },
@@ -42,9 +65,8 @@
           "id": "country",
           "name": "Country",
           "type": "Symbol",
-          "localized": false,
+          "localized": true,
           "required": false,
-          "validations": [{ "in": ["Portugal", "Europe", "USA", "Worldwide", "Switzerland", "United Kingdom", "Germany", "Spain", "Poland", "Philippines", "Hungary", "France", "Italy", "Global", "Remote"] }],
           "disabled": false,
           "omitted": false
         },
@@ -54,7 +76,14 @@
           "type": "Symbol",
           "localized": false,
           "required": false,
-          "validations": [{ "regexp": { "pattern": "^.+$", "flags": "" } }],
+          "validations": [
+            {
+              "regexp": {
+                "pattern": "^.+$",
+                "flags": ""
+              }
+            }
+          ],
           "disabled": false,
           "omitted": false
         },
@@ -62,24 +91,8 @@
           "id": "type",
           "name": "Type",
           "type": "Symbol",
-          "localized": false,
+          "localized": true,
           "required": false,
-          "validations": [
-            {
-              "in": [
-                "Exchange",
-                "Scholarship",
-                "Conference",
-                "Programme",
-                "Volunteering",
-                "Online",
-                "Volunteer",
-                "Internship",
-                "Fellowship",
-                "Grant"
-              ]
-            }
-          ],
           "disabled": false,
           "omitted": false
         },
@@ -87,7 +100,7 @@
           "id": "description",
           "name": "Short description",
           "type": "Text",
-          "localized": false,
+          "localized": true,
           "required": true,
           "validations": [],
           "disabled": false,
@@ -97,7 +110,7 @@
           "id": "longDescription",
           "name": "Long description",
           "type": "RichText",
-          "localized": false,
+          "localized": true,
           "required": false,
           "validations": [],
           "disabled": false,
@@ -107,9 +120,8 @@
           "id": "ageRange",
           "name": "Age range",
           "type": "Symbol",
-          "localized": false,
+          "localized": true,
           "required": false,
-          "validations": [{ "regexp": { "pattern": "^Ages \\d{2}–\\d{2}$", "flags": "" } }],
           "disabled": false,
           "omitted": false
         },
@@ -117,9 +129,8 @@
           "id": "funding",
           "name": "Funding",
           "type": "Symbol",
-          "localized": false,
+          "localized": true,
           "required": false,
-          "validations": [{ "regexp": { "pattern": "^(Fully funded|Free|Scholarship available|Paid|Partial scholarship|Funded|Unpaid|Grant)$", "flags": "" } }],
           "disabled": false,
           "omitted": false
         },
@@ -127,9 +138,8 @@
           "id": "deadline",
           "name": "Deadline",
           "type": "Symbol",
-          "localized": false,
+          "localized": true,
           "required": false,
-          "validations": [{ "regexp": { "pattern": "^[A-Z][a-z]+ \\d{1,2}|Rolling$", "flags": "" } }],
           "disabled": false,
           "omitted": false
         },
@@ -137,12 +147,15 @@
           "id": "tags",
           "name": "Tags",
           "type": "Array",
-          "localized": false,
+          "localized": true,
           "required": false,
           "validations": [],
           "disabled": false,
           "omitted": false,
-          "items": { "type": "Symbol", "validations": [] }
+          "items": {
+            "type": "Symbol",
+            "validations": []
+          }
         },
         {
           "id": "image",
@@ -178,7 +191,10 @@
       ]
     },
     {
-      "sys": { "id": "session", "type": "ContentType" },
+      "sys": {
+        "id": "session",
+        "type": "ContentType"
+      },
       "name": "Online Session",
       "description": "An online session, workshop, speaking club, or programme.",
       "displayField": "title",
@@ -187,7 +203,7 @@
           "id": "title",
           "name": "Title",
           "type": "Symbol",
-          "localized": false,
+          "localized": true,
           "required": true,
           "validations": [],
           "disabled": false,
@@ -199,7 +215,11 @@
           "type": "Symbol",
           "localized": false,
           "required": true,
-          "validations": [{ "unique": true }],
+          "validations": [
+            {
+              "unique": true
+            }
+          ],
           "disabled": false,
           "omitted": false
         },
@@ -209,7 +229,14 @@
           "type": "Symbol",
           "localized": false,
           "required": false,
-          "validations": [{ "regexp": { "pattern": "^.+$", "flags": "" } }],
+          "validations": [
+            {
+              "regexp": {
+                "pattern": "^.+$",
+                "flags": ""
+              }
+            }
+          ],
           "disabled": false,
           "omitted": false
         },
@@ -217,7 +244,7 @@
           "id": "description",
           "name": "Description",
           "type": "Text",
-          "localized": false,
+          "localized": true,
           "required": true,
           "validations": [],
           "disabled": false,
@@ -227,9 +254,8 @@
           "id": "duration",
           "name": "Duration",
           "type": "Symbol",
-          "localized": false,
+          "localized": true,
           "required": false,
-          "validations": [{ "regexp": { "pattern": "^\\d{2,3} min", "flags": "" } }],
           "disabled": false,
           "omitted": false
         },
@@ -237,11 +263,8 @@
           "id": "difficulty",
           "name": "Difficulty",
           "type": "Symbol",
-          "localized": false,
+          "localized": true,
           "required": false,
-          "validations": [
-            { "in": ["All levels", "Beginner", "Intermediate", "Advanced"] }
-          ],
           "disabled": false,
           "omitted": false
         },
@@ -261,7 +284,14 @@
           "type": "Symbol",
           "localized": false,
           "required": false,
-          "validations": [{ "regexp": { "pattern": "^https://", "flags": "" } }],
+          "validations": [
+            {
+              "regexp": {
+                "pattern": "^https://",
+                "flags": ""
+              }
+            }
+          ],
           "disabled": false,
           "omitted": false
         },
@@ -288,7 +318,10 @@
       ]
     },
     {
-      "sys": { "id": "guide", "type": "ContentType" },
+      "sys": {
+        "id": "guide",
+        "type": "ContentType"
+      },
       "name": "Guide",
       "description": "A practical how-to article that helps young people apply or prepare.",
       "displayField": "title",
@@ -297,7 +330,7 @@
           "id": "title",
           "name": "Title",
           "type": "Symbol",
-          "localized": false,
+          "localized": true,
           "required": true,
           "validations": [],
           "disabled": false,
@@ -309,7 +342,11 @@
           "type": "Symbol",
           "localized": false,
           "required": true,
-          "validations": [{ "unique": true }],
+          "validations": [
+            {
+              "unique": true
+            }
+          ],
           "disabled": false,
           "omitted": false
         },
@@ -319,7 +356,14 @@
           "type": "Integer",
           "localized": false,
           "required": false,
-          "validations": [{ "range": { "min": 1, "max": 60 } }],
+          "validations": [
+            {
+              "range": {
+                "min": 1,
+                "max": 60
+              }
+            }
+          ],
           "disabled": false,
           "omitted": false
         },
@@ -327,7 +371,7 @@
           "id": "excerpt",
           "name": "Excerpt",
           "type": "Text",
-          "localized": false,
+          "localized": true,
           "required": false,
           "validations": [],
           "disabled": false,
@@ -337,7 +381,7 @@
           "id": "body",
           "name": "Body",
           "type": "RichText",
-          "localized": false,
+          "localized": true,
           "required": true,
           "validations": [],
           "disabled": false,
@@ -356,7 +400,10 @@
       ]
     },
     {
-      "sys": { "id": "story", "type": "ContentType" },
+      "sys": {
+        "id": "story",
+        "type": "ContentType"
+      },
       "name": "Student Story",
       "description": "A testimonial from a Global Connect member.",
       "displayField": "name",
@@ -365,7 +412,7 @@
           "id": "quote",
           "name": "Quote",
           "type": "Text",
-          "localized": false,
+          "localized": true,
           "required": true,
           "validations": [],
           "disabled": false,
@@ -385,7 +432,7 @@
           "id": "location",
           "name": "Location",
           "type": "Symbol",
-          "localized": false,
+          "localized": true,
           "required": false,
           "validations": [],
           "disabled": false,
@@ -395,7 +442,7 @@
           "id": "role",
           "name": "Role",
           "type": "Symbol",
-          "localized": false,
+          "localized": true,
           "required": false,
           "validations": [],
           "disabled": false,
@@ -414,7 +461,10 @@
       ]
     },
     {
-      "sys": { "id": "partner", "type": "ContentType" },
+      "sys": {
+        "id": "partner",
+        "type": "ContentType"
+      },
       "name": "Partner",
       "description": "An organisation that partners with Global Connect.",
       "displayField": "name",
@@ -446,14 +496,24 @@
           "type": "Symbol",
           "localized": false,
           "required": false,
-          "validations": [{ "regexp": { "pattern": "^https://", "flags": "" } }],
+          "validations": [
+            {
+              "regexp": {
+                "pattern": "^https://",
+                "flags": ""
+              }
+            }
+          ],
           "disabled": false,
           "omitted": false
         }
       ]
     },
     {
-      "sys": { "id": "pathStep", "type": "ContentType" },
+      "sys": {
+        "id": "pathStep",
+        "type": "ContentType"
+      },
       "name": "Path Step",
       "description": "One step in the 'How Global Connect works' path.",
       "displayField": "title",
@@ -464,7 +524,14 @@
           "type": "Integer",
           "localized": false,
           "required": true,
-          "validations": [{ "range": { "min": 1, "max": 10 } }],
+          "validations": [
+            {
+              "range": {
+                "min": 1,
+                "max": 10
+              }
+            }
+          ],
           "disabled": false,
           "omitted": false
         },
@@ -472,7 +539,7 @@
           "id": "title",
           "name": "Title",
           "type": "Symbol",
-          "localized": false,
+          "localized": true,
           "required": true,
           "validations": [],
           "disabled": false,
@@ -482,7 +549,7 @@
           "id": "description",
           "name": "Description",
           "type": "Text",
-          "localized": false,
+          "localized": true,
           "required": false,
           "validations": [],
           "disabled": false,
@@ -491,7 +558,10 @@
       ]
     },
     {
-      "sys": { "id": "interest", "type": "ContentType" },
+      "sys": {
+        "id": "interest",
+        "type": "ContentType"
+      },
       "name": "Interest",
       "description": "A topic chip shown under 'Personalised discovery'.",
       "displayField": "label",
@@ -500,7 +570,7 @@
           "id": "label",
           "name": "Label",
           "type": "Symbol",
-          "localized": false,
+          "localized": true,
           "required": true,
           "validations": [],
           "disabled": false,
@@ -512,14 +582,24 @@
           "type": "Symbol",
           "localized": false,
           "required": false,
-          "validations": [{ "regexp": { "pattern": "^.+$", "flags": "" } }],
+          "validations": [
+            {
+              "regexp": {
+                "pattern": "^.+$",
+                "flags": ""
+              }
+            }
+          ],
           "disabled": false,
           "omitted": false
         }
       ]
     },
     {
-      "sys": { "id": "siteSettings", "type": "ContentType" },
+      "sys": {
+        "id": "siteSettings",
+        "type": "ContentType"
+      },
       "name": "Site Settings",
       "description": "Site-wide links and global configuration. One entry per space.",
       "displayField": "communityUrl",
@@ -530,7 +610,14 @@
           "type": "Symbol",
           "localized": false,
           "required": true,
-          "validations": [{ "regexp": { "pattern": "^https://", "flags": "" } }],
+          "validations": [
+            {
+              "regexp": {
+                "pattern": "^https://",
+                "flags": ""
+              }
+            }
+          ],
           "disabled": false,
           "omitted": false
         },
@@ -541,7 +628,12 @@
           "localized": false,
           "required": true,
           "validations": [
-            { "regexp": { "pattern": "^[^@\\s]+@[^@\\s]+\\.[^@\\s]+$", "flags": "" } }
+            {
+              "regexp": {
+                "pattern": "^[^@\\s]+@[^@\\s]+\\.[^@\\s]+$",
+                "flags": ""
+              }
+            }
           ],
           "disabled": false,
           "omitted": false
@@ -549,7 +641,10 @@
       ]
     },
     {
-      "sys": { "id": "city", "type": "ContentType" },
+      "sys": {
+        "id": "city",
+        "type": "ContentType"
+      },
       "name": "City",
       "description": "A city shown in the community avatar grid on the homepage.",
       "displayField": "city",
@@ -560,7 +655,11 @@
           "type": "Symbol",
           "localized": false,
           "required": true,
-          "validations": [{ "unique": true }],
+          "validations": [
+            {
+              "unique": true
+            }
+          ],
           "disabled": false,
           "omitted": false
         },
@@ -568,7 +667,7 @@
           "id": "city",
           "name": "City",
           "type": "Symbol",
-          "localized": false,
+          "localized": true,
           "required": true,
           "validations": [],
           "disabled": false,
@@ -587,7 +686,10 @@
       ]
     },
     {
-      "sys": { "id": "homepageSection", "type": "ContentType" },
+      "sys": {
+        "id": "homepageSection",
+        "type": "ContentType"
+      },
       "name": "Homepage Section",
       "description": "Configures the heading, description and image of a homepage section.",
       "displayField": "section",
@@ -622,7 +724,7 @@
           "id": "eyebrow",
           "name": "Eyebrow",
           "type": "Symbol",
-          "localized": false,
+          "localized": true,
           "required": false,
           "validations": [],
           "disabled": false,
@@ -632,7 +734,7 @@
           "id": "title",
           "name": "Title",
           "type": "Symbol",
-          "localized": false,
+          "localized": true,
           "required": false,
           "validations": [],
           "disabled": false,
@@ -642,7 +744,7 @@
           "id": "description",
           "name": "Description",
           "type": "Text",
-          "localized": false,
+          "localized": true,
           "required": false,
           "validations": [],
           "disabled": false,
@@ -663,7 +765,7 @@
           "id": "imageAlt",
           "name": "Image alt text",
           "type": "Symbol",
-          "localized": false,
+          "localized": true,
           "required": false,
           "validations": [],
           "disabled": false,
@@ -682,7 +784,10 @@
       ]
     },
     {
-      "sys": { "id": "video", "type": "ContentType" },
+      "sys": {
+        "id": "video",
+        "type": "ContentType"
+      },
       "name": "Video",
       "description": "An external video (YouTube) embedded inside a guide's rich-text body.",
       "displayField": "title",
@@ -691,7 +796,7 @@
           "id": "title",
           "name": "Title",
           "type": "Symbol",
-          "localized": false,
+          "localized": true,
           "required": true,
           "validations": [],
           "disabled": false,
@@ -703,7 +808,14 @@
           "type": "Symbol",
           "localized": false,
           "required": true,
-          "validations": [{ "regexp": { "pattern": "^(https?://)?(www\\.)?(youtube\\.com|youtu\\.be)/.+", "flags": "" } }],
+          "validations": [
+            {
+              "regexp": {
+                "pattern": "^(https?://)?(www\\.)?(youtube\\.com|youtu\\.be)/.+",
+                "flags": ""
+              }
+            }
+          ],
           "disabled": false,
           "omitted": false
         },
@@ -711,7 +823,7 @@
           "id": "caption",
           "name": "Caption",
           "type": "Symbol",
-          "localized": false,
+          "localized": true,
           "required": false,
           "validations": [],
           "disabled": false,

@@ -1,17 +1,21 @@
 import Image from "next/image";
 
+import { getT } from "@/i18n/t";
+
 import { tv, type VariantProps } from "@/lib/utils";
 import { SectionHeading } from "@/components/sections/section";
 import { ArrowLink } from "@/components/ui/arrow-link";
 import { Tile } from "@/components/ui/tile";
 import type { CityData, HomepageSectionData } from "@/types/models";
 
-const FEATURES = [
-  { icon: "🌍", text: "Meet young people worldwide" },
-  { icon: "💬", text: "Join discussions" },
-  { icon: "🎤", text: "Speaking clubs" },
-  { icon: "🤝", text: "Mentorship" },
-  { icon: "📚", text: "Learn together" },
+type FeatureKey = "meet" | "discuss" | "speak" | "mentor" | "learn";
+
+const FEATURES: { icon: string; key: FeatureKey }[] = [
+  { icon: "🌍", key: "meet" },
+  { icon: "💬", key: "discuss" },
+  { icon: "🎤", key: "speak" },
+  { icon: "🤝", key: "mentor" },
+  { icon: "📚", key: "learn" },
 ];
 
 /** Which city chips sit one step higher. */
@@ -46,7 +50,7 @@ function liftAt(index: number): Lift {
   return CITY_LIFT[index % CITY_LIFT.length] ? true : undefined;
 }
 
-export function CommunitySection({
+export async function CommunitySection({
   config,
   cities,
   communityUrl,
@@ -55,6 +59,7 @@ export function CommunitySection({
   cities?: CityData[];
   communityUrl: string;
 }) {
+  const t = await getT("Home.community");
   const slots = community();
   return (
     <section id="community" className={slots.root()}>
@@ -64,20 +69,20 @@ export function CommunitySection({
             <SectionHeading
               eyebrow={config?.eyebrow}
               eyebrowDot="blush"
-              title={config?.title ?? "Community"}
+              title={config?.title ?? t("defaultTitle")}
               description={config?.description}
               align="left"
             />
             <ul className={slots.features()}>
               {FEATURES.map((f) => (
-                <li key={f.text} className={slots.feature()}>
+                <li key={f.key} className={slots.feature()}>
                   <span aria-hidden="true">{f.icon}</span>
-                  {f.text}
+                  {t(`features.${f.key}`)}
                 </li>
               ))}
             </ul>
             <ArrowLink href={communityUrl} external className={slots.cta()}>
-              Join the community
+              {t("cta")}
             </ArrowLink>
           </div>
 
@@ -86,10 +91,7 @@ export function CommunitySection({
               {config?.imageUrl && (
                 <Image
                   src={config.imageUrl}
-                  alt={
-                    config.imageAlt ??
-                    "Young people from different countries talking in a circle"
-                  }
+                  alt={config.imageAlt ?? t("imageAlt")}
                   width={1200}
                   height={912}
                   loading="lazy"

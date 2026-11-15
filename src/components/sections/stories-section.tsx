@@ -1,3 +1,5 @@
+import { getT } from "@/i18n/t";
+
 import { tv, type VariantProps } from "@/lib/utils";
 
 import { SectionHeading, CardShell } from "@/components/sections/section";
@@ -37,7 +39,7 @@ type DotTone = NonNullable<VariantProps<typeof storiesSection>["dotTone"]>;
 
 const DOT_TONES: DotTone[] = ["lavender", "pastelBlue", "sage"];
 
-export function StoriesSection({
+export async function StoriesSection({
   stories,
   config,
   communityUrl,
@@ -46,6 +48,7 @@ export function StoriesSection({
   config?: HomepageSectionData;
   communityUrl: string;
 }) {
+  const t = await getT("Home.stories");
   const slots = storiesSection();
   return (
     <section className={slots.root()}>
@@ -55,12 +58,12 @@ export function StoriesSection({
         <SectionHeading
           eyebrow={config?.eyebrow}
           eyebrowDot="lavender"
-          title={config?.title ?? "Stories"}
+          title={config?.title ?? t("defaultTitle")}
           description={config?.description}
           className="mx-auto max-w-2xl text-center"
         />
 
-        <Carousel ariaLabel="Student stories" className="mt-16">
+        <Carousel ariaLabel={t("carouselAria")} className="mt-16">
           {stories.map((story, index) => (
             <CardShell key={story.id} variant="story">
               <span className={slots.quoteMark()} aria-hidden="true">
@@ -98,7 +101,7 @@ export function StoriesSection({
 
         <div className={slots.cta()}>
           <ArrowLink href={communityUrl} external variant="accent">
-            Share your Global Connect story
+            {t("cta")}
           </ArrowLink>
         </div>
       </div>

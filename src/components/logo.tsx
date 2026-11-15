@@ -1,7 +1,10 @@
-import Link from "next/link";
+"use client";
+
 import Image from "next/image";
+import { useTranslations } from "next-intl";
 
 import { tv } from "@/lib/utils";
+import { Link } from "@/i18n/navigation";
 
 const logo = tv({
   slots: {
@@ -12,16 +15,17 @@ const logo = tv({
 });
 
 export function Logo({ className }: { className?: string }) {
+  const t = useTranslations("Common");
   const slots = logo();
   return (
     <Link
       href="/"
-      aria-label="Global Connect — home"
+      aria-label={t("logoHome")}
       className={slots.root({ class: className })}
     >
       <Image
         src="/logo.png"
-        alt="Global Connect logo"
+        alt={t("logoAlt")}
         width={40}
         height={40}
         className={slots.image()}

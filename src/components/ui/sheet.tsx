@@ -6,6 +6,8 @@ import { XIcon } from "lucide-react"
 
 import { mergeClass, tv, type VariantProps } from "@/lib/utils"
 
+import { useTranslations } from "next-intl"
+
 import { Button } from "@/components/ui/button"
 
 const sheet = tv({
@@ -76,6 +78,7 @@ function SheetContent({
   showCloseButton?: boolean
 }) {
   const slots = sheet({ side });
+  const t = useTranslations("Common");
   return (
     <SheetPortal>
       <SheetOverlay />
@@ -98,7 +101,7 @@ function SheetContent({
             }
           >
             <XIcon />
-            <span className={slots.closeLabel()}>Close</span>
+            <span className={slots.closeLabel()}>{t("close")}</span>
           </SheetPrimitive.Close>
         )}
       </SheetPrimitive.Popup>

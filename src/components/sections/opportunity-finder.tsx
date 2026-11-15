@@ -2,6 +2,7 @@
 
 import { useDeferredValue, useMemo, useState } from "react";
 import { RotateCcw } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 import { tv } from "@/lib/utils";
 import { OpportunityCard } from "@/components/opportunity-card";
@@ -61,6 +62,8 @@ export function OpportunityFinder({
   const [funding, setFunding] = useState("all");
   const [age, setAge] = useState("all");
   const [deadline, setDeadline] = useState("all");
+
+  const t = useTranslations("Home.finder");
 
   const deferredSearch = useDeferredValue(search.trim().toLowerCase());
 
@@ -125,7 +128,7 @@ export function OpportunityFinder({
       <SectionHeading
         eyebrow={config?.eyebrow}
         eyebrowDot="lavender"
-        title={config?.title ?? "Opportunities"}
+        title={config?.title ?? t("defaultTitle")}
         description={config?.description}
         as={headingAs}
       />
@@ -137,41 +140,41 @@ export function OpportunityFinder({
           </span>
           <Input
             type="search"
-            placeholder="Search opportunities…"
+            placeholder={t("searchPlaceholder")}
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            aria-label="Search opportunities"
+            aria-label={t("searchAria")}
             className={slots.searchInput()}
           />
         </div>
         <div className={slots.filters()}>
           <div className={slots.filterRow()}>
             <FilterSelect
-              label="Country"
+              label={t("filterCountry")}
               value={country}
               onChange={setCountry}
               options={countries}
             />
             <FilterSelect
-              label="Type"
+              label={t("filterType")}
               value={type}
               onChange={setType}
               options={types}
             />
             <FilterSelect
-              label="Age"
+              label={t("filterAge")}
               value={age}
               onChange={setAge}
               options={ages}
             />
             <FilterSelect
-              label="Funding"
+              label={t("filterFunding")}
               value={funding}
               onChange={setFunding}
               options={fundings}
             />
             <FilterSelect
-              label="Deadline"
+              label={t("filterDeadline")}
               value={deadline}
               onChange={setDeadline}
               options={deadlines}
@@ -183,7 +186,7 @@ export function OpportunityFinder({
                 onClick={resetFilters}
               >
                 <RotateCcw className={slots.clearIcon()} />
-                Clear
+                {t("clear")}
               </Button>
             )}
           </div>
@@ -206,23 +209,21 @@ export function OpportunityFinder({
           {limit && filtered.length > limit && (
             <div className={slots.cta()}>
               <ArrowLink href="/opportunities" variant="accent">
-                View all opportunities
+                {t("viewAll")}
               </ArrowLink>
             </div>
           )}
         </>
       ) : (
         <div className={slots.empty()}>
-          <p className={slots.emptyTitle()}>No opportunities match</p>
-          <p className={slots.emptyText()}>
-            Try clearing a filter or two to widen the search.
-          </p>
+          <p className={slots.emptyTitle()}>{t("emptyTitle")}</p>
+          <p className={slots.emptyText()}>{t("emptyText")}</p>
           <Button
             className={slots.emptyAction()}
             variant="outline"
             onClick={resetFilters}
           >
-            Clear filters
+            {t("emptyAction")}
           </Button>
         </div>
       )}

@@ -1,5 +1,6 @@
 import { SITE_URL } from "@/lib/site";
 import { DEFAULT_OG_IMAGE, SITE_NAME } from "@/lib/seo";
+import { LOCALES, type Locale } from "@/lib/locales";
 import type {
   GuideData,
   OpportunityData,
@@ -11,25 +12,34 @@ import type {
  * JSON-LD relative URLs against the document base, and an empty or wrong
  * `SITE_URL` silently degrades all of this, so `SITE_URL` is the single
  * source of truth (see `src/lib/site.ts`).
+ *
+ * Paths passed in are relative to the locale prefix (`/guides/x`); each
+ * builder prefixes the current locale, so callers never build URLs.
  */
 
 type BreadcrumbItem = { name: string; path: string };
 
-const absolute = (path: string) => `${SITE_URL}${path}`;
+const absolute = (path: string, locale: Locale) =>
+  `${SITE_URL}/${locale}${path}`;
+
+const inLanguage = (locale: Locale) => LOCALES[locale].htmlLang;
 
 /**
  * Site-wide: Organization + WebSite.
  *
+ * `@id` stays locale-independent — it is the same entity on every page —
+ * while `url` and `inLanguage` point at the locale the page is served in.
+ *
  * No `SearchAction` — the opportunity finder filters client-side and has no
  * query-parameter URL, so declaring a search endpoint would be false.
  */
-export function organization(): Record<string, unknown> {
+export function organization(locale: Locale): Record<string, unknown> {
   return {
     "@context": "https://schema.org",
     "@type": "Organization",
     "@id": `${SITE_URL}/#organization`,
     name: SITE_NAME,
-    url: SITE_URL,
+    url: `${SITE_URL}/${locale}`,
     logo: {
       "@type": "ImageObject",
       url: `${SITE_URL}/logo.png`,
@@ -37,25 +47,28 @@ export function organization(): Record<string, unknown> {
       height: 512,
     },
     image: `${SITE_URL}/og-default.jpg`,
-    inLanguage: "en",
+    inLanguage: inLanguage(locale),
     sameAs: ["https://t.me/globalconnect"],
   };
 }
 
-export function website(): Record<string, unknown> {
+export function website(locale: Locale): Record<string, unknown> {
   return {
     "@context": "https://schema.org",
     "@type": "WebSite",
     "@id": `${SITE_URL}/#website`,
     name: SITE_NAME,
-    url: SITE_URL,
-    inLanguage: "en",
+    url: `${SITE_URL}/${locale}`,
+    inLanguage: inLanguage(locale),
     publisher: { "@id": `${SITE_URL}/#organization` },
   };
 }
 
 /** Root node for `BreadcrumbList`; items are appended in display order. */
-export function breadcrumb(items: BreadcrumbItem[]): Record<string, unknown> {
+export function breadcrumb(
+  items: BreadcrumbItem[],
+  locale: Locale,
+): Record<string, unknown> {
   return {
     "@context": "https://schema.org",
     "@type": "BreadcrumbList",
@@ -63,7 +76,7 @@ export function breadcrumb(items: BreadcrumbItem[]): Record<string, unknown> {
       "@type": "ListItem",
       position: index + 1,
       name: item.name,
-      item: absolute(item.path),
+      url: absolute(item.path, locale),
     })),
   };
 }
@@ -73,18 +86,21 @@ export function breadcrumb(items: BreadcrumbItem[]): Record<string, unknown> {
  * a made-up `datePublished` is a trust violation, and Google requires
  * `dateModified` to be accurate if published.
  */
-export function article(guide: GuideData): Record<string, unknown> {
+export function article(
+  guide: GuideData,
+  locale: Locale,
+): Record<string, unknown> {
   const node: Record<string, unknown> = {
     "@context": "https://schema.org",
     "@type": "Article",
-    "@id": `${absolute(`/guides/${guide.slug}`)}#article`,
+    "@id": `${absolute(`/guides/${guide.slug}`, locale)}#article`,
     headline: guide.title,
     description: guide.excerpt,
     image: `${SITE_URL}${DEFAULT_OG_IMAGE.url}`,
-    url: absolute(`/guides/${guide.slug}`),
+    url: absolute(`/guides/${guide.slug}`, locale),
     mainEntityOfPage: {
       "@type": "WebPage",
-      "@id": absolute(`/guides/${guide.slug}`),
+      "@id": absolute(`/guides/${guide.slug}`, locale),
     },
     author: {
       "@type": "Organization",
@@ -92,7 +108,7 @@ export function article(guide: GuideData): Record<string, unknown> {
       name: SITE_NAME,
     },
     publisher: { "@id": `${SITE_URL}/#organization` },
-    inLanguage: "en",
+    inLanguage: inLanguage(locale),
   };
 
   if (guide.publishedAt) node.datePublished = guide.publishedAt;
@@ -106,10 +122,14 @@ export function article(guide: GuideData): Record<string, unknown> {
  * `ItemList` for listing pages. Only entries that are actually rendered
  * belong here — advertising a page that does not exist is worse than
  * omitting it.
+ *
+ * `name` is localized by the caller (it is not user-visible, but it is
+ * indexed).
  */
 export function itemList(
   name: string,
   items: Array<{ name: string; path: string }>,
+  locale: Locale,
 ): Record<string, unknown> {
   return {
     "@context": "https://schema.org",
@@ -120,34 +140,49 @@ export function itemList(
       "@type": "ListItem",
       position: index + 1,
       name: item.name,
-      url: absolute(item.path),
+      url: absolute(item.path, locale),
     })),
   };
 }
 
-export const opportunityItemList = (opportunities: OpportunityData[]) =>
+export const opportunityItemList = (
+  opportunities: OpportunityData[],
+  name: string,
+  locale: Locale,
+) =>
   itemList(
-    "International opportunities for young people",
+    name,
     opportunities.map((o) => ({
       name: o.title,
       path: `/opportunities/${o.slug}`,
     })),
+    locale,
   );
 
-export const sessionItemList = (sessions: SessionData[]) =>
+export const sessionItemList = (
+  sessions: SessionData[],
+  name: string,
+  locale: Locale,
+) =>
   itemList(
-    "Online sessions",
+    name,
     sessions.map((s) => ({
       name: s.title,
       path: `/sessions/${s.slug}`,
     })),
+    locale,
   );
 
-export const guideItemList = (guides: GuideData[]) =>
+export const guideItemList = (
+  guides: GuideData[],
+  name: string,
+  locale: Locale,
+) =>
   itemList(
-    "Guides for applying to international programmes",
+    name,
     guides.map((g) => ({
       name: g.title,
       path: `/guides/${g.slug}`,
     })),
+    locale,
   );

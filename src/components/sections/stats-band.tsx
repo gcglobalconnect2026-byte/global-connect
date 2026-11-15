@@ -1,3 +1,5 @@
+import { getT } from "@/i18n/t";
+
 import { tv } from "@/lib/utils";
 
 const statsBand = tv({
@@ -10,15 +12,23 @@ const statsBand = tv({
   },
 });
 
-const STATS: { value: string; label: string }[] = [
-  { value: "1,000+", label: "Members" },
-  { value: "500+", label: "Opportunities shared" },
-  { value: "35", label: "Online sessions" },
-  { value: "600", label: "Young people mentored" },
-  { value: "3", label: "Partnerships" },
+type StatLabel =
+  | "members"
+  | "opportunities"
+  | "sessions"
+  | "mentored"
+  | "partnerships";
+
+const STATS: { value: string; label: StatLabel }[] = [
+  { value: "1,000+", label: "members" },
+  { value: "500+", label: "opportunities" },
+  { value: "35", label: "sessions" },
+  { value: "600", label: "mentored" },
+  { value: "3", label: "partnerships" },
 ];
 
-export function StatsBand() {
+export async function StatsBand() {
+  const t = await getT("Home.stats");
   const slots = statsBand();
   return (
     <section className={slots.root()}>
@@ -26,7 +36,7 @@ export function StatsBand() {
         {STATS.map((stat) => (
           <div key={stat.label} className={slots.stat()}>
             <p className={slots.value()}>{stat.value}</p>
-            <p className={slots.label()}>{stat.label}</p>
+            <p className={slots.label()}>{t(stat.label)}</p>
           </div>
         ))}
       </div>

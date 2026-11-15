@@ -1,4 +1,6 @@
 import type { Metadata } from "next";
+import { withLocale } from "@/i18n/params";
+import { getTranslations } from "next-intl/server";
 
 import { PageBand, PageContainer, PageMain } from "@/components/page-shell";
 import { SiteFooter } from "@/components/site-footer";
@@ -16,12 +18,18 @@ import { tv } from "@/lib/utils";
 
 import { pageMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = pageMetadata({
-  title: "About",
-  description:
-    "Global Connect helps young people discover international opportunities, build confidence and connect worldwide.",
-  path: "/about",
-});
+export async function generateMetadata({
+  params,
+}: PageProps<"/[locale]/about">): Promise<Metadata> {
+  const { locale } = withLocale(await params);
+  const t = await getTranslations({ locale, namespace: "Metadata" });
+  return pageMetadata({
+    title: t("about.title"),
+    description: t("about.description"),
+    path: "/about",
+    locale,
+  });
+}
 
 const aboutPage = tv({
   slots: {
@@ -35,10 +43,19 @@ const aboutPage = tv({
   },
 });
 
-export default async function AboutPage() {
-  const [partners, stories, homepageSections, siteSettings] = await Promise.all(
-    [getPartners(), getStories(), getHomepageSections(), getSiteSettings()],
-  );
+export default async function AboutPage({
+  params,
+}: PageProps<"/[locale]/about">) {
+  const { locale } = withLocale(await params);
+  const [t, stats, partners, stories, homepageSections, siteSettings] =
+    await Promise.all([
+      getTranslations({ locale, namespace: "About" }),
+      getTranslations({ locale, namespace: "Home.stats" }),
+      getPartners(),
+      getStories(locale),
+      getHomepageSections(locale),
+      getSiteSettings(),
+    ]);
 
   const slots = aboutPage();
 
@@ -48,19 +65,19 @@ export default async function AboutPage() {
       <PageMain>
         <PageBand>
           <PageHeader
-            eyebrow="About"
-            title="Helping young people discover what's possible."
-            description="Global Connect is a global youth community sharing international opportunities, online sessions and practical guides."
+            eyebrow={t("eyebrow")}
+            title={t("title")}
+            description={t("description")}
           />
         </PageBand>
 
         <PageContainer id="impact" size="compact">
           <div className={slots.stats()}>
-            <Stat value="1,000+" label="Members" />
-            <Stat value="500+" label="Opportunities shared" />
-            <Stat value="35" label="Online sessions" />
-            <Stat value="600" label="Young people mentored" />
-            <Stat value="3" label="Partnerships" />
+            <Stat value="1,000+" label={stats("members")} />
+            <Stat value="500+" label={stats("opportunities")} />
+            <Stat value="35" label={stats("sessions")} />
+            <Stat value="600" label={stats("mentored")} />
+            <Stat value="3" label={stats("partnerships")} />
           </div>
         </PageContainer>
 
@@ -84,17 +101,19 @@ export default async function AboutPage() {
           )}
 
         <PageContainer id="contact" size="tiny" center>
-          <h2 className={slots.contactTitle()}>Want to work with us?</h2>
+          <h2 className={slots.contactTitle()}>{t("contactTitle")}</h2>
           <p className={slots.contactText()}>
-            Share opportunities with our community, run a session, or become a
-            partner. Reach out at{" "}
-            <a
-              href={`mailto:${siteSettings.contactEmail}`}
-              className={slots.contactLink()}
-            >
-              {siteSettings.contactEmail}
-            </a>
-            .
+            {t.rich("contactText", {
+              address: siteSettings.contactEmail,
+              email: (chunks) => (
+                <a
+                  href={`mailto:${siteSettings.contactEmail}`}
+                  className={slots.contactLink()}
+                >
+                  {chunks}
+                </a>
+              ),
+            })}
           </p>
         </PageContainer>
       </PageMain>

@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useState, isValidElement } from "react";
 import useEmblaCarousel from "embla-carousel-react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 import { tv } from "@/lib/utils";
 
@@ -30,13 +31,14 @@ const carousel = tv({
 
 export function Carousel({
   children,
-  ariaLabel = "Carousel",
+  ariaLabel,
   className,
 }: {
   children: React.ReactNode;
-  ariaLabel?: string;
+  ariaLabel: string;
   className?: string;
 }) {
+  const t = useTranslations("A11y");
   const [emblaRef, emblaApi] = useEmblaCarousel({ align: "start", loop: false });
   const [canScrollPrev, setCanScrollPrev] = useState(false);
   const [canScrollNext, setCanScrollNext] = useState(true);
@@ -69,7 +71,7 @@ export function Carousel({
       <div className={slots.controls()}>
         <button
           type="button"
-          aria-label="Previous"
+          aria-label={t("previous")}
           onClick={() => emblaApi?.scrollPrev()}
           disabled={!canScrollPrev}
           className={slots.arrow()}
@@ -78,7 +80,7 @@ export function Carousel({
         </button>
         <button
           type="button"
-          aria-label="Next"
+          aria-label={t("next")}
           onClick={() => emblaApi?.scrollNext()}
           disabled={!canScrollNext}
           className={slots.arrow({ class: slots.arrowNext() })}
@@ -106,7 +108,7 @@ export function Carousel({
             <button
               key={snap}
               type="button"
-              aria-label={`Go to slide group ${index + 1}`}
+              aria-label={t("slideGroup", { index: index + 1 })}
               onClick={() => emblaApi?.scrollTo(index)}
               className={slots.dot({ active: index === selectedIndex })}
             />
