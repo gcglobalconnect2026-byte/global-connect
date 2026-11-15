@@ -1,6 +1,5 @@
 import "server-only";
 import { cacheLife, cacheTag } from "next/cache";
-import type { Asset, UnresolvedLink } from "contentful";
 import type { Document as RichTextDocument } from "@contentful/rich-text-types";
 import { getContentfulClient } from "./client";
 import {
@@ -120,31 +119,40 @@ type AssetFile = {
   details?: { image?: { width?: number; height?: number } };
 };
 
-function assetUrl(
-  target: unknown,
-  locale: Locale,
-): string | undefined {
-  const asset = target as
-    | { fields?: Record<string, unknown> }
-    | UnresolvedLink<"Asset">
-    | undefined;
+type AssetLike = { fields?: Record<string, unknown> };
+
+/**
+ * Unwraps an asset link down to the asset object.
+ *
+ * With `locale=*` Contentful wraps **every** entry field — including
+ * non-localized asset links — in a locale key (`{"en-US": {asset}}`), so the
+ * link itself must go through `pick()` before `.fields` is reachable.
+ * Single-locale responses and inline seed data resolve the asset directly;
+ * `pick()` returns those unchanged.
+ */
+function resolveAsset(target: unknown): AssetLike | undefined {
+  const asset = pick<AssetLike>(target, "en");
   if (!asset || typeof asset !== "object" || !("fields" in asset)) {
-    return undefined;
+    return undefined; // unresolved link or missing field
   }
+  return asset;
+}
+
+function assetUrl(target: unknown, locale: Locale): string | undefined {
+  const asset = resolveAsset(target);
+  if (!asset) return undefined;
   const file = pick<AssetFile>(asset.fields?.file, locale);
   const url = file?.url;
   if (!url) return undefined;
   return url.startsWith("//") ? `https:${url}` : url;
 }
 
-type ResolvedAssetLink = Asset<"WITH_ALL_LOCALES", CfLocale> | undefined;
-
-function assetAlt(asset: ResolvedAssetLink, locale: Locale): string | undefined {
+function assetAlt(target: unknown, locale: Locale): string | undefined {
+  const asset = resolveAsset(target);
   if (!asset) return undefined;
-  const fields = asset.fields as unknown as Record<string, unknown>;
   return (
-    pick<string>(fields.description, locale) ??
-    pick<string>(fields.title, locale) ??
+    pick<string>(asset.fields?.description, locale) ??
+    pick<string>(asset.fields?.title, locale) ??
     undefined
   );
 }
@@ -342,13 +350,12 @@ function mapStory(entry: Story, locale: Locale): StoryData {
 
 function mapPartner(entry: Partner): PartnerData {
   const fields = entry.fields as unknown as Record<string, unknown>;
-  const asset = fields.logo as ResolvedAssetLink | undefined;
   const name = pickRequired<string>(fields.name, "en");
   return {
     id: entry.sys.id,
     name,
     logoUrl: assetUrl(fields.logo, "en"),
-    logoAlt: assetAlt(asset, "en") ?? name,
+    logoAlt: assetAlt(fields.logo, "en") ?? name,
     website: pick<string>(fields.website, "en"),
   };
 }
@@ -394,7 +401,10 @@ function mapHomepageSection(
     title: pick<string>(fields.title, locale) ?? undefined,
     description: pick<string>(fields.description, locale) ?? undefined,
     imageUrl: assetUrl(fields.image, locale),
-    imageAlt: pick<string>(fields.imageAlt, locale) ?? undefined,
+    imageAlt:
+      pick<string>(fields.imageAlt, locale) ??
+      assetAlt(fields.image, locale) ??
+      undefined,
     enabled: pick<boolean>(fields.enabled, locale) ?? true,
   };
 }
