@@ -1,7 +1,9 @@
 "use client";
 
+import { useState } from "react";
+
 import { Show, SignInButton, UserButton } from "@clerk/nextjs";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 
 import { tv } from "@/lib/utils";
 import { Link, usePathname } from "@/i18n/navigation";
@@ -78,9 +80,24 @@ function AuthButtons({ variant = "desktop" }: { variant?: "desktop" | "mobile" }
 
 export function SiteHeaderNav({ communityUrl }: { communityUrl: string }) {
   const pathname = usePathname();
+  const locale = useLocale();
   const isHome = pathname === "/";
   const t = useTranslations("Nav");
   const slots = headerNav();
+
+  // The header is layout-persistent, so the sheet would otherwise survive
+  // client-side navigation and stay open over the new page. Any route or
+  // locale change drops the key it was opened on — a render-phase update (the
+  // React-recommended alternative to an effect here) — so the menu closes even
+  // for the browser back/forward gesture. In-page anchor links keep the same
+  // pathname, so they close it explicitly.
+  const navigationKey = `${pathname}#${locale}`;
+  const [openedAt, setOpenedAt] = useState<string | null>(null);
+  if (openedAt !== null && openedAt !== navigationKey) {
+    setOpenedAt(null);
+  }
+  const menuOpen = openedAt !== null;
+  const closeMenu = () => setOpenedAt(null);
 
   const NAV_LINKS: NavItem[] = [
     { key: "home", section: "top", page: "/" },
@@ -143,7 +160,10 @@ export function SiteHeaderNav({ communityUrl }: { communityUrl: string }) {
           <AuthButtons />
         </div>
 
-        <Sheet>
+        <Sheet
+          open={menuOpen}
+          onOpenChange={(open) => setOpenedAt(open ? navigationKey : null)}
+        >
           <SheetTrigger
             render={
               <button
@@ -171,6 +191,7 @@ export function SiteHeaderNav({ communityUrl }: { communityUrl: string }) {
                   <Link
                     key={link.label}
                     href={link.href}
+                    onClick={closeMenu}
                     className={slots.mobileLink()}
                   >
                     {link.label}
@@ -185,6 +206,7 @@ export function SiteHeaderNav({ communityUrl }: { communityUrl: string }) {
                         ? "noopener noreferrer"
                         : undefined
                     }
+                    onClick={closeMenu}
                     className={slots.mobileLink()}
                   >
                     {link.label}

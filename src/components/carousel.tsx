@@ -22,9 +22,10 @@ const carousel = tv({
     dot: "rounded-full transition-all",
   },
   variants: {
+    // Slot maps (not flat strings): tv v4 drops flat variant values on `slots`.
     active: {
-      true: "h-2.5 w-6 bg-foreground",
-      false: "h-2.5 w-2.5 bg-border hover:bg-muted-foreground",
+      true: { dot: "h-2.5 w-6 bg-foreground" },
+      false: { dot: "h-2.5 w-2.5 bg-border hover:bg-muted-foreground" },
     },
   },
 });
@@ -43,14 +44,12 @@ export function Carousel({
   const [canScrollPrev, setCanScrollPrev] = useState(false);
   const [canScrollNext, setCanScrollNext] = useState(true);
   const [selectedIndex, setSelectedIndex] = useState(0);
-  const [snaps, setSnaps] = useState<number[]>([]);
 
   const onSelect = useCallback(() => {
     if (!emblaApi) return;
     setSelectedIndex(emblaApi.selectedScrollSnap());
     setCanScrollPrev(emblaApi.canScrollPrev());
     setCanScrollNext(emblaApi.canScrollNext());
-    setSnaps(emblaApi.scrollSnapList());
   }, [emblaApi]);
 
   useEffect(() => {
@@ -102,11 +101,13 @@ export function Carousel({
         </div>
       </div>
 
-      {snaps.length > 1 && (
+      {slides.length > 1 && (
         <div className={slots.dots()}>
-          {snaps.map((snap, index) => (
+          {/* One dot per slide: embla uses its default `slidesToScroll: 1`,
+              so the snap list matches the children one-to-one. */}
+          {slides.map((child, index) => (
             <button
-              key={snap}
+              key={isValidElement(child) ? child.key : undefined}
               type="button"
               aria-label={t("slideGroup", { index: index + 1 })}
               onClick={() => emblaApi?.scrollTo(index)}
