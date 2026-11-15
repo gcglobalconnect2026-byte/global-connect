@@ -1,4 +1,6 @@
 import type { Metadata, Viewport } from "next";
+import { Analytics } from "@vercel/analytics/next";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 import { ClerkProvider } from "@clerk/nextjs";
 import { deDE, enUS } from "@clerk/localizations";
 import { Fraunces, Inter } from "next/font/google";
@@ -114,6 +116,22 @@ export default async function RootLayout({
             {children}
           </ClerkProvider>
         </NextIntlClientProvider>
+        {/*
+          Vercel Web Analytics + Speed Insights: both render `null` and inject
+          their own script, and both wrap themselves in <Suspense> internally,
+          which Cache Components requires because they read `useSearchParams()`.
+
+          Production only: preview builds must not add rows to the dataset, and
+          `VERCEL_ENV` is evaluated at build time per deployment. The scripts are
+          served from `/_vercel/...`, which `src/proxy.ts` already excludes from
+          locale routing, so nothing else needs to change for them.
+        */}
+        {isProduction && (
+          <>
+            <Analytics />
+            <SpeedInsights />
+          </>
+        )}
       </body>
     </html>
   );

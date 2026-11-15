@@ -196,7 +196,7 @@
     "eyebrow": "Rechtliches",
     "title": "Datenschutzerklärung",
     "collectTitle": "Was wir erheben",
-    "collectBody": "Global Connect nutzt Contentful zur Speicherung von Inhalten und Clerk zur Verwaltung von Konten. Wir erheben nur die Informationen, die du bei der Anmeldung angibst, sowie grundlegende Nutzungsdaten, die für den Betrieb der Website erforderlich sind.",
+    "collectBody": "Global Connect nutzt Contentful zur Speicherung von Inhalten und Clerk zur Verwaltung von Konten. Wir erheben nur die Informationen, die du bei der Anmeldung angibst, sowie grundlegende Nutzungsdaten, die für den Betrieb der Website erforderlich sind. Die Website nutzt zudem Vercel Web Analytics und Vercel Speed Insights, die anonyme Seitenaufrufe und Leistungsmessungen aufzeichnen. Sie setzen keine Cookies und können dich nicht über Websites hinweg identifizieren: Ein Besucher wird nur anhand eines aus der eingehenden Anfrage erzeugten Hash erkannt, der nach 24 Stunden verworfen wird, und alle Auswertungen sind aggregierte Statistiken.",
     "useTitle": "Wie wir es nutzen",
     "useBody": "Deine Daten werden genutzt, um Community-Funktionen zu personalisieren – zum Beispiel die Anmeldung für Sessions – und um den Dienst sicher zu halten. Wir verkaufen deine Daten niemals.",
     "choicesTitle": "Deine Rechte",

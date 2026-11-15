@@ -41,6 +41,10 @@ Copy `.env.example` → `.env.local` and fill in your keys. Full walkthroughs:
 - **Site origin** — `NEXT_PUBLIC_SITE_URL` drives canonical URLs, Open Graph,
   `sitemap.xml` and `robots.txt` (see `src/lib/site.ts`). On Vercel it falls
   back to `$VERCEL_PROJECT_PRODUCTION_URL`; locally to `http://localhost:3000`.
+- **Analytics** — Vercel Web Analytics and Speed Insights take no keys: they
+  are enabled per project in the Vercel dashboard and served from `/_vercel/…`.
+  Both are mounted in `src/app/[locale]/layout.tsx` for
+  `VERCEL_ENV === "production"` only, so previews and `pnpm dev` send nothing.
 
 ## Useful commands
 
