@@ -8,6 +8,7 @@ import { useLocale, useTranslations } from "next-intl";
 import { tv } from "@/lib/utils";
 import { Link, usePathname } from "@/i18n/navigation";
 import { LocaleSwitcher } from "@/components/locale-switcher";
+import { ThemeSwitcher } from "@/components/theme-switcher";
 import { Logo } from "@/components/logo";
 import { Button } from "@/components/ui/button";
 import {
@@ -42,22 +43,23 @@ const headerNav = tv({
 });
 
 type NavKey =
-  | "home"
-  | "opportunities"
-  | "sessions"
-  | "guides"
-  | "community"
-  | "about";
+  "home" | "opportunities" | "sessions" | "guides" | "community" | "about";
 
 type NavItem =
   | { key: NavKey; page: string; section?: string }
   | { key: NavKey; href: string; external: true };
 
-function AuthButtons({ variant = "desktop" }: { variant?: "desktop" | "mobile" }) {
+function AuthButtons({
+  variant = "desktop",
+}: {
+  variant?: "desktop" | "mobile";
+}) {
   const t = useTranslations("Nav");
   const slots = headerNav();
   return (
-    <div className={variant === "mobile" ? slots.mobileAuthRow() : slots.authRow()}>
+    <div
+      className={variant === "mobile" ? slots.mobileAuthRow() : slots.authRow()}
+    >
       <Show
         when="signed-out"
         fallback={
@@ -156,6 +158,7 @@ export function SiteHeaderNav({ communityUrl }: { communityUrl: string }) {
           >
             {t("explore")}
           </Button>
+          <ThemeSwitcher />
           <LocaleSwitcher />
           <AuthButtons />
         </div>
@@ -223,6 +226,7 @@ export function SiteHeaderNav({ communityUrl }: { communityUrl: string }) {
               >
                 {t("explore")}
               </Button>
+              <ThemeSwitcher />
               <LocaleSwitcher />
             </div>
           </SheetContent>

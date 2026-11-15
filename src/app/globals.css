@@ -10,7 +10,9 @@
   --color-foreground: var(--foreground);
   --font-sans: var(--font-inter);
   --font-display: var(--font-fraunces);
-  --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  --font-mono:
+    ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono",
+    "Courier New", monospace;
   --font-heading: var(--font-display);
   --color-sidebar-ring: var(--sidebar-ring);
   --color-sidebar-border: var(--sidebar-border);
@@ -60,8 +62,45 @@
   --radius-4xl: calc(var(--radius) * 2.6);
 }
 
+/* Shadow utilities are hand-written `@utility` definitions instead of
+   `@theme --shadow-*` keys: Tailwind inlines theme values into utilities,
+   which would ignore the `.dark` overrides below. Registered as utilities so
+   variants (`hover:`) keep working. Note: `shadow-card` also matches the
+   color namespace (`--color-card`) and emits a harmless
+   `--tw-shadow-color` twin rule — it is unused because these utilities set
+   `box-shadow` directly. */
+@utility shadow-card {
+  box-shadow: var(--elev-card);
+}
+@utility shadow-card-lift {
+  box-shadow: var(--elev-card-lift);
+}
+@utility shadow-card-hover {
+  box-shadow: var(--elev-card-hover);
+}
+@utility shadow-hero {
+  box-shadow: var(--elev-hero);
+}
+@utility shadow-hero-strong {
+  box-shadow: var(--elev-hero-strong);
+}
+@utility shadow-pill {
+  box-shadow: var(--elev-pill);
+}
+@utility shadow-chip {
+  box-shadow: var(--elev-chip);
+}
+
 :root {
+  color-scheme: light;
   --radius: 0.875rem;
+  --elev-card: 0 8px 30px -12px rgba(36, 36, 64, 0.08);
+  --elev-card-lift: 0 16px 40px -12px rgba(36, 36, 64, 0.14);
+  --elev-card-hover: 0 18px 40px -24px rgba(36, 36, 64, 0.4);
+  --elev-hero: 0 30px 70px -45px rgba(36, 36, 64, 0.5);
+  --elev-hero-strong: 0 30px 70px -40px rgba(36, 36, 64, 0.55);
+  --elev-pill: 0 10px 30px -22px rgba(36, 36, 64, 0.5);
+  --elev-chip: 0 14px 36px -20px rgba(36, 36, 64, 0.45);
   --background: oklch(98.5% 0.008 80);
   --foreground: oklch(26% 0.08 265);
   --card: oklch(99.7% 0.004 80);
@@ -103,6 +142,7 @@
 }
 
 .dark {
+  color-scheme: dark;
   --background: oklch(12.9% 0.042 264.695);
   --foreground: oklch(98.4% 0.003 247.858);
   --card: oklch(20.8% 0.042 265.755);
@@ -135,6 +175,23 @@
   --sidebar-accent-foreground: oklch(98.4% 0.003 247.858);
   --sidebar-border: oklch(100% 0 0 / 10%);
   --sidebar-ring: oklch(55.1% 0.027 264.364);
+  /* Brand pastels: tuned for the dark background — same hues, slightly
+     brighter and more saturated so 15–35% tints (dots, blobs, tiles) stay
+     visible instead of muddying out. */
+  --lavender: oklch(78% 0.12 268);
+  --pastel-blue: oklch(82% 0.11 250);
+  --sage: oklch(84% 0.08 200);
+  --peach: oklch(87% 0.09 45);
+  --blush: oklch(88% 0.08 15);
+  --charcoal: oklch(93% 0.015 265);
+  /* Shadows: the navy glow reads as haze on dark surfaces; use neutral black. */
+  --elev-card: 0 8px 30px -12px rgba(0, 0, 0, 0.35);
+  --elev-card-lift: 0 16px 40px -12px rgba(0, 0, 0, 0.4);
+  --elev-card-hover: 0 18px 40px -24px rgba(0, 0, 0, 0.55);
+  --elev-hero: 0 30px 70px -45px rgba(0, 0, 0, 0.6);
+  --elev-hero-strong: 0 30px 70px -40px rgba(0, 0, 0, 0.65);
+  --elev-pill: 0 10px 30px -22px rgba(0, 0, 0, 0.55);
+  --elev-chip: 0 14px 36px -20px rgba(0, 0, 0, 0.5);
 }
 
 @layer base {

@@ -68,7 +68,10 @@
     "logoHome": "Global Connect — home",
     "logoAlt": "Global Connect logo",
     "close": "Close",
-    "language": "Language"
+    "language": "Language",
+    "theme": "Theme",
+    "light": "Light",
+    "dark": "Dark"
   },
   "A11y": {
     "previous": "Previous",

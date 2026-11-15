@@ -30,7 +30,7 @@ const community = tv({
     feature: "flex items-center gap-3 text-base text-foreground",
     cta: "mt-10",
     media:
-      "relative overflow-hidden rounded-[2rem] border border-border shadow-[0_30px_70px_-45px_rgba(36,36,64,0.5)]",
+      "relative overflow-hidden rounded-[2rem] border border-border shadow-hero",
     image:
       "h-72 w-full object-cover transition-transform duration-[1200ms] hover:scale-[1.04] sm:h-96",
     cities: "mt-5 grid grid-cols-4 gap-3 sm:gap-4",

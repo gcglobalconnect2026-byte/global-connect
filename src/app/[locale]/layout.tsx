@@ -6,6 +6,7 @@ import { deDE, enUS } from "@clerk/localizations";
 import { Fraunces, Inter } from "next/font/google";
 import { NextIntlClientProvider } from "next-intl";
 import { getMessages, getTranslations } from "next-intl/server";
+import { ThemeProvider } from "next-themes";
 
 import { cn, tv } from "@/lib/utils";
 import { SITE_URL } from "@/lib/site";
@@ -94,7 +95,12 @@ export async function generateMetadata({
 export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
-  themeColor: "#ffffff",
+  // Static colors can't follow the in-page theme toggle, so this only covers
+  // the browser chrome: light by default, dark for OS-dark readers.
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#ffffff" },
+    { media: "(prefers-color-scheme: dark)", color: "#17171c" },
+  ],
 };
 
 export default async function RootLayout({
@@ -107,16 +113,33 @@ export default async function RootLayout({
   const messages = await getMessages({ locale });
 
   return (
-    <html lang={LOCALES[locale].htmlLang} className={cn(inter.variable, fraunces.variable, slots.html())}>
+    // next-themes applies `.dark` to <html> via a pre-hydration script; the
+    // mismatch against the server-rendered (light) markup is expected.
+    <html
+      lang={LOCALES[locale].htmlLang}
+      className={cn(inter.variable, fraunces.variable, slots.html())}
+      suppressHydrationWarning
+    >
       <body className={slots.body()}>
-        <JsonLd data={organization()} />
-        <JsonLd data={website(locale)} />
-        <NextIntlClientProvider locale={locale} messages={messages}>
-          <ClerkProvider localization={clerkLocalizations[locale]}>
-            {children}
-          </ClerkProvider>
-        </NextIntlClientProvider>
         {/*
+          `defaultTheme="light"` + `enableSystem={false}` means the site is
+          light for everyone until the user explicitly picks Dark — OS
+          preference is deliberately ignored.
+        */}
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="light"
+          enableSystem={false}
+          disableTransitionOnChange
+        >
+          <JsonLd data={organization()} />
+          <JsonLd data={website(locale)} />
+          <NextIntlClientProvider locale={locale} messages={messages}>
+            <ClerkProvider localization={clerkLocalizations[locale]}>
+              {children}
+            </ClerkProvider>
+          </NextIntlClientProvider>
+          {/*
           Vercel Web Analytics + Speed Insights: both render `null` and inject
           their own script, and both wrap themselves in <Suspense> internally,
           which Cache Components requires because they read `useSearchParams()`.
@@ -126,12 +149,13 @@ export default async function RootLayout({
           served from `/_vercel/...`, which `src/proxy.ts` already excludes from
           locale routing, so nothing else needs to change for them.
         */}
-        {isProduction && (
-          <>
-            <Analytics />
-            <SpeedInsights />
-          </>
-        )}
+          {isProduction && (
+            <>
+              <Analytics />
+              <SpeedInsights />
+            </>
+          )}
+        </ThemeProvider>
       </body>
     </html>
   );

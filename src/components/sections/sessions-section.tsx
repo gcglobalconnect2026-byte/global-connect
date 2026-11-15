@@ -12,18 +12,17 @@ const SESSION_COUNT = "35";
 
 const sessionsSection = tv({
   slots: {
-    header:
-      "flex flex-col gap-8 md:flex-row md:items-end md:justify-between",
+    header: "flex flex-col gap-8 md:flex-row md:items-end md:justify-between",
     count: "shrink-0 font-display text-5xl text-foreground",
     countLabel:
       "block text-sm font-sans uppercase tracking-[0.18em] text-muted-foreground",
     media:
-      "mt-12 overflow-hidden rounded-[2rem] border border-border shadow-[0_30px_70px_-45px_rgba(36,36,64,0.5)]",
+      "mt-12 overflow-hidden rounded-[2rem] border border-border shadow-hero",
     image:
       "h-64 w-full object-cover transition-transform duration-[1200ms] hover:scale-[1.04] sm:h-80",
     grid: "mt-8 grid gap-6 sm:grid-cols-2",
     cta: "mt-10 text-center",
-    card: "flex flex-col rounded-3xl border border-border bg-card/80 p-7 transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_18px_40px_-24px_rgba(36,36,64,0.4)]",
+    card: "flex flex-col rounded-3xl border border-border bg-card/80 p-7 transition-all duration-300 hover:-translate-y-1 hover:shadow-card-hover",
     cardHead: "flex items-start justify-between gap-4",
     badge: "rounded-full bg-muted px-3 py-1 text-xs text-muted-foreground",
     title: "mt-5 font-display text-xl text-foreground",
@@ -130,10 +129,7 @@ async function SessionCard({
             {t("register")}
           </a>
         ) : (
-          <Link
-            href={`/sessions/${session.slug}`}
-            className={slots.register()}
-          >
+          <Link href={`/sessions/${session.slug}`} className={slots.register()}>
             {t("register")}
           </Link>
         )}

@@ -23,7 +23,7 @@ const opportunityFinder = tv({
   slots: {
     searchPanel: "mx-auto mb-10 mt-12 max-w-3xl",
     searchBar:
-      "flex items-center gap-3 rounded-full border border-border bg-card px-5 py-3 shadow-[0_10px_30px_-22px_rgba(36,36,64,0.5)]",
+      "flex items-center gap-3 rounded-full border border-border bg-card px-5 py-3 shadow-pill",
     searchIcon: "text-lg leading-none",
     searchInput:
       "h-auto w-full border-0 bg-transparent p-0 rounded-none text-base md:text-[16px] text-foreground outline-none placeholder:text-muted-foreground focus-visible:ring-0",

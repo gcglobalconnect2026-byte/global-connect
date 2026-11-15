@@ -14,7 +14,7 @@ const section = tv({
       "mt-6 font-display text-3xl leading-[1.1] text-foreground sm:text-4xl md:text-[2.75rem]",
     description:
       "mt-5 text-base leading-relaxed text-muted-foreground sm:text-lg",
-    card: "flex flex-col rounded-3xl border border-border bg-card/80 p-7 transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_18px_40px_-24px_rgba(36,36,64,0.4)]",
+    card: "flex flex-col rounded-3xl border border-border bg-card/80 p-7 transition-all duration-300 hover:-translate-y-1 hover:shadow-card-hover",
   },
   variants: {
     band: {
@@ -34,7 +34,7 @@ const section = tv({
     variant: {
       default: { card: "" },
       story: {
-        card: "group relative p-8 shadow-[0_8px_30px_-12px_rgba(36,36,64,0.08)] backdrop-blur-sm hover:shadow-[0_16px_40px_-12px_rgba(36,36,64,0.14)]",
+        card: "group relative p-8 shadow-card backdrop-blur-sm hover:shadow-card-lift",
       },
     },
   },

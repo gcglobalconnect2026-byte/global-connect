@@ -8,7 +8,7 @@ import { CF_LOCALES } from "@/lib/contentful/locales";
 
 const richText = tv({
   slots: {
-    root: "prose prose-neutral max-w-none prose-headings:tracking-tight prose-a:text-brand prose-img:rounded-2xl prose-img:my-8",
+    root: "prose prose-neutral dark:prose-invert max-w-none prose-headings:tracking-tight prose-a:text-brand prose-img:rounded-2xl prose-img:my-8",
     image: "my-8 w-full rounded-2xl object-cover",
     figure: "my-8",
     media: "aspect-video relative w-full overflow-hidden rounded-2xl",
@@ -106,7 +106,10 @@ const renderNode: RenderNode = {
   },
   [BLOCKS.EMBEDDED_ENTRY]: (node, children) => {
     const entry = node.data.target as
-      | { sys?: { contentType?: { sys?: { id?: string } } }; fields?: Record<string, unknown> }
+      | {
+          sys?: { contentType?: { sys?: { id?: string } } };
+          fields?: Record<string, unknown>;
+        }
       | undefined;
     const typeId = entry?.sys?.contentType?.sys?.id;
     if (typeId === "video" && entry?.fields) {
@@ -128,7 +131,9 @@ const renderNode: RenderNode = {
             />
           </div>
           {caption && (
-            <figcaption className={richTextSlots.caption()}>{caption}</figcaption>
+            <figcaption className={richTextSlots.caption()}>
+              {caption}
+            </figcaption>
           )}
         </figure>
       );

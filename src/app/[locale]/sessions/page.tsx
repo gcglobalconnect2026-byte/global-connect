@@ -37,8 +37,7 @@ export async function generateMetadata({
 const sessionsPage = tv({
   slots: {
     grid: "grid gap-6 md:grid-cols-2 lg:grid-cols-4",
-    card:
-      "flex h-full flex-col transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_18px_40px_-24px_rgba(36,36,64,0.4)]",
+    card: "flex h-full flex-col transition-all duration-300 hover:-translate-y-1 hover:shadow-card-hover",
     cardHead: "flex-row items-center justify-between",
     icon: "text-3xl",
     badge: "rounded-full font-normal",
@@ -74,7 +73,9 @@ export default async function SessionsPage({
           locale,
         )}
       />
-      <JsonLd data={sessionItemList(sessions, meta("itemListSessions"), locale)} />
+      <JsonLd
+        data={sessionItemList(sessions, meta("itemListSessions"), locale)}
+      />
       <PageMain>
         <PageBand>
           <PageHeader

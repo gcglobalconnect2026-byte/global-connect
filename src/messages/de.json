@@ -68,7 +68,10 @@
     "logoHome": "Global Connect – Startseite",
     "logoAlt": "Global-Connect-Logo",
     "close": "Schließen",
-    "language": "Sprache"
+    "language": "Sprache",
+    "theme": "Design",
+    "light": "Hell",
+    "dark": "Dunkel"
   },
   "A11y": {
     "previous": "Zurück",

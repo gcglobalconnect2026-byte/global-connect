@@ -16,20 +16,22 @@ const hero = tv({
     title:
       "mt-7 font-display text-[2.6rem] leading-[1.05] tracking-tight text-foreground sm:text-6xl text-balance",
     highlight: "relative inline-block break-words",
-    highlightMark: "absolute inset-x-0 bottom-1 -z-10 h-3 rounded-full bg-peach/40",
+    highlightMark:
+      "absolute inset-x-0 bottom-1 -z-10 h-3 rounded-full bg-peach/40",
     description:
       "mt-6 max-w-xl text-base leading-relaxed text-muted-foreground sm:text-lg",
     actions: "mt-9 flex flex-col gap-3 sm:flex-row",
     meta: "mt-8 text-sm text-muted-foreground",
     media: "relative",
-    mediaDrift: "blob drift pointer-events-none absolute inset-8 bg-lavender/15",
+    mediaDrift:
+      "blob drift pointer-events-none absolute inset-8 bg-lavender/15",
     frame:
-      "relative overflow-hidden rounded-[2rem] border border-border shadow-[0_30px_70px_-40px_rgba(36,36,64,0.55)]",
+      "relative overflow-hidden rounded-[2rem] border border-border shadow-hero-strong",
     image: "h-[26rem] w-full object-cover sm:h-[34rem]",
     imageOverlay:
       "pointer-events-none absolute inset-0 bg-gradient-to-t from-background/70 via-transparent to-transparent",
     chips: "relative z-10 -mt-16 space-y-3 px-2 sm:-mt-20 sm:px-6",
-    chip: "float-soft flex items-center gap-4 rounded-2xl border border-border bg-card/90 p-4 shadow-[0_14px_36px_-20px_rgba(36,36,64,0.45)] backdrop-blur-md transition-transform duration-300 hover:-translate-y-1",
+    chip: "float-soft flex items-center gap-4 rounded-2xl border border-border bg-card/90 p-4 shadow-chip backdrop-blur-md transition-transform duration-300 hover:-translate-y-1",
     chipTitle: "truncate text-sm font-medium text-foreground",
     chipMeta: "truncate text-xs text-muted-foreground",
     chipBody: "min-w-0",
@@ -82,10 +84,7 @@ export async function HeroSection({
               {titleRest}{" "}
               <span className={slots.highlight()}>
                 {titleHighlight}
-                <span
-                  className={slots.highlightMark()}
-                  aria-hidden="true"
-                />
+                <span className={slots.highlightMark()} aria-hidden="true" />
               </span>
             </h1>
           )}
@@ -126,9 +125,7 @@ export async function HeroSection({
             {config?.imageUrl && (
               <Image
                 src={config.imageUrl}
-                alt={
-                  config.imageAlt ?? t("imageAlt")
-                }
+                alt={config.imageAlt ?? t("imageAlt")}
                 width={1024}
                 height={1280}
                 priority

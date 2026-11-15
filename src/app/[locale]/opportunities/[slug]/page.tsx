@@ -11,11 +11,7 @@ import { breadcrumb } from "@/lib/schema";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { JsonLd } from "@/components/json-ld";
-import {
-  Card,
-  CardContent,
-  CardFooter,
-} from "@/components/ui/card";
+import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { PageArticle, PageMain } from "@/components/page-shell";
 import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
@@ -68,7 +64,7 @@ const opportunityPage = tv({
     cardBody: "grid gap-4 sm:grid-cols-3",
     cardFoot: "flex flex-wrap gap-1.5 border-t border-border pt-4",
     tag: "rounded-full font-normal",
-    prose: "prose prose-neutral max-w-none mt-8",
+    prose: "prose prose-neutral dark:prose-invert max-w-none mt-8",
     fallback:
       "mt-8 rounded-2xl border border-dashed border-border p-6 text-center text-sm text-muted-foreground",
     detail: "flex flex-col gap-0.5",
@@ -143,7 +139,9 @@ export default async function OpportunityPage({
   const nav = await getTranslations({ locale, namespace: "Nav" });
   // Resolve the record before rendering so unknown slugs return a real 404
   // status instead of streaming a 200 with a 404 body.
-  const opportunity = (await getOpportunities(locale)).find((o) => o.slug === slug);
+  const opportunity = (await getOpportunities(locale)).find(
+    (o) => o.slug === slug,
+  );
   if (!opportunity) notFound();
 
   return (
@@ -154,7 +152,10 @@ export default async function OpportunityPage({
           [
             { name: nav("home"), path: "" },
             { name: nav("opportunities"), path: "/opportunities" },
-            { name: opportunity.title, path: `/opportunities/${opportunity.slug}` },
+            {
+              name: opportunity.title,
+              path: `/opportunities/${opportunity.slug}`,
+            },
           ],
           locale,
         )}

@@ -8,7 +8,7 @@ import { Tile } from "@/components/ui/tile";
 
 const opportunityCard = tv({
   slots: {
-    root: "flex h-full flex-col overflow-hidden rounded-3xl border border-border bg-card/80 p-7 transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_18px_40px_-24px_rgba(36,36,64,0.4)]",
+    root: "flex h-full flex-col overflow-hidden rounded-3xl border border-border bg-card/80 p-7 transition-all duration-300 hover:-translate-y-1 hover:shadow-card-hover",
     head: "flex items-center gap-3",
     country: "text-xs uppercase tracking-[0.16em] text-muted-foreground",
     title: "mt-5 font-display text-xl leading-snug text-foreground",
