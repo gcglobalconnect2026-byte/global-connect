@@ -112,6 +112,14 @@ function toContentfulBody(doc: Document | undefined): Document | undefined {
 
 async function uploadAsset(assetId: string, title: string) {
   const base = { spaceId: SPACE, environmentId: ENV, assetId };
+  // Prefer the real image committed under public/guides/: it is the same asset
+  // picsum would serve, and picsum.photos is an external dependency that can be
+  // down (HTTP 522) — Contentful fetches the URL server-side, so a dead host
+  // fails the whole seed. Fall back to picsum only when no local file exists.
+  const localPath = `public/guides/${assetId}.jpg`;
+  if (fs.existsSync(localPath)) {
+    return uploadLocalAsset(assetId, localPath, title);
+  }
   try {
     await client.asset.get(base);
     console.log("asset exists", assetId);
